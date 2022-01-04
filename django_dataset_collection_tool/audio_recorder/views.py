@@ -1,9 +1,9 @@
-from django.shortcuts import render
 from django.http import HttpResponse
+from django.shortcuts import render
 
 # Create your views here.
 def home(request):
-    return HttpResponse("<h1>Audio recorder home </h1>")
+    return render(request, 'audio_recorder/home.html')
 
 def about(request):
-    return HttpResponse("<h1>Audio recorder about </h1>")
+    return render(request, 'audio_recorder/about.html')

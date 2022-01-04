@@ -17,12 +17,10 @@ ADD requirements.txt .
 RUN pip3 install -r requirements.txt
 ## END - Install python
 
-## START - Setup project
-RUN python3 src/setup.py
-## END - Setup project
-
-
 USER docker
 WORKDIR /home/docker/projects
 
-CMD [ "django-admin runserver" ]
+CMD [ "bash", "-c", "python3 src/setup.py &&" \
+                    #  python3 django_dataset_collection_tool/manage.py runserver 0.0.0.0:8000" 
+                    ]
+CMD [ "entrypoint.sh" ]

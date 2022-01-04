@@ -1,12 +1,70 @@
 {% extends "audio_recorder/base.html" %}
 {% block content %}
 
-    <h1>Audio recorder home </h1>
+<!-- Header -->
+<header class="masthead d-flex">
+	<div class="container text-center my-auto">
+		{% for i in data %}
+			<h1 class="mb-1">Record Audio</h1>
+			<h3 class="mb-5"> <em>Read: {{i.utterance}}</em> </h3>
+			<h3 class="mb-5"> <em>Prosody: {{i.prosody}}</em> </h3>
+		{% endfor %}
 
-	{% for i in data %}
-    	<h2>{{i.author}} </h2>
-    	<p>Read: {{i.utterance}} </p>
-    	<p>Prosody: {{i.prosody}} </p>
-	{% endfor %}
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+					<span class="service-icon rounded-circle mx-auto mb-3">
+						<i class="icon-screen-smartphone"></i>
+					</span>
+					<h4>
+						<strong>Responsive</strong>
+					</h4>
+					<p class="text-faded mb-0">Looks great on any screen size!</p>
+				</div>
+	
+				<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+					<span class="service-icon rounded-circle mx-auto mb-3">
+						<i class="icon-pencil"></i>
+					</span>
+					<h4>
+						<strong>Redesigned</strong>
+					</h4>
+					<p class="text-faded mb-0">Freshly redesigned for Bootstrap 4.</p>
+				</div>
+	
+				<div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+					<span class="service-icon rounded-circle mx-auto mb-3">
+						<i class="icon-like"></i>
+					</span>
+					<h4>
+						<strong>Favorited</strong>
+					</h4>
+					<p class="text-faded mb-0">Millions of users
+						<i class="fas fa-heart"></i>
+						Start Bootstrap!
+					</p>
+				</div>
+	
+				<div class="col-lg-3 col-md-6">
+					<span class="service-icon rounded-circle mx-auto mb-3">
+						<i class="icon-mustache"></i>
+					</span>
+					<h4>
+						<strong>Question</strong>
+					</h4>
+					<p class="text-faded mb-0">I mustache you a question...</p>
+				</div>
+	
+			</div>
+		</div>
+
+	</div>
+	
+	<div class="overlay"></div>
+</header>
+
 
 {% endblock content %}
+
+

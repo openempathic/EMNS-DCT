@@ -1,0 +1,35 @@
+{% extends "audio_recorder/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<header class="masthead d-flex">
+
+    <div class="container my-auto">
+
+        <div class="p-5 bg-dark text-white">
+            <div class="content-section">
+                <form method="POST">
+                    {% csrf_token %}
+                    <Fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Register</legend>
+                        {{ form|crispy }}
+                    </Fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit">Sign Up</button>
+                    </div>
+                </form>
+    
+                <div class="border-top pt-3">
+                    <small class="text-muted">
+                        Already have an account? <a class="ml-2" href="#">Sign In</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</header>
+
+{% endblock content %}

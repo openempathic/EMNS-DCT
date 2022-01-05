@@ -1,0 +1,23 @@
+{% extends "audio_recorder/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<header class="callout d-flex">
+    <div class="container text-center my-auto">
+        <h1 class="mb-1">Profile</h1>
+        <h3 class="mb-5"> <em>Something witty here</em> </h3>
+        <!-- <a class="btn btn-primary btn-xl" href="https://startbootstrap.com/theme/stylish-portfolio/">Download Now!</a> -->
+    </div>
+</header>
+
+
+<div class="p-5 bg-dark text-white">
+    <div class="content-section">
+        <!-- <img class="rounded-circle account-img" src="{{ user.profile.image.url }}"> -->
+        <h1 class="account-heading">{{ user.username }}</h1>
+        <h1 class="text-secondary">{{ user.email }}</h1>
+
+    </div>
+</div>
+
+{% endblock content %}

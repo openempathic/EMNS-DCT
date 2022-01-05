@@ -38,11 +38,30 @@
 				<a class="js-scroll-trigger" href="#page-top">TTS Dataset Collection</a>
 			</li>
 			<li class="sidebar-nav-item">
-				<a class="js-scroll-trigger" href="{% url 'audio-recorder-record' %}">Home</a>
+				<a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}">Home</a>
 			</li>
-			<li class="sidebar-nav-item">
-				<a class="js-scroll-trigger" href="{% url 'audio-recorder-record' %}">Record</a>
-			</li>
+			{% if user.is_authenticated %}
+
+				<li class="sidebar-nav-item">
+					<a class="js-scroll-trigger" href="{% url 'logout' %}">Logout</a>
+				</li>
+				<li class="sidebar-nav-item">
+					<a class="js-scroll-trigger" href="{% url 'audio-recorder-record' %}">Record</a>
+				</li>
+				<li class="sidebar-nav-item">
+					<a class="js-scroll-trigger" href="{% url 'profile' %}">Profile</a>
+				</li>
+			{% else %}
+
+				<li class="sidebar-nav-item">
+					<a class="js-scroll-trigger" href="{% url 'login' %}">Login</a>
+				</li>
+				<li class="sidebar-nav-item">
+					<a class="js-scroll-trigger" href="{% url 'register' %}">Register</a>
+				</li>
+			{% endif %}
+
+
 			<li class="sidebar-nav-item">
 				<a class="js-scroll-trigger" href="{% url 'audio-recorder-about' %}">About</a>
 			</li>

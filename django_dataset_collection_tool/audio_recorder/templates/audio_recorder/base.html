@@ -23,7 +23,7 @@
 
 	<!-- Custom CSS -->
 	<link href="{% static 'audio_recorder/css/stylish-portfolio.min.css' %}" rel="stylesheet">
-	<link href="{% static 'audio_recorder/css/lineAnimation.css' %}" rel="stylesheet">
+	<!-- <link href="{% static 'audio_recorder/css/lineAnimation.css' %}" rel="stylesheet"> -->
 </head>
 
 <body id="page-top">
@@ -35,13 +35,16 @@
 	<nav id="sidebar-wrapper">
 		<ul class="sidebar-nav">
 			<li class="sidebar-brand">
-				<a class="js-scroll-trigger" href="#page-top">Start Bootstrap</a>
+				<a class="js-scroll-trigger" href="#page-top">TTS Dataset Collection</a>
 			</li>
 			<li class="sidebar-nav-item">
-				<a class="js-scroll-trigger" href="/">Home</a>
+				<a class="js-scroll-trigger" href="{% url 'audio-recorder-record' %}">Home</a>
 			</li>
 			<li class="sidebar-nav-item">
-				<a class="js-scroll-trigger" href="about/">About</a>
+				<a class="js-scroll-trigger" href="{% url 'audio-recorder-record' %}">Record</a>
+			</li>
+			<li class="sidebar-nav-item">
+				<a class="js-scroll-trigger" href="{% url 'audio-recorder-about' %}">About</a>
 			</li>
 		</ul>
 	</nav>

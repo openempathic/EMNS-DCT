@@ -4,59 +4,40 @@
 <!-- Header -->
 <header class="masthead d-flex">
 	<div class="container text-center my-auto">
-		{% for i in data %}
-			<h1 class="mb-1">Record Audio</h1>
-			<h3 class="mb-5"> <em>Read: {{i.utterance}}</em> </h3>
-			<h3 class="mb-5"> <em>Prosody: {{i.prosody}}</em> </h3>
-		{% endfor %}
 
-		
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-					<span class="service-icon rounded-circle mx-auto mb-3">
-						<i class="icon-screen-smartphone"></i>
-					</span>
-					<h4>
-						<strong>Responsive</strong>
-					</h4>
-					<p class="text-faded mb-0">Looks great on any screen size!</p>
-				</div>
-	
-				<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-					<span class="service-icon rounded-circle mx-auto mb-3">
-						<i class="icon-pencil"></i>
-					</span>
-					<h4>
-						<strong>Redesigned</strong>
-					</h4>
-					<p class="text-faded mb-0">Freshly redesigned for Bootstrap 4.</p>
-				</div>
-	
-				<div class="col-lg-3 col-md-6 mb-5 mb-md-0">
-					<span class="service-icon rounded-circle mx-auto mb-3">
-						<i class="icon-like"></i>
-					</span>
-					<h4>
-						<strong>Favorited</strong>
-					</h4>
-					<p class="text-faded mb-0">Millions of users
-						<i class="fas fa-heart"></i>
-						Start Bootstrap!
-					</p>
-				</div>
-	
-				<div class="col-lg-3 col-md-6">
-					<span class="service-icon rounded-circle mx-auto mb-3">
-						<i class="icon-mustache"></i>
-					</span>
-					<h4>
-						<strong>Question</strong>
-					</h4>
-					<p class="text-faded mb-0">I mustache you a question...</p>
-				</div>
-	
+		<div class="p-5 mb-5 bg-dark text-white">
+			<h1 class="mb-5"> Some Super Duper Long Text Here, hope fully it will fit in this box. </h1>
+
+			<h4 class="mb-5"> Prosody: Angry </h4>
+		</div>
+
+
+		<div class="row justify-content-center">
+			
+			<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+				<span class="service-icon rounded-circle mx-auto mb-3">
+					<i class="icon-cloud-upload"></i>
+				</span>
+				<h4> <strong>Submit</strong> </h4>
+				<p class="text-faded mb-0">Submit your recording.</p>
 			</div>
+
+			<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+				<span class="service-icon rounded-circle mx-auto mb-3">
+					<i class="icon-microphone"></i>
+				</span>
+				<h4> <strong>Record</strong> </h4>
+			</div>
+
+			<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+				<span class="service-icon rounded-circle mx-auto mb-3">
+					<i class="icon-flag"></i>
+				</span>
+				<h4> <strong>Report</strong> </h4>
+				<p class="text-faded mb-0">Report content which you deem inappropriate.</p>
+			</div>
+
+
 		</div>
 
 	</div>

@@ -11,13 +11,24 @@
 </header>
 
 
-<div class="p-5 bg-dark text-white">
-    <div class="content-section">
-        <!-- <img class="rounded-circle account-img" src="{{ user.profile.image.url }}"> -->
-        <h1 class="account-heading">{{ user.username }}</h1>
-        <h1 class="text-secondary">{{ user.email }}</h1>
+<!-- <div class="container my-auto"> -->
 
+    <div class="p-5 bg-dark text-white">
+        <div class="content-section">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <Fieldset class="form-group">
+                    {{ u_form|crispy }}
+                    {{ p_form|crispy }}
+                </Fieldset>
+
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Update</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+<!-- </div> -->
+
 
 {% endblock content %}

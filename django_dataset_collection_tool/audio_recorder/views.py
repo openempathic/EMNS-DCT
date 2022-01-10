@@ -1,9 +1,9 @@
 from django.db.models import fields
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
+from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 
 # from .form import UploadAudioForm
@@ -78,6 +78,19 @@ class UtteranceListView(ListView):
     # template_name = 'audio_recorder/utterances.html'
     context_object_name = 'posts'
     ordering = ['prosody']
+    paginate_by = 5
+
+class UserUtteranceListView(ListView):
+    model = Utterances
+    template_name = 'audio_recorder/user_utterances_list.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        return Utterances.objects.filter(author=user).order_by('-date_created')
+
+
 
 class UtteranceDetailView(DetailView):
     model = Utterances

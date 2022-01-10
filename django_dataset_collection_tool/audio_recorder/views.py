@@ -68,11 +68,11 @@ def about(request):
 @login_required
 def utterances(request):
     context = {'posts':data}
-    return render(request, 'audio_recorder/recorder.html', context)
+    return render(request, 'audio_recorder/utterances.html', context)
 
 class UtteranceListView(ListView):
     model = Utterances
-    template_name = 'audio_recorder/recorder.html'
+    # template_name = 'audio_recorder/utterances.html'
     context_object_name = 'posts'
     ordering = ['prosody']
 

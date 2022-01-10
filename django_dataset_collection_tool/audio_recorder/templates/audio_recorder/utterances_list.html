@@ -2,46 +2,12 @@
 {% block content %}
 
 <!-- Header -->
-<!-- <header class="masthead d-flex">
-	<div class="container text-center my-auto">
-
-		<div class="p-5 mb-5 bg-dark text-white">
-			<h1 class="mb-5"> Some Super Duper Long Text Here, hope fully it will fit in this box. </h1>
-
-			<h4 class="mb-5"> Prosody: Angry </h4>
-		</div>
-
-
-		<div class="row justify-content-center">
-			
-			<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-				<span class="service-icon rounded-circle mx-auto mb-3">
-					<i class="icon-cloud-upload"></i>
-				</span>
-				<h4> <strong>Submit</strong> </h4>
-				<p class="text-faded mb-0">Submit your recording.</p>
-			</div>
-
-			<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-				<span class="service-icon rounded-circle mx-auto mb-3">
-					<i class="icon-microphone"></i>
-				</span>
-				<h4> <strong>Record</strong> </h4>
-			</div>
-
-			<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-				<span class="service-icon rounded-circle mx-auto mb-3">
-					<i class="icon-flag"></i>
-				</span>
-				<h4> <strong>Report</strong> </h4>
-				<p class="text-faded mb-0">Report content which you deem inappropriate.</p>
-			</div>
-
-
-		</div>
-
-	</div>	
-</header> -->
+<header class="callout d-flex">
+    <div class="container text-center my-auto">
+        <h1 class="mb-1">Utterances</h1>
+        <!-- <a class="btn btn-primary btn-xl" href="https://startbootstrap.com/theme/stylish-portfolio/">Download Now!</a> -->
+	</div>
+</header>
 
 
 <div class="album py-5 bg-light">
@@ -50,14 +16,11 @@
 			{% for post in posts %}
 				<!-- <div class="col-md-4"> -->
 					<div class="card mb-4 box-shadow">
-						<img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
+						<!-- <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
 						<div class="card-body">
 							<p class="card-text">{{ post.utterance }}</p>
 							<div class="d-flex justify-content-between align-items-center">
-								<div class="btn-group">
-									<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-									<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-								</div>
+								<a class="stretched-link" href="{% url 'utterance-detail' post.id %}" >View</a>
 								<small class="text-muted">{{ post.date_created|date:"F d, Y" }}</small>
 							</div>
 						</div>

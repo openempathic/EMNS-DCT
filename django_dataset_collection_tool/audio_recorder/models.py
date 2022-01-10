@@ -1,6 +1,10 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.urls import reverse
+from django.views.generic import detail
+
+# from django_dataset_collection_tool.audio_recorder.views import utterances
 
 class Utterances(models.Model):
     utterance       = models.TextField()
@@ -13,3 +17,6 @@ class Utterances(models.Model):
 
     def __str__(self) -> str:
         return f"{self.utterance}, Prosody: {self.prosody}"
+
+    def get_absolute_url(self):
+        return reverse('utterance-detail', kwargs={'pk':self.pk})

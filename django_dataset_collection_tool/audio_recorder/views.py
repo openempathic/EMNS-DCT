@@ -1,7 +1,10 @@
+from django.db.models import fields
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 
 # from .form import UploadAudioForm
 from .models import Utterances
@@ -78,3 +81,35 @@ class UtteranceListView(ListView):
 
 class UtteranceDetailView(DetailView):
     model = Utterances
+
+class UtteranceCreateView(LoginRequiredMixin, CreateView):
+    model = Utterances
+    fields = ['utterance', 'prosody']
+
+    def form_valid(self, form) -> HttpResponse:
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Utterances
+    fields = ['utterance', 'prosody']
+
+    def form_valid(self, form) -> HttpResponse:
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        utterance = self.get_object()
+        if self.request.user == utterance.author or self.request.user.is_superuser: # also allowing admin user to update posts
+            return True
+        return False
+
+class UtteranceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Utterances
+    success_url = '/utterances/'
+
+    def test_func(self):
+        utterance = self.get_object()
+        if self.request.user == utterance.author or self.request.user.is_superuser: # also allowing admin user to update posts
+            return True
+        return False

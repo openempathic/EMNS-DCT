@@ -20,7 +20,8 @@ RUN pip3 install -r requirements.txt
 USER docker
 WORKDIR /home/docker/projects
 
-CMD [ "bash", "-c", "python3 src/setup.py &&" \
-                    #  python3 django_dataset_collection_tool/manage.py runserver 0.0.0.0:8000" 
+CMD [ "bash", "-c", "python3 src/setup.py && \
+                    # python3 django_dataset_collection_tool/manage.py collectstatic --noinput \
+                    python3 django_dataset_collection_tool/manage.py runserver 0.0.0.0:8000" \
                     ]
-CMD [ "entrypoint.sh" ]
+# CMD [ "entrypoint.sh" ]

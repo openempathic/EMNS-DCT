@@ -12,4 +12,4 @@ class Utterances(models.Model):
 
 
     def __str__(self) -> str:
-        return self.utterance#, self.audio_recording
+        return f"{self.utterance}, Prosody: {self.prosody}"

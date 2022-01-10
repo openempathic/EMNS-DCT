@@ -4,7 +4,6 @@ from . import views
 urlpatterns = [
     path('', views.home, name="audio-recorder-home"),
     path('about/', views.about, name="audio-recorder-about"),
-    path('record/', views.record, name="audio-recorder-record"),
-
-
+    path('utterances/', views.UtteranceListView.as_view(), name="audio-recorder-utterances"),
+    path('record/<pk>/', views.UtteranceDetailView.as_view(), name="utterance-detail"),
 ]

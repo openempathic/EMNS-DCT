@@ -12,7 +12,7 @@ class Utterances(models.Model):
     author          = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     date_created    = models.DateTimeField(default=timezone.now)
 
-    audio_recording = models.FileField()
+    audio_recording = models.FileField(upload_to='media/wavs')
 
 
     def __str__(self) -> str:

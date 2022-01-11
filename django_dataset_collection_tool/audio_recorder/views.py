@@ -58,6 +58,24 @@ class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         return False
 
+#####################################################################################################################################
+# class UtteranceUpdateRecordingView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     model = Utterances
+#     fields = ['audio_recording']
+
+#     def form_valid(self, form) -> HttpResponse:
+#         form.instance.author = self.request.user
+#         return super().form_valid(form)
+
+#     def test_func(self):
+#         utterance = self.get_object()
+#         if self.request.user == utterance.author or self.request.user.is_superuser: # also allowing admin user to update posts
+#             return True
+#         return False
+#####################################################################################################################################
+
+
+
 class UtteranceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Utterances
     success_url = '/utterances/'

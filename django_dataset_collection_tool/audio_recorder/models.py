@@ -14,7 +14,6 @@ class Utterances(models.Model):
 
     audio_recording = models.FileField(upload_to='media/wavs')
 
-
     def __str__(self) -> str:
         return f"{self.utterance}, Prosody: {self.prosody}"
 

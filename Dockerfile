@@ -17,11 +17,13 @@ ADD requirements.txt .
 RUN pip3 install -r requirements.txt
 ## END - Install python
 
-USER docker
-WORKDIR /home/docker/projects
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 
-CMD [ "bash", "-c", "python3 src/setup.py && \
+USER docker
+WORKDIR /home/docker/projects/django_dataset_collection_tool
+
+CMD [ "bash", "-c", "python3 ../src/setup.py && \
                     # python3 django_dataset_collection_tool/manage.py collectstatic --noinput \
-                    python3 django_dataset_collection_tool/manage.py runserver 0.0.0.0:8000" \
+                    python3 manage.py runserver 0.0.0.0:8000" \
                     ]
 # CMD [ "entrypoint.sh" ]

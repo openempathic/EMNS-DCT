@@ -6,7 +6,7 @@ Docker_name				= $(shell whoami)/dataset_collection_tool
 container_name 			= dataset_collection_tool
 
 # forwards ports
-ports 					= -p 8000:8000
+ports 					= --network host
 
 # set volume directory
 volume_dir 				= $(shell pwd):/home/docker/projects

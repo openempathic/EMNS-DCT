@@ -1,4 +1,5 @@
 {% extends "audio_recorder/base.html" %}
+
 {% block content %}
 
 <!-- Header -->
@@ -20,6 +21,18 @@
 
 			<h1 class="mb-5"> {{ object.utterance }} </h1>
 			<h4 class="mb-5"> Prosody: {{object.prosody}} </h4>
+			{% if object.audio_recording %}
+				<p>Audio recording exists</p>
+				<audio controls>
+					<source src="{{ object.audio_recording }}">
+					Your browser does not support the audio element.
+				</audio>
+			{% else %}
+				<p>An audio recording does not exist yet.</p>
+
+				{% include "audio_recorder/videojs_recorder.html" %}
+
+			{% endif %}
 		</div>
 
 
@@ -52,4 +65,5 @@
 
 	</div>	
 </header>
+
 {% endblock content %}

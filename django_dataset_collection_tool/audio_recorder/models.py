@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.views.generic import detail
+import uuid
 
 # from django_dataset_collection_tool.audio_recorder.views import utterances
 

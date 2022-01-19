@@ -1,4 +1,33 @@
 {% extends "audio_recorder/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %}
+	Utterance Detail
+{% endblock title %}
+
+{% block scripts %}
+
+	<!-- videojd-record -->
+	<link href="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
+	<link href="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css' %}" rel="stylesheet">
+	<link href="{% static 'audio_recorder/videojs-record/dist/css/videojs.record.css' %}" rel="stylesheet">
+	<link href="{% static 'audio_recorder/videojs-record/examples/assets/css/examples.css' %}" rel="stylesheet">
+
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video.min.js' %}"></script>
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/recordrtc/RecordRTC.js' %}"></script>
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/webrtc-adapter/out/adapter.js' %}"></script>
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/wavesurfer.js/dist/wavesurfer.min.js' %}"></script>
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/wavesurfer.js/dist/plugin/wavesurfer.microphone.min.js' %}"></script>
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js' %}"></script>
+
+	<script src="{% static 'audio_recorder/videojs-record/dist/videojs.record.js' %}"></script>
+
+	<script src="{% static 'audio_recorder/videojs-record/examples/browser-workarounds.js' %}"></script>
+
+{% endblock scripts %}
+
 
 {% block content %}
 
@@ -65,5 +94,6 @@
 
 	</div>	
 </header>
+
 
 {% endblock content %}

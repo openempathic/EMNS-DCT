@@ -1,0 +1,42 @@
+<!-- Navigation -->
+<a class="menu-toggle rounded" href="#">
+    <i class="fas fa-bars"></i>
+</a>
+<nav id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+        <li class="sidebar-brand">
+            <a class="js-scroll-trigger" href="#page-top">TTS Dataset Collection</a>
+        </li>
+        <li class="sidebar-nav-item">
+            <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}">Home</a>
+        </li>
+        {% if user.is_authenticated %}
+
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'logout' %}">Logout</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'audio-recorder-utterances' %}">Utterances</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'utterance-create' %}">New Utterance</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'profile' %}">Profile</a>
+            </li>
+        {% else %}
+
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'register' %}">Register</a>
+            </li>
+        {% endif %}
+
+
+        <li class="sidebar-nav-item">
+            <a class="js-scroll-trigger" href="{% url 'audio-recorder-about' %}">About</a>
+        </li>
+    </ul>
+</nav>

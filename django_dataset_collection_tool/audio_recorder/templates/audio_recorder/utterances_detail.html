@@ -23,7 +23,6 @@
 	<script src="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js' %}"></script>
 
 	<script src="{% static 'audio_recorder/videojs-record/dist/videojs.record.js' %}"></script>
-
 	<script src="{% static 'audio_recorder/videojs-record/examples/browser-workarounds.js' %}"></script>
 
 {% endblock scripts %}
@@ -31,7 +30,6 @@
 
 {% block content %}
 
-<!-- Header -->
 <header class="masthead d-flex">
 	<div class="container text-center my-auto">
 
@@ -59,41 +57,29 @@
 			{% else %}
 				<p>An audio recording does not exist yet.</p>
 
-				{% include "audio_recorder/videojs_recorder.html" %}
+				<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
+				
+				<form method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="field">
+					  
+						<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
+							<audio id="recordAudio" class="video-js vjs-default-skin"></audio>
+						</div>
+						<div class="control" style="margin-top: 1rem">
+							<button class="btn btn-outline-info" id="submit">Submit</button>
+						</div>
+					</div>
+				  </form>
 
 			{% endif %}
 		</div>
-
-
-		<div class="row justify-content-center">
-			
-			<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-				<span class="service-icon rounded-circle mx-auto mb-3">
-					<i class="icon-cloud-upload"></i>
-				</span>
-				<h4> <strong>Submit</strong> </h4>
-				<p class="text-faded mb-0">Submit your recording.</p>
-			</div>
-
-			<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-				<span class="service-icon rounded-circle mx-auto mb-3">
-					<i class="icon-microphone"></i>
-				</span>
-				<h4> <strong>Record</strong> </h4>
-			</div>
-
-			<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-				<span class="service-icon rounded-circle mx-auto mb-3">
-					<i class="icon-flag"></i>
-				</span>
-				<h4> <strong>Report</strong> </h4>
-				<p class="text-faded mb-0">Report content which you deem inappropriate.</p>
-			</div>
-
-		</div>
-
 	</div>	
 </header>
 
 
 {% endblock content %}
+
+{% block js %}
+<script src="{% static 'audio_recorder/js/real.recording.js' %}"></script>
+{% endblock js %}

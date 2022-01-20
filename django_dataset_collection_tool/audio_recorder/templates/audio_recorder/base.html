@@ -81,6 +81,26 @@
 	<!-- Custom scripts for this template -->
 	<script src="{% static 'audio_recorder/js/stylish-portfolio.min.js' %}"></script>
 
+	<script>
+		const csrftoken = $("[name=csrfmiddlewaretoken]").val();
+		if (csrftoken) {
+			function csrfSafeMethod(method) {
+				// these HTTP methods do not require CSRF protection
+				return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
+			}
+			$.ajaxSetup({
+				beforeSend: function (xhr, settings) {
+				if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+					xhr.setRequestHeader("X-CSRFToken", csrftoken);
+				}
+				},
+			});
+		}
+    </script>
+	{% block js %} {% endblock %}
+
+
+
 </body>
 
 </html>

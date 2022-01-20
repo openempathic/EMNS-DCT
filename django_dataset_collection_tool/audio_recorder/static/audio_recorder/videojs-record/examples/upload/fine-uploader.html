@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Fine Uploader Example - Record Plugin for Video.js</title>
+        <link href="../../node_modules/video.js/dist/video-js.min.css" rel="stylesheet">
+        <link href="../../node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css" rel="stylesheet">
+        <link href="../../dist/css/videojs.record.css" rel="stylesheet">
+        <link href="../assets/css/examples.css" rel="stylesheet">
+
+        <style>
+        /* change player background color */
+        #myAudio {
+            background-color: #f3e9d2;
+        }
+        </style>
+    </head>
+
+    <body>
+        <audio id="myAudio" class="video-js vjs-default-skin"></audio>
+
+        <script src="../../node_modules/video.js/dist/video.min.js"></script>
+        <script src="../../node_modules/recordrtc/RecordRTC.js"></script>
+        <script src="../../node_modules/webrtc-adapter/out/adapter.js"></script>
+        <script src="../../node_modules/wavesurfer.js/dist/wavesurfer.min.js"></script>
+        <script src="../../node_modules/wavesurfer.js/dist/plugin/wavesurfer.microphone.min.js"></script>
+        <script src="../../node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js"></script>
+
+        <script src="../../dist/videojs.record.js"></script>
+
+        <script src="../../node_modules/fine-uploader/fine-uploader/fine-uploader.js"></script>
+
+        <script src="../browser-workarounds.js"></script>
+
+        <script>
+            /* eslint-disable */
+
+            // initialize Fine Uploader
+            var uploader = new qq.FineUploaderBasic({
+                debug: true,
+                request: {
+                    endpoint: '/vendor/fineuploader/php-traditional-server/endpoint.php'
+                },
+                validation: {
+                    allowedExtensions: ['mp3', 'ogg', 'oga', 'ogg', 'wav']
+                },
+                callbacks: {
+                    onError: function(id, name, errorReason, xhrOrXdr) {
+                        console.error('upload error:', errorReason);
+                    }
+                }
+            });
+            // setup videojs-record
+            var options = {
+                controls: true,
+                bigPlayButton: false,
+                width: 600,
+                height: 300,
+                plugins: {
+                    wavesurfer: {
+                        backend: 'WebAudio',
+                        waveColor: '#114b5f',
+                        progressColor: 'black',
+                        displayMilliseconds: true,
+                        debug: true,
+                        cursorWidth: 1,
+                        hideScrollbar: true,
+                        plugins: [
+                            // enable microphone plugin
+                            WaveSurfer.microphone.create({
+                                bufferSize: 4096,
+                                numberOfInputChannels: 1,
+                                numberOfOutputChannels: 1,
+                                constraints: {
+                                    video: false,
+                                    audio: true
+                                }
+                            })
+                        ]
+                    },
+                    record: {
+                        audio: true,
+                        video: false,
+                        maxLength: 20,
+                        displayMilliseconds: true,
+                        debug: true
+                    }
+                }
+            };
+
+            // apply some workarounds for certain browsers
+            applyAudioWorkaround();
+
+            var player = videojs('myAudio', options, function() {
+                // print version information at startup
+                var msg = 'Using video.js ' + videojs.VERSION +
+                    ' with videojs-record ' + videojs.getPluginVersion('record') +
+                    ', videojs-wavesurfer ' + videojs.getPluginVersion('wavesurfer') +
+                    ', wavesurfer.js ' + WaveSurfer.VERSION + ' and recordrtc ' +
+                    RecordRTC.version;
+                videojs.log(msg);
+            });
+
+            // player error handling
+            player.on('deviceError', function() {
+                console.warn('device error:', player.deviceErrorCode);
+            });
+
+            player.on('error', function(element, error) {
+                console.error(error);
+            });
+
+            // data is available
+            player.on('finishRecord', function() {
+                // the blob object contains the audio data
+                var audioFile = player.recordedData;
+
+                console.log('finished recording: ', audioFile);
+
+                // upload data to server
+                var filesList = [audioFile];
+                uploader.addFiles(filesList);
+            });
+        </script>
+
+    </body>
+</html>

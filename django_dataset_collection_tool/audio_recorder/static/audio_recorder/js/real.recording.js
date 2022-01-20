@@ -1,6 +1,6 @@
-<script>
 // First lets hide the message
 // document.getElementById("alert").style.display = "none";
+
 // Next, declare the options that will passed into the recording constructor
 const options = {
 	controls: true,
@@ -24,8 +24,8 @@ const options = {
 					numberOfInputChannels: 1,
 					numberOfOutputChannels: 1,
 					constraints: {
-						video: false,
-						audio: true,
+					video: false,
+					audio: true,
 					},
 				}),
 			],
@@ -43,7 +43,6 @@ const options = {
 // apply audio workarounds for certain browsers
 applyAudioWorkaround();
 
-// create player
 var player = videojs('audio_recorder', options, function() {
 	// print version information at startup
 	var msg = 'Using video.js ' + videojs.VERSION +
@@ -56,67 +55,67 @@ var player = videojs('audio_recorder', options, function() {
 });
 
 // error handling
-player.on('deviceError', function() {
-	console.log('device error:', player.deviceErrorCode);
+player.on("deviceError", function () {
+	console.log("device error:", player.deviceErrorCode);
 });
 
-player.on('error', function(element, error) {
+player.on("error", function (element, error) {
 	console.error(error);
 });
 
 // user clicked the record button and started recording
-player.on('startRecord', function() {
-	console.log('started recording!');
+player.on("startRecord", function () {
+	console.log("started recording!");
 });
 
 // user completed recording and stream is available
-player.on('finishRecord', function() {
-	// the blob object contains the recorded data that
-	// can be downloaded by the user, stored on server etc.
-	console.log('finished recording: ', player.recordedData);
+player.on("finishRecord", function () {
+	const audioFile = player.recordedData;
+
+	console.log("finished recording: ", audioFile);
+
+	$("#submit").prop("disabled", false);
+	// document.getElementById("alert").style.display = "block";
 });
 
 // Give event listener to the submit button
 $("#submit").on("click", function (event) {
-	console.log('Submit clicked!');
-
 	event.preventDefault();
 	let btn = $(this);
-
 	//   change the button text and disable it
 	btn.html("Submitting...").prop("disabled", true).addClass("disable-btn");
-
 	//   create a new File with the recordedData and its name
 	const recordedFile = new File([player.recordedData], `audiorecord.webm`);
-	
 	//   initializes an empty FormData
 	let data = new FormData();
-	
 	//   appends the recorded file and language value
 	data.append("recorded_audio", recordedFile);
-	
 	//   post url endpoint
-	const url = "{% url 'recording-update' object.id %}";
+	// const url = "";
+	const url = "update-recording/"//"{% url 'recording-update' object.id %}";
+
 	$.ajax({
 		url: url,
 		method: "POST",
 		data: data,
 		dataType: "json",
 		success: function (response) {
+			console.log('success function')
 			if (response.success) {
-				document.getElementById("alert").style.display = "block";
-				window.location.href = "/";
+				console.log('success!');
+				// document.getElementById("alert").style.display = "block";
+				window.location.href = `${response.url}`;
+			} 
+			else {
+				console.log('Failed!');
+				btn.html("Error").prop("disabled", false);
 			}
-			else { btn.html("Error").prop("disabled", false); }
 		},
 		error: function (error) {
-			console.error(error);
+			console.error("ERROR: ", error);
 		},
 		cache: false,
 		processData: false,
 		contentType: false,
 	});
 });
-
-
-</script>

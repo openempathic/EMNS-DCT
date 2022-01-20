@@ -57,22 +57,24 @@
 			{% else %}
 				<p>An audio recording does not exist yet.</p>
 
-				<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
-				
-				<form method="POST" enctype="multipart/form-data">
+				<form method="POST">
 					{% csrf_token %}
 					<div class="field">
-					  
 						<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
-							<audio id="recordAudio" class="video-js vjs-default-skin"></audio>
+							<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
 						</div>
+						<!-- <Fieldset class="form-group">
+							{{ form|crispy }}
+						</Fieldset> -->
 						<div class="control" style="margin-top: 1rem">
 							<button class="btn btn-outline-info" id="submit">Submit</button>
 						</div>
 					</div>
-				  </form>
+				</form>
+				{% endif %}
+				
+			</div>
 
-			{% endif %}
 		</div>
 	</div>	
 </header>

@@ -85,14 +85,13 @@ $("#submit").on("click", function (event) {
 	//   change the button text and disable it
 	btn.html("Submitting...").prop("disabled", true).addClass("disable-btn");
 	//   create a new File with the recordedData and its name
-	const recordedFile = new File([player.recordedData], `audiorecord.webm`);
+	const recordedFile = new File([player.recordedData], `audiorecord.wav`);
 	//   initializes an empty FormData
 	let data = new FormData();
 	//   appends the recorded file and language value
 	data.append("recorded_audio", recordedFile);
 	//   post url endpoint
-	// const url = "";
-	const url = "update-recording/"//"{% url 'recording-update' object.id %}";
+	const url = ""
 
 	$.ajax({
 		url: url,

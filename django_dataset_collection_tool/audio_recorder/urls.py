@@ -18,9 +18,6 @@ urlpatterns = [
     path('utterances/<int:pk>/delete/', views.UtteranceDeleteView.as_view(), name="utterance-delete"),
     path('utterances/new/', views.UtteranceCreateView.as_view(), name="utterance-create"),
 
-    path('record/', views.record, name="record"),
-
-
 ]
 
 

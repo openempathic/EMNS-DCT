@@ -5,7 +5,7 @@ user = User.objects.filter(username="knoriy").first()
 
 for i in range (1,100):
     post = Utterances(  utterance=f"Hellow World! {i:03}",
-                        prosody=f"happy {i}",
+                        prosody=f"happy {i:03}",
                         author=user)
     post.save()
 

@@ -23,6 +23,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 
 	def get_success_url(self):
 		if self.get_queryset().filter(pk=self.object.pk+1).exists():
+			# messages.success(self.request, 'Next Utterance :)')
 			return reverse('utterance-detail', kwargs={'pk': self.object.pk+1})
 		else:
 			messages.success(self.request, 'Nothing else left, please go back to any you have skipped, otherwise let the reseachers know you have finished :)')
@@ -34,22 +35,19 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			return HttpResponseForbidden()
 		self.object = self.get_object()
 		form = self.get_form()
+		
 		if form.is_valid():
-			return self.form_valid(form)
+			audio_file = self.request.FILES.get("recorded_audio")
+			form.save()
+			return JsonResponse({ 	"url": reverse('utterance-detail', kwargs={'pk': self.object.pk}), 
+									"success": True })
+			# return self.form_valid(form)
 		else:
 			return self.form_invalid(form)
 
 	def form_valid(self, form) -> HttpResponse:
 		form.instance.author = self.request.user
-		form.instance.prosody = 'testing'
 
-		print("##################################################################################", form.instance.prosody)
-		print("##################################################################################", self.request.FILES.get("recorded_audio"))
-		audio_file = self.request.FILES.get("recorded_audio")
-		record = Utterances(audio_recording=audio_file)
-		record.save()
-
-		# form.save()
 		return super().form_valid(form)
 
 	def test_func(self):

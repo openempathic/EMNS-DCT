@@ -102,7 +102,6 @@ $("#submit").on("click", function (event) {
 			console.log('success function')
 			if (response.success) {
 				console.log('success!');
-				// document.getElementById("alert").style.display = "block";
 				window.location.href = `${response.url}`;
 			} 
 			else {

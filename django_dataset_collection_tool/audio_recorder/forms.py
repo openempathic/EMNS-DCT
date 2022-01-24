@@ -7,6 +7,7 @@ from .models import Utterances
 class RecordingUpdateForm(forms.ModelForm):
     class Meta:
         model = Utterances
-        # fields = ['audio_recording']
         fields = ['prosody']
+        fields = []
+
 

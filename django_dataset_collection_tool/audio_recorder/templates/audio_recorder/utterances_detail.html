@@ -46,32 +46,30 @@
 				</div>
 			{% endif %}
 
-			<h1 class="mb-5"> {{ object.utterance }} </h1>
+			<h1 class="mb-3"> {{ object.utterance }} </h1>
 			<h4 class="mb-5"> Prosody: {{object.prosody}} </h4>
+			
 			{% if object.audio_recording %}
-				<p>Audio recording exists</p>
-				<audio controls>
-					<source src="{{ object.audio_recording }}">
-					Your browser does not support the audio element.
-				</audio>
+				<audio controls> <source src="{{ BASIC_DIR }}/{{ object.audio_recording }}"> Your browser does not support the audio element. </audio>
 			{% else %}
-				<p>An audio recording does not exist yet.</p>
+				<p class="text-warning">Please record an utterance.</p>
+			{% endif %}
 
-				<form method="POST">
-					{% csrf_token %}
-					<div class="field">
-						<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
-							<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
-						</div>
-						<Fieldset class="form-group">
-							{{ form|crispy }}
-						</Fieldset>
-						<div class="control" style="margin-top: 1rem">
-							<button class="btn btn-outline-info" id="submit">Submit</button>
-						</div>
+			<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
+				<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
+			</div>
+
+			<form method="POST">
+				{% csrf_token %}
+				<div class="field">
+					<Fieldset class="form-group">
+						{{ form|crispy }}
+					</Fieldset>
+					<div class="control" style="margin-top: 1rem">
+						<button class="btn btn-outline-info" id="submit">Submit</button>
 					</div>
-				</form>
-				{% endif %}
+				</div>
+			</form>
 				
 			</div>
 

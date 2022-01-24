@@ -16,6 +16,9 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 	model = Utterances
 	form_class = RecordingUpdateForm
 
+
+
+
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['form'] = self.get_form()
@@ -23,7 +26,6 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 
 	def get_success_url(self):
 		if self.get_queryset().filter(pk=self.object.pk+1).exists():
-			# messages.success(self.request, 'Next Utterance :)')
 			return reverse('utterance-detail', kwargs={'pk': self.object.pk+1})
 		else:
 			messages.success(self.request, 'Nothing else left, please go back to any you have skipped, otherwise let the reseachers know you have finished :)')
@@ -33,48 +35,42 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 	def post(self, request, *args, **kwargs):
 		if not request.user.is_authenticated:
 			return HttpResponseForbidden()
-		self.object = self.get_object()
-		form = self.get_form()
-		
+		form = RecordingUpdateForm(request.POST)
+
 		if form.is_valid():
-			audio_file = self.request.FILES.get("recorded_audio")
-			form.save()
-			return JsonResponse({ 	"url": reverse('utterance-detail', kwargs={'pk': self.object.pk}), 
-									"success": True })
-			# return self.form_valid(form)
+			return self.form_valid(form)
 		else:
 			return self.form_invalid(form)
 
-	def form_valid(self, form) -> HttpResponse:
-		form.instance.author = self.request.user
 
-		return super().form_valid(form)
+	def form_valid(self, form) -> HttpResponse:
+		self.object.author = self.request.user
+		self.object.audio_recording = self.request.FILES.get("recorded_audio")
+		self.object.save()
+
+		return JsonResponse({
+				"url": reverse('utterance-detail', kwargs={'pk': self.object.pk}),
+				"success": True,
+			})
+		# return super().form_valid(form)
 
 	def test_func(self):
 		utterance = self.get_object()
-		if self.request.user == utterance.author or self.request.user.is_superuser: # also allowing admin user to update posts
+		print("#"*50, self.request.user.groups.all() in utterance.author.groups.all())
+		print("#"*50, )
+
+		if 	self.request.user == utterance.author or \
+			self.request.user.groups.filter(user=self.request.user).filter(user=utterance.author).exists() or \
+			self.request.user.is_superuser: # Checking if the user has permissions to modify the post
+
 			return True
 		return False
 
-
-class UpdateRecordingView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-	model = Utterances
-	fields = ['audio_recording']
-
-	def form_valid(self, form) -> HttpResponse:
-		form.instance.author = self.request.user
-		return super().form_valid(form)
-
-	def test_func(self):
-		utterance = self.get_object()
-		if self.request.user == utterance.author or self.request.user.is_superuser: # also allowing admin user to update posts
-			return True
-		return False
 
 
 class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Utterances
-	fields = ['utterance', 'prosody', 'audio_recording']
+	fields = ['utterance', 'prosody']
 
 	def form_valid(self, form) -> HttpResponse:
 		form.instance.author = self.request.user

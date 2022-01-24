@@ -26,16 +26,19 @@ Utterances
 							<div class="d-flex justify-content-between align-items-center">
 								<p class="card-text">{{ object.utterance }}</p>
 								<p class="card-text">{{ object.prosody }}</p>
+								<a class="link-primary" href="{% url 'utterance-detail' object.id %}" >View</a>
 							</div>
+							
 							<div class="d-flex justify-content-between align-items-center">
-								<a class="stretched-link" href="{% url 'utterance-detail' object.id %}" ></a>
-								{% if object.audio_recording %}
-									<audio controls>
-										<source src="{{ object.audio_recording }}">
-										Your browser does not support the audio element.
-									</audio>
-								{% endif %}
 								<small class="text-muted">{{ object.author }}, {{ object.date_created|date:"F d, Y" }}</small>
+								{% if object.audio_recording %}
+								<audio controls>
+									<source src="{{ BASIC_DIR }}/{{ object.audio_recording }}">
+									Your browser does not support the audio element.
+								</audio>
+								<p class="card-text"></p>
+
+								{% endif %}
 							</div>
 						</div>
 					</div>

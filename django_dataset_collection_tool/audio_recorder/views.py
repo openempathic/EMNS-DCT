@@ -12,12 +12,17 @@ from django.views import View
 from .models import Utterances
 from .forms import RecordingUpdateForm
 
+class HomeView(View):
+	def get(self, request, *args, **kwargs):
+		return render(request, 'audio_recorder/home.html')
+
+class AboutView(View):
+	def get(self, request, *args, **kwargs):
+		return render(request, 'audio_recorder/about.html')
+
 class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, DetailView):
 	model = Utterances
 	form_class = RecordingUpdateForm
-
-
-
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -31,7 +36,6 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			messages.success(self.request, 'Nothing else left, please go back to any you have skipped, otherwise let the reseachers know you have finished :)')
 			return reverse('utterance-detail', kwargs={'pk': self.object.pk})
 
-
 	def post(self, request, *args, **kwargs):
 		if not request.user.is_authenticated:
 			return HttpResponseForbidden()
@@ -42,7 +46,6 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 		else:
 			return self.form_invalid(form)
 
-
 	def form_valid(self, form) -> HttpResponse:
 		self.object.author = self.request.user
 		self.object.audio_recording = self.request.FILES.get("recorded_audio")
@@ -52,21 +55,17 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 				"url": reverse('utterance-detail', kwargs={'pk': self.object.pk}),
 				"success": True,
 			})
-		# return super().form_valid(form)
 
 	def test_func(self):
 		utterance = self.get_object()
 		print("#"*50, self.request.user.groups.all() in utterance.author.groups.all())
 		print("#"*50, )
 
-		if 	self.request.user == utterance.author or \
-			self.request.user.groups.filter(user=self.request.user).filter(user=utterance.author).exists() or \
-			self.request.user.is_superuser: # Checking if the user has permissions to modify the post
-
+		if self.request.user == utterance.author or \
+				self.request.user.groups.filter(user=self.request.user).filter(user=utterance.author).exists() or \
+				self.request.user.is_superuser: # Checking if the user has permissions to modify the post
 			return True
 		return False
-
-
 
 class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Utterances
@@ -82,47 +81,16 @@ class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 			return True
 		return False
 
-def record(request):
-	if request.method == "POST":
-		audio_file = request.FILES.get("recorded_audio")
-		record = Utterances(audio_recording=audio_file)
-		record.save()
-		messages.success(request, "Audio recording successfully added!")
-		return JsonResponse({ "success": True })
-
-	context = {"page_title": "Record audio"}
-	return render(request, "audio_recorder/record.html", context)
-
-
-
-
-
-
-
-
-
-
-
-
-
-class HomeView(View):
-	def get(self, request, *args, **kwargs):
-		return render(request, 'audio_recorder/home.html')
-
-class AboutView(View):
-	def get(self, request, *args, **kwargs):
-		return render(request, 'audio_recorder/about.html')
-
 class UtteranceListView(LoginRequiredMixin, ListView):
 	model = Utterances
 	ordering = ['prosody']
-	paginate_by = 5
+	paginate_by = 10
 
 class UserUtteranceListView(LoginRequiredMixin, ListView):
 	model = Utterances
 	template_name = 'audio_recorder/user_utterances_list.html'
 	context_object_name = 'posts'
-	paginate_by = 5
+	paginate_by = 10
 
 	def get_queryset(self):
 		user = get_object_or_404(User, username=self.kwargs.get('username'))

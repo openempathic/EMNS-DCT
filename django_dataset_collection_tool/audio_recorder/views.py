@@ -1,3 +1,4 @@
+from enum import unique
 from django.http import HttpResponse, HttpResponseForbidden
 from django.http.response import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -57,12 +58,10 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			})
 
 	def test_func(self):
-		utterance = self.get_object()
-		print("#"*50, self.request.user.groups.all() in utterance.author.groups.all())
-		print("#"*50, )
+		self.object = self.get_object()
 
-		if self.request.user == utterance.author or \
-				self.request.user.groups.filter(user=self.request.user).filter(user=utterance.author).exists() or \
+		if self.request.user == self.object.author or \
+				self.request.user.groups.filter(user=self.request.user).filter(user=self.object.author).exists() or \
 				self.request.user.is_superuser: # Checking if the user has permissions to modify the post
 			return True
 		return False
@@ -88,13 +87,14 @@ class UtteranceListView(LoginRequiredMixin, ListView):
 
 class UserUtteranceListView(LoginRequiredMixin, ListView):
 	model = Utterances
-	template_name = 'audio_recorder/user_utterances_list.html'
+	template_name = 'audio_recorder/utterances_list.html'
 	context_object_name = 'posts'
 	paginate_by = 10
 
 	def get_queryset(self):
 		user = get_object_or_404(User, username=self.kwargs.get('username'))
-		return Utterances.objects.filter(author=user).order_by('-date_created')
+		return Utterances.objects.filter(author=user).order_by('-date_created').order_by('-prosody')
+
 
 class UtteranceCreateView(LoginRequiredMixin, CreateView):
 	model = Utterances

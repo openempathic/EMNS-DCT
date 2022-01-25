@@ -50,6 +50,8 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 	def form_valid(self, form) -> HttpResponse:
 		self.object.author = self.request.user
 		self.object.audio_recording = self.request.FILES.get("recorded_audio")
+		self.object.status = 'Awaiting Review'
+
 		self.object.save()
 
 		return JsonResponse({
@@ -98,7 +100,7 @@ class UserUtteranceListView(LoginRequiredMixin, ListView):
 
 class UtteranceCreateView(LoginRequiredMixin, CreateView):
 	model = Utterances
-	fields = ['utterance', 'prosody', 'status']
+	fields = ['utterance', 'prosody']
 
 	def form_valid(self, form) -> HttpResponse:
 		form.instance.author = self.request.user

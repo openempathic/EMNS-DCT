@@ -1,5 +1,6 @@
 django
 django-crispy-forms
+django-filter
 pandas
 pathlib
 pillow

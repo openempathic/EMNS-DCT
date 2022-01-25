@@ -12,7 +12,7 @@ class Utterances(models.Model):
     prosody         = models.CharField(max_length=70)
     author          = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     date_created    = models.DateTimeField(default=timezone.now)
-    status          = models.CharField(max_length=70, null=True, choices=(('Pending', 'Pending'), ('Awaiting Review', 'Awaiting Review'), ('Complete', 'Complete'), ('Needs Updating', 'Needs Updating' )))
+    status          = models.CharField(max_length=70, null=True, choices=(('Awaiting Review', 'Awaiting Review'), ('Complete', 'Complete'), ('Needs Updating', 'Needs Updating' )))
 
     audio_recording = models.FileField(upload_to='media/wavs')
 

@@ -21,8 +21,14 @@
 	<div class="container">
 		<div class="container mb-3">
 			<form action="" method="get">
-				{{ filter.form|crispy }}
-				<input type="submit" />
+				<div class="form-row">
+					{% for form_filter in filter.form %}
+						<div class="form-group col">
+							{{ form_filter|as_crispy_field }}
+						</div>
+					{% endfor %}
+					<button type="submit" class="btn btn-light">Filter</button>
+				</div>
 			</form>
 		</div>
 		{% for object in object_list %}

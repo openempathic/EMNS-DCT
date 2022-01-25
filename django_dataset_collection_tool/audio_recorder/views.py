@@ -92,7 +92,6 @@ class UtteranceListView(LoginRequiredMixin, FilterView):
 	filterset_class = OrderFilter
 
 
-
 class UserUtteranceListView(LoginRequiredMixin, ListView):
 	model = Utterances
 	template_name = 'audio_recorder/utterances_list.html'

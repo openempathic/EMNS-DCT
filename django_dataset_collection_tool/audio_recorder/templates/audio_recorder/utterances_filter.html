@@ -1,5 +1,7 @@
 {% extends "audio_recorder/base.html" %}
 {% load crispy_forms_tags %}
+{% load audio_recorder_extras %}
+
 
 {% block title %}
 	Utterances
@@ -17,46 +19,41 @@
 
 <div class="album py-5 bg-light">
 	<div class="container">
-		<form action="" method="get">
-			{{ filter.form|crispy }}
-			<input type="submit" />
-		</form>
-		<!-- <div class="row"> -->
-			{% for object in object_list %}
-				<!-- <div class="col-md-4"> -->
-					<div class="card mb-4 box-shadow">
-						<!-- <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
-						<div class="card-body">
-							<div class="d-flex justify-content-between align-items-center">
-								<p class="card-text">{{ object.utterance }}</p>
-								<p class="card-text">{{ object.prosody }}</p>
-								<a class="link-primary" href="{% url 'utterance-detail' object.id %}" >View</a>
-							</div>
-							
-							<div class="d-flex justify-content-between align-items-center">
-								<small class="text-muted">{{ object.author }}, {{ object.date_created|date:"F d, Y" }}</small>
-								{% if object.audio_recording %}
-								<audio controls>
-									<source src="{{ BASIC_DIR }}/{{ object.audio_recording }}">
-									Your browser does not support the audio element.
-								</audio>
-								<small class="text-info">{{ object.status }}</small>
-
-
-								{% endif %}
-							</div>
-						</div>
+		<div class="container mb-3">
+			<form action="" method="get">
+				{{ filter.form|crispy }}
+				<input type="submit" />
+			</form>
+		</div>
+		{% for object in object_list %}
+			<div class="card mb-4 box-shadow">
+				<div class="card-body">
+					<div class="d-flex justify-content-between align-items-center">
+						<p class="card-text">{{ object.utterance }}</p>
+						<p class="card-text">{{ object.prosody }}</p>
+						<a class="link-primary" href="{% url 'utterance-detail' object.id %}" >View</a>
 					</div>
-				<!-- </div> -->
-			{% endfor %}
-		<!-- </div> -->
+					
+					<div class="d-flex justify-content-between align-items-center">
+						<small class="text-muted">{{ object.author }}, {{ object.date_created|date:"F d, Y" }}</small>
+						{% if object.audio_recording %}
+						<audio controls>
+							<source src="{{ BASIC_DIR }}/{{ object.audio_recording }}">
+							Your browser does not support the audio element.
+						</audio>
+						{% endif %}
+						<small class="text-info">{{ object.status }}</small>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
 		{% if is_paginated %}
 			<nav aria-label="Page navigation">
 				<ul class="pagination justify-content-center">
 					{% if page_obj.has_previous %}
-						<li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+						<li class="page-item"><a class="page-link" href="{% filtered_paginated_url 1 'page' request.GET.urlencode %}">First</a></li>
 						<li class="page-item">
-							<a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+							<a class="page-link" href="{% filtered_paginated_url page_obj.previous_page_number 'page' request.GET.urlencode %}" aria-label="Previous">
 							<span aria-hidden="true">&laquo;</span>
 							<span class="sr-only">Previous</span>
 							</a>
@@ -65,21 +62,21 @@
 					
 					{% for num in page_obj.paginator.page_range %}
 						{% if page_obj.number == num %}
-							<li class="page-item disabled"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+							<li class="page-item disabled"><a class="page-link" href="{% filtered_paginated_url num 'page' request.GET.urlencode %}"">{{ num }}</a></li>
 						{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-							<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+							<li class="page-item"><a class="page-link" href="{% filtered_paginated_url num 'page' request.GET.urlencode %}">{{ num }}</a></li>
 						{% endif %}
 
 					{% endfor %}
 					
 					{% if page_obj.has_next %}
 					<li class="page-item">
-						<a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Last">
+						<a class="page-link" href="{% filtered_paginated_url page_obj.next_page_number 'page' request.GET.urlencode %}" aria-label="Last">
 							<span aria-hidden="true">&raquo;</span>
 							<span class="sr-only">Next</span>
 						</a>
 					</li>
-					<li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+					<li class="page-item"><a class="page-link" href="{% filtered_paginated_url page_obj.paginator.num_pages 'page' request.GET.urlencode %}">Last</a></li>
 					{% endif %}
 				</ul>
 			</nav>

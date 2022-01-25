@@ -68,7 +68,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 
 class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Utterances
-	fields = ['utterance', 'prosody']
+	fields = ['utterance', 'prosody', 'status']
 
 	def form_valid(self, form) -> HttpResponse:
 		form.instance.author = self.request.user
@@ -98,7 +98,7 @@ class UserUtteranceListView(LoginRequiredMixin, ListView):
 
 class UtteranceCreateView(LoginRequiredMixin, CreateView):
 	model = Utterances
-	fields = ['utterance', 'prosody']
+	fields = ['utterance', 'prosody', 'status']
 
 	def form_valid(self, form) -> HttpResponse:
 		form.instance.author = self.request.user

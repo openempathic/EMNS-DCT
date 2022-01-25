@@ -63,10 +63,6 @@ player.on("error", function (element, error) {
 	console.error(error);
 });
 
-player.on('click', function(){
-	player.record().getDevice();
-});
-
 // user clicked the record button and started recording
 player.on("startRecord", function () {
 	console.log("started recording!");
@@ -75,11 +71,8 @@ player.on("startRecord", function () {
 // user completed recording and stream is available
 player.on("finishRecord", function () {
 	const audioFile = player.recordedData;
-
 	console.log("finished recording: ", audioFile);
-
 	$("#submit").prop("disabled", false);
-	// document.getElementById("alert").style.display = "block";
 });
 
 // Give event listener to the submit button
@@ -89,7 +82,7 @@ $("#submit").on("click", function (event) {
 	//   change the button text and disable it
 	btn.html("Submitting...").prop("disabled", true).addClass("disable-btn");
 	//   create a new File with the recordedData and its name
-	const recordedFile = new File([player.recordedData], `audiorecord.webm`);
+	const recordedFile = new File([player.recordedData], `recorded_audio.wav`);
 	//   initializes an empty FormData
 	let data = new FormData();
 	//   appends the recorded file and language value

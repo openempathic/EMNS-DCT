@@ -1,16 +1,24 @@
 from audio_recorder.models import Utterances
 from django.contrib.auth.models import User
 import random
+import pandas as pd
 
-user = User.objects.filter(username="knoriy").first()
-testuser = User.objects.filter(username="testuser").first()
 
-prosodies = ['Happy', 'Sad', 'Angry', 'Excited']
+def create_utterance(user, utterance, prosodies):
 
-for i in range (1,100):
-    post = Utterances(  utterance=f"Hellow World!",
+    post = Utterances(  utterance=utterance,
                         prosody=random.choice(prosodies),
                         author=user)
     post.save()
 
-Utterances.objects.all()
+def read_csv():
+    pd.read_csv()
+
+
+if __name__ == '__main__':
+    prosodies = ['Happy', 'Sad', 'Angry', 'Excited']
+    user = User.objects.filter(username="knoriy").first()
+
+
+
+    create_utterance(user, prosodies)

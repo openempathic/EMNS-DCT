@@ -6,6 +6,6 @@ from .models import Utterances
 class OrderFilter(django_filters.FilterSet):
     class Meta:
         model = Utterances
-        fields = ['status', 'prosody']
+        fields = ['prosody', 'status',]
 
         # exclude = ['audio_recording']

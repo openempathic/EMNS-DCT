@@ -9,9 +9,11 @@ from django.views.generic import ListView, DetailView, CreateView, DeleteView, U
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
 from django.views import View
+from django_filters.views import FilterView
 
 from .models import Utterances
 from .forms import RecordingUpdateForm
+from .filters import OrderFilter
 
 class HomeView(View):
 	def get(self, request, *args, **kwargs):
@@ -82,10 +84,14 @@ class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 			return True
 		return False
 
-class UtteranceListView(LoginRequiredMixin, ListView):
+class UtteranceListView(LoginRequiredMixin, FilterView):
 	model = Utterances
 	ordering = ['prosody']
 	paginate_by = 10
+
+	filterset_class = OrderFilter
+
+
 
 class UserUtteranceListView(LoginRequiredMixin, ListView):
 	model = Utterances

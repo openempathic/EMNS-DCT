@@ -1,4 +1,5 @@
 {% extends "audio_recorder/base.html" %}
+{% load crispy_forms_tags %}
 
 {% block title %}
 	Utterances
@@ -16,6 +17,10 @@
 
 <div class="album py-5 bg-light">
 	<div class="container">
+		<form action="" method="get">
+			{{ filter.form|crispy }}
+			<input type="submit" />
+		</form>
 		<!-- <div class="row"> -->
 			{% for object in object_list %}
 				<!-- <div class="col-md-4"> -->

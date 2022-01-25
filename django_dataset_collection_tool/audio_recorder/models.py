@@ -21,3 +21,10 @@ class Utterances(models.Model):
 
     def get_absolute_url(self):
         return reverse('utterance-detail', kwargs={'pk':self.pk})
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            recording = Utterances.objects.get(pk=self.pk)
+            if recording.audio_recording != self.audio_recording:
+                recording.audio_recording.delete(save=False)
+        super().save(*args, **kwargs)

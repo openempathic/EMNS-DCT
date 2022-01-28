@@ -1,4 +1,5 @@
 from enum import unique
+from tokenize import group
 from django.http import HttpResponse, HttpResponseForbidden
 from django.http.response import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -47,19 +48,26 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 		if form.is_valid():
 			return self.form_valid(form)
 		else:
+			print('#'*100)
 			return self.form_invalid(form)
 
 	def form_valid(self, form) -> HttpResponse:
-		self.object.author = self.request.user
-		self.object.audio_recording = self.request.FILES.get("recorded_audio")
-		self.object.status = 'Awaiting Review'
+		if self.request.user.profile.status == 'Actor':
+			self.object.author = self.request.user
+			self.object.audio_recording = self.request.FILES.get("recorded_audio")
+			self.object.status = 'Awaiting Review'
+			self.object.save()
+			return JsonResponse({
+					"url": reverse('utterance-detail', kwargs={'pk': self.object.pk+1}),
+					"success": True,
+				})
+		elif self.request.user.profile.status == 'Admin':
+			self.object.status = self.request.POST.get("status")
+			self.object.save()
+		
+		return super().form_valid(form)
 
-		self.object.save()
 
-		return JsonResponse({
-				"url": reverse('utterance-detail', kwargs={'pk': self.object.pk}),
-				"success": True,
-			})
 
 	def test_func(self):
 		self.object = self.get_object()
@@ -92,11 +100,10 @@ class UtteranceListView(LoginRequiredMixin, FilterView):
 	filterset_class = OrderFilter
 
 
-class UserUtteranceListView(LoginRequiredMixin, ListView):
+class UserUtteranceListView(LoginRequiredMixin, FilterView):
 	model = Utterances
-	template_name = 'audio_recorder/utterances_list.html'
-	context_object_name = 'posts'
 	paginate_by = 10
+	filterset_class = OrderFilter
 
 	def get_queryset(self):
 		user = get_object_or_404(User, username=self.kwargs.get('username'))

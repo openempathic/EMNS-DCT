@@ -33,41 +33,78 @@
 <header class="masthead d-flex">
 	<div class="container text-center my-auto">
 
-		<div class="p-5 mb-5 bg-dark text-white">
+		<div class=" mb-5 bg-dark text-white">
 			{% if object.author == user %}
 				<div class="container text-right my-auto">
 					<div class="dropdown">
 						<button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 							<a class="dropdown-item" href="{% url 'utterance-update' object.id %}">Update</a>
 							<a class="dropdown-item" href="{% url 'utterance-delete' object.id %}">Delete</a>
 						</div>
 					</div>
 				</div>
 			{% endif %}
+			<div class="p-5 mb-5 mt-2 bg-light text-dark">
+				<h4 class="text-justify mb-5 mt-5"> {{ object.utterance }} </h4>
+			</div>
 
-			<h1 class="mb-3"> {{ object.utterance }} </h1>
-			<h4 class="mb-5"> Prosody: {{object.prosody}} </h4>
-			
+
 			{% if object.audio_recording %}
 				<audio controls> <source src="{{ BASIC_DIR }}/{{ object.audio_recording }}"> Your browser does not support the audio element. </audio>
-			{% else %}
+			{% elif request.user.profile.status == 'Actor' %}
 				<p class="text-warning">Please record an utterance.</p>
+			{% else %}
+				<p class="text-info">There is no corresponding audio.</p>
 			{% endif %}
-
-			<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
-				<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
+			
+			<div class="row mb-2 mt-5">
+				<div class="col-md-6">
+					<p class="text-start mb-5"> Prosody: {{object.prosody}} </p>
+				</div>
+				<div class="col-md-6">
+					<p class="text-info mb-5"> Status: {{object.status}} </p>
+				</div>
 			</div>
 
 			<form method="POST">
 				{% csrf_token %}
 				<div class="field">
 					<Fieldset class="form-group">
-						{{ form|crispy }}
+						{% if request.user.profile.status == 'Admin' %}
+							<div class="container">
+								<div class="row">
+									<div class="col-md-6 mb-4 offset-md-3">
+										<div class="row">
+											<div class="col">
+
+												<select name="status" class="select form-control" id="id_status"> 
+													<option value="Pending" selected="">Pending</option> 
+													<option value="Awaiting Review">Awaiting Review</option> 
+													<option value="Complete">Complete</option> 
+													<option value="Needs Updating">Needs Updating</option>
+												</select>
+											</div>
+												<button class="btn btn-outline-info" id="submit">Submit</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% else %}
+							<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
+								{% if object.audio_recording %}
+									<audio id="audio_recorder" src="{{ BASIC_DIR }}/{{ object.audio_recording }}" class="video-js vjs-default-skin"></audio>
+								{% else%}
+									<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
+								{% endif %}
+
+							</div>
+							<div class="control mb-4 mt-2" style="margin-top: 1rem">
+								
+								<button class="btn btn-outline-info" id="submit">Submit</button>
+							</div>
+						{% endif %}
 					</Fieldset>
-					<div class="control" style="margin-top: 1rem">
-						<button class="btn btn-outline-info" id="submit">Submit</button>
-					</div>
 				</div>
 			</form>
 				

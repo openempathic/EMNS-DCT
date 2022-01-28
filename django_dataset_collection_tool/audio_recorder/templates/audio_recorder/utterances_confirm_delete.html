@@ -2,37 +2,39 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-    Delete
+	Delete
 {% endblock title %}
 
 {% block content %}
 <header class="masthead d-flex">
 
-    <div class="container my-auto">
+	<div class="container my-auto">
+		<div class=" mb-5 bg-dark text-white">
+			<div class="content-section">
+				<form method="POST">
+					{% csrf_token %}
+					<div class="container mb-5 ml-5">
+						<h2 class="text-warning">Are you sure you want to <span class="text-danger">DELETE</span> the utterance:</h2>
+					</div>
 
-        <div class="p-5 bg-dark text-white">
-            <div class="content-section">
-                <form method="POST">
-                    {% csrf_token %}
-                    <Fieldset class="form-group">
-                        <legend class="border-bottom mb-4">Delete Post!</legend>
-                        <h2>Are you sure you want to DELETE the utterance:
-                            
-                        </h2>
-                        <h4>"{{ object.utterance }}"</h4>
-                    </Fieldset>
-                    <div class="form-group">
-                        <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
-                        <a class="btn btn-outline-secondary" href="{% url 'utterance-detail' object.id %}">Cancel</a>
+					<div class="p-5 mb-5 bg-light text-dark">
+						<h4 class="text-justify mb-5 mt-5"> {{ object.utterance }} </h4>
+					</div>
 
-                    </div>
-                </form>
-            </div>
-        </div>
+					<div class="container ml-5">
+
+						<div class="form-group">
+							<button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+							<a class="btn btn-outline-secondary" href="{% url 'utterance-detail' object.id %}">Cancel</a>
+
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
 
 
-
-    </div>
+	</div>
 </header>
 
 {% endblock content %}

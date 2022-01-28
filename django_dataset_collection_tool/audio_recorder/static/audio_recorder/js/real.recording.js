@@ -5,8 +5,9 @@
 const options = {
 	controls: true,
 	bigPlayButton: false,
-	width: 600,
-	height: 300,
+	aspectRatio: '16:3',
+	// width: 50,
+	// height: 50,
 	fluid: true, // this ensures that it's responsive
 	plugins: {
 		wavesurfer: {
@@ -86,7 +87,9 @@ $("#submit").on("click", function (event) {
 	//   initializes an empty FormData
 	let data = new FormData();
 	//   appends the recorded file and language value
+	// try{
 	data.append("recorded_audio", recordedFile);
+	// }
 	//   post url endpoint
 	const url = ""
 

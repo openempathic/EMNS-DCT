@@ -6,8 +6,11 @@ from PIL import Image
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
-    image = models.ImageField(default='media/default.jpg', upload_to='media/profile_picks')
+    user  = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+    image  = models.ImageField(default='media/default.jpg', upload_to='media/profile_picks')
+    status = models.CharField(max_length=70, null=True, choices=(('Admin', 'Admin'), ('Actor', 'Actor'), ('Viewer', 'Viewer')), default='Viewer' )
+
+
 
     def __str__(self) -> str:
         return f"{self.user.username} Profile"

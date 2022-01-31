@@ -1,26 +1,24 @@
 version: '3.7'
 
 services:
-  emotive_conversatinal_dataset:
+  app:
     build:
       context: .
-    ports:
-      - "8080:8080"
     volumes:
-      - static_data:/vol/static/
+      - static_data:/vol/web
     environment:
-      - SECRET_KEY=samplesecretkey123
-      - ALLWOED_HOSTS=127.0.0.1, localhost
+      - SECRET_KEY=samplesecret123
+      - ALLOWED_HOSTS=127.0.0.1,localhost
 
   proxy:
     build:
       context: ./proxy
     volumes:
-      - static_data:/vol/static/
+      - static_data:/vol/static
     ports:
       - "8080:8080"
     depends_on:
-      - emotive_conversatinal_dataset
+      - app
 
 volumes:
   static_data:

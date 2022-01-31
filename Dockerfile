@@ -19,20 +19,11 @@ RUN pip3 install -r requirements.txt
 
 RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 
-RUN mkdir -p /vol/media/
-RUN mkdir -p /vol/static/
-
-ENV PATH="/scripts:${PATH}"
-COPY ./scripts /scripts
-RUN chmod +x /scripts/*
-RUN chown -R docker:docker /vol
-
-
 USER docker
 WORKDIR /home/docker/projects/django_dataset_collection_tool
 
-# CMD [ "bash", "-c", "python3 ../src/setup.py && \
-#                     # python3 django_dataset_collection_tool/manage.py collectstatic --noinput \
-#                     python3 manage.py runserver 0.0.0.0:8000" \
-#                     ]
-CMD [ "entrypoint.sh" ]
+CMD [ "bash", "-c", "python3 ../src/setup.py && \
+                    # python3 django_dataset_collection_tool/manage.py collectstatic --noinput \
+                    python3 manage.py runserver 0.0.0.0:8000" \
+                    ]
+# CMD [ "entrypoint.sh" ]

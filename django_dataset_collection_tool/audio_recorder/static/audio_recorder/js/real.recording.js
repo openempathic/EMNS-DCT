@@ -6,8 +6,6 @@ const options = {
 	controls: true,
 	bigPlayButton: false,
 	aspectRatio: '16:3',
-	// width: 50,
-	// height: 50,
 	fluid: true, // this ensures that it's responsive
 	plugins: {
 		wavesurfer: {

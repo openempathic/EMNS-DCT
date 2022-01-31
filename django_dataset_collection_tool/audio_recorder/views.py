@@ -58,7 +58,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			self.object.status = 'Awaiting Review'
 			self.object.save()
 			return JsonResponse({
-					"url": reverse('utterance-detail', kwargs={'pk': self.object.pk+1}),
+					"url": self.get_success_url(),
 					"success": True,
 				})
 		elif self.request.user.profile.status == 'Admin':

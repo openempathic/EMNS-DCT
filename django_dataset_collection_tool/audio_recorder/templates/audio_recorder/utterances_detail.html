@@ -92,15 +92,9 @@
 							</div>
 						{% else %}
 							<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
-								{% if object.audio_recording %}
-									<audio id="audio_recorder" src="{{ BASIC_DIR }}/{{ object.audio_recording }}" class="video-js vjs-default-skin"></audio>
-								{% else%}
-									<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
-								{% endif %}
-
+								<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
 							</div>
 							<div class="control mb-4 mt-2" style="margin-top: 1rem">
-								
 								<button class="btn btn-outline-info" id="submit">Submit</button>
 							</div>
 						{% endif %}

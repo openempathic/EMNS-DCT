@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  emotive_conversatinal_dataset:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./django_dataset_collection_tool:/home/docker/projects/django_dataset_collection_tool
+    command: sh -c "python3 manage.py runserver 0.0.0.0:8000"
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=samplesecretkey123
+      - ALLWOED_HOSTS=127.0.0.1, localhost

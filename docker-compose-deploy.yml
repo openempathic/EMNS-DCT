@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  emotive_conversatinal_dataset:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - static_data:/vol/static/
+    environment:
+      - SECRET_KEY=samplesecretkey123
+      - ALLWOED_HOSTS=127.0.0.1, localhost
+
+  proxy:
+    build:
+      context: ./proxy
+    volumes:
+      - static_data:/vol/static/
+    ports:
+      - "8080:8080"
+    depends_on:
+      - emotive_conversatinal_dataset
+
+volumes:
+  static_data:

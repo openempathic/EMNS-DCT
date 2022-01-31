@@ -1,20 +1,29 @@
-from enum import unique
-from tokenize import group
+from email import header
+import tablib
+
+from urllib import response
 from django.http import HttpResponse, HttpResponseForbidden
 from django.http.response import JsonResponse
+
 from django.shortcuts import render, get_object_or_404, redirect
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
-from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
-from django.views.generic.edit import FormMixin
-from django.urls import reverse
+
 from django.views import View
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from django.views.generic.edit import FormMixin, FormView
+
+from django.urls import reverse
+
 from django_filters.views import FilterView
 
+
 from .models import Utterances
-from .forms import RecordingUpdateForm
+from .forms import RecordingUpdateForm, ImportForm
 from .filters import OrderFilter
+from .admin import UtterancesResource
 
 class HomeView(View):
 	def get(self, request, *args, **kwargs):
@@ -99,7 +108,6 @@ class UtteranceListView(LoginRequiredMixin, FilterView):
 
 	filterset_class = OrderFilter
 
-
 class UserUtteranceListView(LoginRequiredMixin, FilterView):
 	model = Utterances
 	paginate_by = 10
@@ -108,7 +116,6 @@ class UserUtteranceListView(LoginRequiredMixin, FilterView):
 	def get_queryset(self):
 		user = get_object_or_404(User, username=self.kwargs.get('username'))
 		return Utterances.objects.filter(author=user).order_by('-date_created').order_by('-prosody')
-
 
 class UtteranceCreateView(LoginRequiredMixin, CreateView):
 	model = Utterances
@@ -130,3 +137,37 @@ class UtteranceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 def handler404(request, *args, **argv):
 	return render(request, 'audio_recorder/404.html')
+
+class Export(LoginRequiredMixin, UserPassesTestMixin, View):
+	model = Utterances
+
+	def get(self, *args, **kwargs ):
+		dataset = UtterancesResource().export()
+		response = HttpResponse(dataset.csv, content_type="text/csv")
+		response['Content-Disposition'] = 'attachment; filename=dataset.csv'
+		return response
+
+	def test_func(self):
+		if self.request.user.is_superuser or self.request.user.profile.status == 'Admin': # also allowing admin user to update posts
+			return True
+		return False
+
+class Import(FormView):
+	model = Utterances
+	form_class = ImportForm
+	template_name = 'audio_recorder/import_data.html'
+
+	def get_success_url(self):
+		messages.warning(self.request, 'Not implemented')
+		# return reverse('audio-recorder-utterances')
+		return reverse('import-utterances')
+	
+	def post(self, request, *args, **kwargs):
+		form_class = self.get_form_class()
+		form = self.get_form(form_class)
+
+		if form.is_valid():
+			file = request.FILES['file_field']
+			return self.form_valid(form)
+		else:
+			return self.form_invalid(form)

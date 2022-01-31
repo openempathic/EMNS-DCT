@@ -10,4 +10,5 @@ class RecordingUpdateForm(forms.ModelForm):
         # fields = ['status']
         fields = []
 
-
+class ImportForm(forms.Form):
+    file_field = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))

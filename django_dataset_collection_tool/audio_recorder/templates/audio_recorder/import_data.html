@@ -1,0 +1,34 @@
+{% extends "audio_recorder/base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    Import
+{% endblock title %}
+
+
+{% block content %}
+
+
+<header class="masthead d-flex">
+
+    <div class="container my-auto">
+
+        <div class="p-5 bg-dark text-white">
+            <div class="content-section">
+                <form method="POST">
+                    {% csrf_token %}
+                    <Fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Create New Utterance</legend>
+                        {{ form|crispy }}
+                    </Fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% endblock content %}

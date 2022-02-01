@@ -112,5 +112,7 @@
 {% endblock content %}
 
 {% block js %}
-<script src="{% static 'audio_recorder/js/real.recording.js' %}"></script>
+	{% if request.user.profile.status == 'Admin' or request.user.profile.status == 'Actor' %}
+		<script src="{% static 'audio_recorder/js/real.recording.js' %}"></script>
+	{% endif %}
 {% endblock js %}

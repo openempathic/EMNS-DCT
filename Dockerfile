@@ -4,7 +4,7 @@ RUN apt update
 
 ## START - Creating user
 RUN apt-get -y install sudo
-RUN adduser --disabled-password --gecos '' docker
+RUN adduser --disabled-password --gecos --no-create-home '' docker
 RUN adduser docker sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 ## END - Creating user
@@ -20,7 +20,7 @@ RUN pip3 install -r requirements.txt
 RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 
 USER docker
-WORKDIR /home/docker/projects/django_dataset_collection_tool
+WORKDIR /app
 
 CMD [ "bash", "-c", "python3 ../src/setup.py && \
                     # python3 django_dataset_collection_tool/manage.py collectstatic --noinput \

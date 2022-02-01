@@ -90,7 +90,7 @@
 									</div>
 								</div>
 							</div>
-						{% else %}
+						{% elif request.user.profile.status == 'Actor' %}
 							<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
 								<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
 							</div>

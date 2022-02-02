@@ -1,29 +1,29 @@
-FROM ubuntu:20.04
+FROM python:3.8-alpine
 
-RUN apt update
+ENV PATH="/scripts:${PATH}"
 
-## START - Creating user
-RUN apt-get -y install sudo
-RUN adduser --disabled-password --gecos --no-create-home '' docker
-RUN adduser docker sudo
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-## END - Creating user
+# RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apk -y add tzdata
 
 
-## START - Install python
-RUN apt-get install -y  python3 \
-                    python3-pip
-ADD requirements.txt .
-RUN pip3 install -r requirements.txt
-## END - Install python
+COPY ./requirements.txt /requirements.txt
+RUN apk add --update --no-cache --virtual .tmp gcc libc-dev linux-headers
+RUN pip install -r /requirements.txt
+RUN apk del .tmp
 
-RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
-
-USER docker
+COPY ./django_dataset_collection_tool/ /app
 WORKDIR /app
+COPY ./scripts /scripts
 
-CMD [ "bash", "-c", "python3 ../src/setup.py && \
-                    # python3 django_dataset_collection_tool/manage.py collectstatic --noinput \
-                    python3 manage.py runserver 0.0.0.0:8000" \
-                    ]
-# CMD [ "entrypoint.sh" ]
+RUN chmod +x /scripts/*
+
+RUN mkdir -p /vol/web/media
+RUN mkdir -p /vol/web/static
+RUN adduser -D user
+RUN chown -R user:user /vol
+RUN chmod -R 755 /vol/web
+# RUN chown -R user:user /app/static
+
+
+# USER user
+
+CMD ["entrypoint.sh"]

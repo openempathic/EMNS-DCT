@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./django_dataset_collection_tool:/home/docker/projects/django_dataset_collection_tool
+      - ./django_dataset_collection_tool:/app
     command: sh -c "python3 manage.py runserver 0.0.0.0:8000"
     environment:
       - DEBUG=1

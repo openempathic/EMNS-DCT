@@ -8,7 +8,7 @@ services:
       - static_data:/vol/web
     environment:
       - SECRET_KEY=samplesecret123
-      - ALLOWED_HOSTS=127.0.0.1,localhost,__all
+      - ALLOWED_HOSTS=127.0.0.1,localhost,__all, dct.knoriy.com, www.dct.knoriy.com
 
   proxy:
     build:

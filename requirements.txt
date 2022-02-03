@@ -2,7 +2,7 @@ django
 django-crispy-forms
 django-filter
 django-import-export
-# pandas
+pandas
 pathlib
-# pillow
+pillow
 uwsgi

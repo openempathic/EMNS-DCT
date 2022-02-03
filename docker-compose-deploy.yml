@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  app:
+    image: knoriy/dataset_collection_tool
+    build:
+      context: .
+    volumes:
+      - ./django_dataset_collection_tool:/app
+      - static_data:/vol/web
+    env_file:
+      - ./ENVIROMENT_VARIABLES
+
+  proxy:
+    image: knoriy/test_proxy
+    build:
+      context: ./proxy
+    volumes:
+      - static_data:/vol/static
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+
+volumes:
+  static_data:

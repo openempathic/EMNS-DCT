@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  app:
+    image: knoriy/dataset_collection_tool
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./django_dataset_collection_tool:/app
+    command: sh -c "python3 manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - ./ENVIROMENT_VARIABLES
+    environment:
+      - DEBUG=1

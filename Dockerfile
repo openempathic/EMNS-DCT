@@ -1,29 +1,20 @@
-FROM python:3.8-alpine
+FROM ubuntu:20.04
 
-ENV PATH="/scripts:${PATH}"
+RUN apt update
 
-# RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apk -y add tzdata
+## START - Creating user
+RUN apt-get -y install sudo
+RUN adduser --disabled-password --gecos '' user
+RUN adduser user sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+## END - Creating user
 
+## START - Python packages
+RUN apt install -y python3.8 python3-pip
+ADD requirements.txt .
+RUN pip install -r requirements.txt
+## END - Python packages
 
-COPY ./requirements.txt /requirements.txt
-RUN apk add --update --no-cache --virtual .tmp gcc libc-dev linux-headers
-RUN pip install -r /requirements.txt
-RUN apk del .tmp
+USER user
 
-COPY ./django_dataset_collection_tool/ /app
-WORKDIR /app
-COPY ./scripts /scripts
-
-RUN chmod +x /scripts/*
-
-RUN mkdir -p /vol/web/media
-RUN mkdir -p /vol/web/static
-RUN adduser -D user
-RUN chown -R user:user /vol
-RUN chmod -R 755 /vol/web
-# RUN chown -R user:user /app/static
-
-
-# USER user
-
-CMD ["entrypoint.sh"]
+CMD [ "bash" ]

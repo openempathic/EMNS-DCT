@@ -6,10 +6,12 @@ services:
     build:
       context: .
     volumes:
-      - ./django_dataset_collection_tool:/app
+      - ./django_dataset_collection_tool:/app # Copy these files to teh dockerfile
       - static_data:/vol/web
     env_file:
       - ./ENVIROMENT_VARIABLES
+    # environment:
+    #   - DEBUG=1
 
   proxy:
     image: knoriy/test_proxy
@@ -18,7 +20,9 @@ services:
     volumes:
       - static_data:/vol/static
     ports:
-      - "80:80"
+      - "8080:8080"
+      - "443:443"
+
     depends_on:
       - app
 

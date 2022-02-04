@@ -27,7 +27,7 @@ RUN mkdir -p /vol/web/static
 RUN chown -R user:user /vol
 RUN chmod -R 755 /vol/web
 
-USER user
+# USER user
 WORKDIR /app
 
-CMD ["sudo" "entrypoint.sh"]
+CMD ["entrypoint.sh"]

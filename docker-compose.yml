@@ -7,10 +7,15 @@ services:
       context: .
     ports:
       - "8000:8000"
+      - "8080:8080"
+      - "80:80"
+      - "443:443"
+
     volumes:
       - ./django_dataset_collection_tool:/app
-    command: sh -c "python3 manage.py runserver 0.0.0.0:8000"
+      - ./proxy:/proxy
+    # command: sh -c "python3 manage.py runserver 0.0.0.0:8000"
     env_file:
       - ./ENVIROMENT_VARIABLES
-    environment:
-      - DEBUG=1
+    # environment:
+      # - DEBUG=1

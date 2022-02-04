@@ -9,9 +9,7 @@ container_name 			= dataset_collection_tool
 ports 					= --network host
 
 # set volume directory
-volume_dir 				= $(shell pwd):/home/docker/projects
 volume_dir 				= $(shell pwd):/app
-
 dataset_dir 			= /media/$(shell whoami)/DATA/Datasets/:/Datasets
 
 

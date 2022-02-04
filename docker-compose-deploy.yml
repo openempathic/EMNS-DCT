@@ -10,8 +10,8 @@ services:
       - static_data:/vol/web
     env_file:
       - ./ENVIROMENT_VARIABLES
-    # environment:
-    #   - DEBUG=1
+    environment:
+      - DEBUG=1
 
   proxy:
     image: knoriy/test_proxy
@@ -21,6 +21,7 @@ services:
       - static_data:/vol/static
     ports:
       - "8080:8080"
+      - "80:80"
       - "443:443"
 
     depends_on:

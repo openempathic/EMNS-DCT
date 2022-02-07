@@ -27,18 +27,6 @@ RUN mkdir -p /vol/web/static
 RUN chown -R user:user /vol
 RUN chmod -R 755 /vol/web
 
-# ## START - Nginx
-# RUN apt install -y nginx systemctl
-# COPY ./proxy/default.conf /etc/nginx/conf.d/default.conf
-# # COPY ./proxy/uwsgi_params /etc/nginx/uwsgi_params
-# RUN systemctl start nginx
-# ## END - Nginx
-
-# ## START - Certbot
-# RUN apt install -y certbot python3-certbot-nginx
-# # RUN certbot --nginx --test-cert --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com --redirect
-# ## END - Certbot
-
 USER user
 WORKDIR /app
 

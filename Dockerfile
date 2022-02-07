@@ -2,28 +2,44 @@ FROM ubuntu:20.04
 
 RUN apt update
 
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt install -y tzdata
+
 ## START - Creating user
 RUN apt-get -y install sudo
-RUN adduser --disabled-password --gecos '' docker
-RUN adduser docker sudo
+RUN adduser --disabled-password --gecos '' user
+RUN adduser user sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 ## END - Creating user
 
 
-## START - Install python
-RUN apt-get install -y  python3 \
-                    python3-pip
+## START - Python packages
+RUN apt install -y python3.8 python3-pip
 ADD requirements.txt .
-RUN pip3 install -r requirements.txt
-## END - Install python
+RUN pip install -r requirements.txt
+## END - Python packages
 
-RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
+ENV PATH="/scripts:${PATH}"
+COPY ./scripts /scripts
+RUN chmod +x /scripts/*
 
-USER docker
-WORKDIR /home/docker/projects/django_dataset_collection_tool
+RUN mkdir -p /vol/web/media
+RUN mkdir -p /vol/web/static
+RUN chown -R user:user /vol
+RUN chmod -R 755 /vol/web
 
-CMD [ "bash", "-c", "python3 ../src/setup.py && \
-                    # python3 django_dataset_collection_tool/manage.py collectstatic --noinput \
-                    python3 manage.py runserver 0.0.0.0:8000" \
-                    ]
-# CMD [ "entrypoint.sh" ]
+# ## START - Nginx
+# RUN apt install -y nginx systemctl
+# COPY ./proxy/default.conf /etc/nginx/conf.d/default.conf
+# # COPY ./proxy/uwsgi_params /etc/nginx/uwsgi_params
+# RUN systemctl start nginx
+# ## END - Nginx
+
+# ## START - Certbot
+# RUN apt install -y certbot python3-certbot-nginx
+# # RUN certbot --nginx --test-cert --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com --redirect
+# ## END - Certbot
+
+USER user
+WORKDIR /app
+
+CMD ["entrypoint.sh"]

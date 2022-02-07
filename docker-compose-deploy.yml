@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  app:
+    image: knoriy/dataset_collection_tool
+    build:
+      context: .
+    volumes:
+      - ./django_dataset_collection_tool:/app # Copy these files to the dockerfile
+      - static_data:/vol/web
+    env_file:
+      - ./ENVIROMENT_VARIABLES
+    environment:
+      - DEBUG=1
+
+  proxy:
+    image: knoriy/test_proxy
+    build:
+      context: ./proxy
+    volumes:
+      - static_data:/vol/static
+      # - ./certbot/www:/var/www/certbot/:ro
+      # - ./certbot/conf/:/etc/nginx/ssl/:ro
+    # command: 'certbot --nginx --test-cert --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com'
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+
+volumes:
+  static_data:

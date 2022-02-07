@@ -6,7 +6,7 @@ Docker_name				= $(shell whoami)/test_proxy
 container_name 			= test_proxy
 
 # forwards ports
-ports 					= -p 80:80 -p 8080:8080 
+ports 					= -p 80:80 -p 443:443
 
 build:
 	@docker build . -t $(Docker_name)

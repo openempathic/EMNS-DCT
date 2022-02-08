@@ -7,20 +7,22 @@ services:
       context: .
     volumes:
       - ./django_dataset_collection_tool:/app # Copy these files to the dockerfile
+
       # - static_data:/vol/web
     env_file:
       - ./ENVIROMENT_VARIABLES
-    # environment:
-      # - DEBUG=1
+    environment:
+      - DEBUG=0
 
   proxy:
     image: knoriy/test_proxy
     build:
       context: ./proxy
     volumes:
-      - static_data:/vol/static
+      # - static_data:/vol/static
+      - ./django_dataset_collection_tool/static:/vol/static
       - ./django_dataset_collection_tool/media/:/vol/media
-    # command: 'certbot --nginx --test-cert --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com'
+    # command: 'certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com'
     ports:
       - "80:80"
       - "443:443"

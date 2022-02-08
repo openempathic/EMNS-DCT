@@ -41,25 +41,6 @@ def HomeView(request, *args, **argv):
 
 	return render(request, 'audio_recorder/home.html')
 
-# class HomeView(View):
-# 	def get(self, request, *args, **kwargs):
-# 		if request.method == 'POST':
-# 			name = request.POST['name']
-# 			email = request.POST['email']
-# 			subject = request.POST['subject']
-# 			message = request.POST['message']
-# 			send_mail(subject=subject, message=message, fail_silently=False)
-# 			messages.success(self.request, "Thank you for contacting us, we will be in touch soon.")
-
-
-# 			return JsonResponse({
-# 						"url": self.get_success_url(),
-# 						"success": True,
-# 					})
-# 		else:
-# 			return render(request, 'audio_recorder/home.html')
-
-
 
 class ContactUsView(View):
 	def get(self, request, *args, **kwargs):

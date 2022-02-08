@@ -137,7 +137,7 @@ h6 {
   height: 100%;
   transition: all 0.4s ease 0s;
   transform: translateX(250px);
-  background: #1D809F;
+  background: #070707;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -160,7 +160,7 @@ h6 {
 .sidebar-nav li a:hover {
   text-decoration: none;
   color: #fff;
-  background: rgba(255, 255, 255, 0.2);
+  background: #ecb807;
 }
 
 .sidebar-nav li a:active,
@@ -216,7 +216,7 @@ h6 {
 
 .service-icon {
   background-color: #fff;
-  color: #1D809F;
+  color: #3f3f3f;
   height: 7rem;
   width: 7rem;
   display: block;
@@ -327,13 +327,13 @@ footer.footer .social-link {
   width: 4rem;
   line-height: 4.3rem;
   font-size: 1.5rem;
-  background-color: #1D809F;
+  background-color: #ffffff;
   transition: background-color 0.15s ease-in-out;
   box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 footer.footer .social-link:hover {
-  background-color: #155d74;
+  background-color: #ecb807;
   text-decoration: none;
 }
 
@@ -388,11 +388,15 @@ a:hover, a:focus, a:active {
 }
 
 .bg-primary {
-  background-color: #1D809F !important;
+  background-color: #131313 !important;
+}
+
+.bg-secondary {
+  background-color: #070707 !important;
 }
 
 .text-primary {
-  color: #1D809F !important;
+  color: #d8d8d8 !important;
 }
 
 .text-secondary {

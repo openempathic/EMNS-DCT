@@ -10,6 +10,16 @@
         <li class="sidebar-nav-item">
             <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}">Home</a>
         </li>
+        <li class="sidebar-nav-item">
+            <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}#about">About</a>
+        </li>
+        <li class="sidebar-nav-item">
+            <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}#contribute">Contribute</a>
+        </li>
+        <li class="sidebar-nav-item">
+            <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}#contact-us">Contact Us</a>
+        </li>
+
         {% if user.is_authenticated %}
 
             <li class="sidebar-nav-item">
@@ -34,9 +44,5 @@
             </li>
         {% endif %}
 
-
-        <li class="sidebar-nav-item">
-            <a class="js-scroll-trigger" href="{% url 'audio-recorder-about' %}">About</a>
-        </li>
     </ul>
 </nav>

@@ -18,6 +18,8 @@ from django.views.generic.edit import FormMixin, FormView
 from django.urls import reverse
 
 from django_filters.views import FilterView
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 from .models import Utterances
@@ -25,13 +27,43 @@ from .forms import RecordingUpdateForm, ImportForm
 from .filters import OrderFilter
 from .admin import UtterancesResource
 
-class HomeView(View):
-	def get(self, request, *args, **kwargs):
-		return render(request, 'audio_recorder/home.html')
+def HomeView(request, *args, **argv):
+	if request.method == 'POST':
+		name = request.POST['name']
+		email = request.POST['email']
+		subject = request.POST['subject']
+		message = request.POST['message']
 
-class AboutView(View):
+		message = f"MY DJANGO APP \n\n\nFrom: {name}\n\nemail: {email}\n\nmessage:\n\n{message}"
+
+		send_mail(subject=subject, message=message, from_email=email, recipient_list=[settings.EMAIL_HOST_USER], fail_silently=False)
+		messages.success(request, "Thank you for contacting us, we will be in touch soon.")
+
+	return render(request, 'audio_recorder/home.html')
+
+# class HomeView(View):
+# 	def get(self, request, *args, **kwargs):
+# 		if request.method == 'POST':
+# 			name = request.POST['name']
+# 			email = request.POST['email']
+# 			subject = request.POST['subject']
+# 			message = request.POST['message']
+# 			send_mail(subject=subject, message=message, fail_silently=False)
+# 			messages.success(self.request, "Thank you for contacting us, we will be in touch soon.")
+
+
+# 			return JsonResponse({
+# 						"url": self.get_success_url(),
+# 						"success": True,
+# 					})
+# 		else:
+# 			return render(request, 'audio_recorder/home.html')
+
+
+
+class ContactUsView(View):
 	def get(self, request, *args, **kwargs):
-		return render(request, 'audio_recorder/about.html')
+		return render(request, 'audio_recorder/contact_us.html')
 
 class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, DetailView):
 	model = Utterances

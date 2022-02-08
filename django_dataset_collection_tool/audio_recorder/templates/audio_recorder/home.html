@@ -15,4 +15,98 @@
 	</div>
 </header>
 
+<!-- About-->
+<section class="content-section bg-primary text-white" id="about">
+    <div class="container px-4 px-lg-5 ">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-10">
+                <h2 class='text-center'>Expressive Speech Dataset</h2>
+                <p class="lead mb-5">
+                    Voice is a natural form of communication. Outside of transferring information,  the human 
+                    voice holds many paralinguistic features, such as the emotional state and the speaker's intention.
+                </p>
+                <p class="lead">With this dataset, we aim to enable those who have otherwise lost the ability to speak 
+                    naturally and emotionally, bring about a more natural conversation between humans and machines and 
+                    enable immersive experiences within interactive technologies.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action-->
+<section class="content-section bg-secondary text-white" id="contribute">
+    <div class="container px-4 px-lg-5 text-center">
+        <h2 class="mb-4">Want to help build an open dataset for the community?</h2>
+        <p class="lead mb-4">Get in contact and well get you up and running with a contributor account :)</p>
+
+        <a class="btn btn-xl btn-light me-4" href="#contact-us">Contact Us!</a>
+    </div>
+</section>
+
+
+<!-- Data we collect-->
+<section class="content-section bg-primary text-white" id="data_we_collect">
+    <div class="container px-4 px-lg-5 ">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-10">
+                <div class="content-section-heading text-center">
+                    <h2 class="text-secondary mb-5">What data we collect?</h2>
+                </div>
+                <ul class="lead">
+                    <li>We will not make your email public.</li>
+                    <li>number of recording and the hours of recorded.</li> 
+                    <li>You can choose to make your name or contact details available.</li>
+                    <li>You can choose to include demographic data, such as age and gender.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="container mb-5">
+    <h2 class="h1-responsive font-weight-bold text-center my-4">Contact us</h2>
+    <form id="contact-us" method="POST">
+        {% csrf_token %}
+        <Fieldset class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="md-form mb-0">
+                        <input type="text" id="name" name="name" class="form-control">
+                        <label for="name" class="">Your name</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="md-form mb-0">
+                        <input type="text" id="email" name="email" class="form-control">
+                        <label for="email" class="">Your email</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="md-form mb-0">
+                        <input type="text" id="subject" name="subject" class="form-control">
+                        <label for="subject" class="">Subject</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="md-form">
+                        <textarea type="text" id="message" name="message" rows="2" class="form-control md-textarea"></textarea>
+                        <label for="message">Your message</label>
+                    </div>
+                </div>
+            </div>
+        </Fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Submit</button>
+        </div>
+
+    </form>
+
+</section>
+
 {% endblock content %}

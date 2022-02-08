@@ -41,11 +41,6 @@ def HomeView(request, *args, **argv):
 
 	return render(request, 'audio_recorder/home.html')
 
-
-class ContactUsView(View):
-	def get(self, request, *args, **kwargs):
-		return render(request, 'audio_recorder/contact_us.html')
-
 class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, DetailView):
 	model = Utterances
 	form_class = RecordingUpdateForm

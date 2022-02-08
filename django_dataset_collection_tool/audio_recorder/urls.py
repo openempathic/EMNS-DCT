@@ -3,7 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.HomeView, name="audio-recorder-home"),
-    path('contact-us/', views.ContactUsView.as_view(), name="contact-us"),
 
     path('utterances/', views.UtteranceListView.as_view(), name="audio-recorder-utterances"),
     path('utterances/user/<username>/', views.UserUtteranceListView.as_view(), name="user-utterances"),

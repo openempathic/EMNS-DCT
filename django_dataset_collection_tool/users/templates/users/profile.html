@@ -6,29 +6,39 @@
     <div class="container text-center my-auto">
         <h1 class="mb-1">Profile</h1>
         <h3 class="mb-5"> <em>Something witty here</em> </h3>
-        <!-- <a class="btn btn-primary btn-xl" href="https://startbootstrap.com/theme/stylish-portfolio/">Download Now!</a> -->
     </div>
 </header>
 
 
-<!-- <div class="container my-auto"> -->
+<div class="p-5 bg-dark text-white">
+    <div class="container">
 
-    <div class="p-5 bg-dark text-white">
         <div class="content-section">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <Fieldset class="form-group">
-                    {{ u_form|crispy }}
+
+                    <div class="form-row">
+                        <div class="form-group col">
+                            {{ u_form.first_name  |as_crispy_field }}
+                        </div>
+                        <div class="form-group col">
+                            {{ u_form.last_name  |as_crispy_field }}
+                        </div>
+                    </div>
+                    {{ u_form.username    |as_crispy_field }}
+                    {{ u_form.email    |as_crispy_field }}
+
                     {{ p_form|crispy }}
                 </Fieldset>
-
+                
                 <div class="form-group">
                     <button class="btn btn-outline-info" type="submit">Update</button>
                 </div>
             </form>
         </div>
     </div>
-<!-- </div> -->
+</div>
 
 
 {% endblock content %}

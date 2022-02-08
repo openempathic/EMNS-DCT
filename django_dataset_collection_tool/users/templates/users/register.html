@@ -12,7 +12,28 @@
                     {% csrf_token %}
                     <Fieldset class="form-group">
                         <legend class="border-bottom mb-4">Register</legend>
-                        {{ form|crispy }}
+
+                        <div class="form-row">
+                                <div class="form-group col">
+                                    {{ form.first_name  |as_crispy_field }}
+                                </div>
+                                <div class="form-group col">
+                                    {{ form.last_name  |as_crispy_field }}
+                                </div>
+                        </div>
+                        
+                        {{ form.username    |as_crispy_field }}
+                        {{ form.email       |as_crispy_field }}
+                        
+                        <div class="form-row">
+                            <div class="form-group col">
+                                {{ form.password1   |as_crispy_field }}
+                            </div>
+                            <div class="form-group col">
+                                {{ form.password2   |as_crispy_field }}
+                            </div>
+                        </div>
+
                     </Fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-info" type="submit">Sign Up</button>

@@ -30,10 +30,13 @@
 
 {% block content %}
 
-<header class="masthead d-flex">
-	<div class="container text-center my-auto">
+<section class="content-section fillv bg-secondary ">
+	<div class="container text-center">
+		<div class="container text-center text-white pb-5">
+			<h1>Record</h1>
+		</div>
 
-		<div class=" mb-5 bg-secondary text-white">
+		<!-- <div class=" mb-5 bg-secondary text-white"> -->
 			{% if object.author == user %}
 				<div class="container text-right my-auto">
 					<div class="dropdown">
@@ -45,7 +48,7 @@
 					</div>
 				</div>
 			{% endif %}
-			<div class="p-5 mb-5 mt-2 bg-light text-dark">
+			<div class="p-5 mb-5 mt-2 bg-light">
 				<h4 class="text-justify mb-5 mt-5"> {{ object.utterance }} </h4>
 			</div>
 
@@ -60,7 +63,7 @@
 			
 			<div class="row mb-2 mt-5">
 				<div class="col-md-6">
-					<p class="text-start mb-5"> Prosody: {{object.prosody}} </p>
+					<p class="text-primary mb-5"> Prosody: {{object.prosody}} </p>
 				</div>
 				<div class="col-md-6">
 					<p class="text-info mb-5"> Status: {{object.status}} </p>
@@ -106,7 +109,7 @@
 
 		</div>
 	</div>	
-</header>
+</section>
 {% endblock content %}
 
 {% block js %}

@@ -33,7 +33,7 @@
 <header class="masthead d-flex">
 	<div class="container text-center my-auto">
 
-		<div class=" mb-5 bg-dark text-white">
+		<div class=" mb-5 bg-secondary text-white">
 			{% if object.author == user %}
 				<div class="container text-right my-auto">
 					<div class="dropdown">
@@ -95,7 +95,7 @@
 								<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
 							</div>
 							<div class="control mb-4 mt-2" style="margin-top: 1rem">
-								<button class="btn btn-outline-info" id="submit">Submit</button>
+								<button class="btn btn-primary" id="submit">Submit</button>
 							</div>
 						{% endif %}
 					</Fieldset>
@@ -107,8 +107,6 @@
 		</div>
 	</div>	
 </header>
-
-
 {% endblock content %}
 
 {% block js %}

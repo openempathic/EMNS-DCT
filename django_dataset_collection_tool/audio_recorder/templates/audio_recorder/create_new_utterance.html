@@ -10,7 +10,7 @@
 
     <div class="container my-auto">
 
-        <div class="p-5 bg-dark text-white">
+        <div class="p-5 bg-secondary text-white">
             <div class="content-section">
                 <form method="POST">
                     {% csrf_token %}
@@ -19,29 +19,12 @@
                         {{ form|crispy }}
                     </Fieldset>
                     <div class="form-group">
-                        <button class="btn btn-outline-info" type="submit">Submit</button>
+                        <button class="btn btn-primary" type="submit">Submit</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <section class="content-section bg-primary text-white" id="data_we_collect">
-        <div class="container px-4 px-lg-5 ">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-lg-10">
-                    <div class="content-section-heading">
-                        <h2 class="text-secondary mb-4">What data we collect?</h2>
-                    </div>
-                    <ul class="lead list-unstyled">
-                        <li>We will not make your email public.</li>
-                        <li>number of recording and the hours of recorded.</li> 
-                        <li>You can choose to make your name or contact details available.</li>
-                        <li>You can choose to include demographic data, such as age and gender.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
 </header>
 
 {% endblock content %}

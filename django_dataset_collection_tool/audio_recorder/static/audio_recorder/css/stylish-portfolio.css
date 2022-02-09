@@ -349,29 +349,29 @@ a:hover, a:focus, a:active {
 }
 
 .btn-primary {
+  background-color: #ecb807 !important;
+  border-color: #ecb807 !important;
+  color: #070707 !important;
+}
+
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+  background-color: #ba9106 !important;
+  border-color: #ba9106 !important;
+  color: #fff !important;
+
+}
+
+.btn-secondary {
   background-color: #000000 !important;
   border-color: #ffffff !important;
   color: #fff !important;
 }
 
-.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
-  background-color: #ba9106 !important;
-  border-color: #ba9106 !important;
-  color: #070707 !important;
-}
-
-.btn-secondary {
-  background-color: #ecb807 !important;
-  border-color: #ecb807 !important;
-  color: #fff !important;
-}
-
-
 .btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
   background-color: #ba9106 !important;
   border-color: #ba9106 !important;
   color: #070707 !important;
-
 }
 
 /* .btn-secondary.dropdown-toggle {

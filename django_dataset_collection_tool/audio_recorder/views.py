@@ -132,6 +132,7 @@ class UserUtteranceListView(LoginRequiredMixin, FilterView):
 class UtteranceCreateView(LoginRequiredMixin, CreateView):
 	model = Utterances
 	fields = ['utterance', 'prosody']
+	template_name = 'audio_recorder/create_new_utterance.html'
 
 	def form_valid(self, form) -> HttpResponse:
 		form.instance.author = self.request.user

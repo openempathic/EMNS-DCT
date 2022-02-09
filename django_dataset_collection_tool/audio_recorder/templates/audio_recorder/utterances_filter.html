@@ -9,34 +9,33 @@
 
 {% block content %}
 
-<!-- Header -->
-<header class="callout d-flex">
-    <div class="container text-center my-auto">
-        <h1 class="mb-3">Utterances</h1>
+<section class="content-section bg-primary text-white text-center" id="title">
+	<div class="container text-center my-auto">
+		<h1>Utterances</h1>
 	</div>
-</header>
+</section>
 
 
-<div class="album py-5 bg-light">
+<div class="album py-5 bg-secondary">
 	<div class="container">
 		<div class="container mb-3">
 			<form action="" method="get">
 				<div class="form-row">
 					{% for form_filter in filter.form %}
-						<div class="form-group col">
+						<div class="form-group col text-white">
 							{{ form_filter|as_crispy_field }}
 						</div>
 					{% endfor %}
-					<button type="submit" class="btn btn-light">Filter</button>
+					<button class="btn btn-light" type="submit" >Filter</button>
 				</div>
 			</form>
 		</div>
 		{% for object in object_list %}
-			<div class="card mb-2 box-shadow">
+			<div class="card mb-2 box-shadow bg-primary">
 				<div class="card-body">
 					<div class="d-flex justify-content-between">
-						<p class="card-text">{{ object.prosody }}</p>
-						<p class="card-text">{{ object.utterance|truncatewords:13}}</p>
+						<p class="card-text text-white">{{ object.prosody }}</p>
+						<p class="card-text text-white">{{ object.utterance|truncatewords:13}}</p>
 						<a class="link-primary" href="{% url 'utterance-detail' object.id %}">Edit</a>
 					</div>
 					
@@ -55,7 +54,7 @@
 		{% endfor %}
 		{% if is_paginated %}
 			<nav aria-label="Page navigation">
-				<ul class="pagination justify-content-center">
+				<ul class="pagination justify-content-center mt-5">
 					{% if page_obj.has_previous %}
 						<li class="page-item"><a class="page-link" href="{% filtered_paginated_url 1 'page' request.GET.urlencode %}">First</a></li>
 						<li class="page-item">

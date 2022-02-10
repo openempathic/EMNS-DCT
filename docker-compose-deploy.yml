@@ -15,7 +15,7 @@ services:
       - DEBUG=0
 
   proxy:
-    image: knoriy/test_proxy
+    image: knoriy/nginx_reverse_proxy
     build:
       context: ./proxy
     volumes:

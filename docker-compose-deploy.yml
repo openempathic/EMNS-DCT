@@ -7,8 +7,6 @@ services:
       context: .
     volumes:
       - ./django_dataset_collection_tool:/app # Copy these files to the dockerfile
-
-      # - static_data:/vol/web
     env_file:
       - ./ENVIROMENT_VARIABLES
     environment:
@@ -19,7 +17,6 @@ services:
     build:
       context: ./proxy
     volumes:
-      # - static_data:/vol/static
       - ./django_dataset_collection_tool/static:/vol/static
       - ./django_dataset_collection_tool/media/:/vol/media
     # command: 'certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com'
@@ -28,6 +25,3 @@ services:
       - "443:443"
     depends_on:
       - app
-
-volumes:
-  static_data:

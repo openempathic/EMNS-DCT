@@ -142,4 +142,4 @@ src/dummy_utterances.csv
 django_dataset_collection_tool/audio_recorder/migrations/
 django_dataset_collection_tool/users/migrations/
 
-ENVIROMENT_VARIABLES
+env_variables.conf

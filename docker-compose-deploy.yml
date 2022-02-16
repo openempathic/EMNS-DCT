@@ -21,7 +21,7 @@ services:
       - ./django_dataset_collection_tool/media/:/vol/media
     # command: 'certbot --nginx --test-cert --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com'
     ports:
-      - "8081:80"
-      - "4432:443"
+      - "80:80"
+      - "443:443"
     depends_on:
       - app

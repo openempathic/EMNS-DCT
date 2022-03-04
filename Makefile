@@ -24,7 +24,7 @@ bash:
 	@docker run -it --rm --gpus=all $(ports) -v $(volume_dir) -v $(dataset_dir) --name $(container_name) $(Docker_name) bash || docker exec -it $(container_name) bash
 
 run:
-	@docker run -it --rm --gpus=all $(ports) -v $(volume_dir) -v $(dataset_dir) --name $(container_name) $(Docker_name) || docker exec -it $(container_name) bash
+	@docker-compose -f docker-compose-deploy.yml up
 
 reset_migrations:
 	@find . -path "*/*/migrations/*.py" -not -name "__init__.py" -delete

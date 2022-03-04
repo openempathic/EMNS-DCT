@@ -10,7 +10,7 @@ services:
     env_file:
       - ./env_variables.conf
     environment:
-      - DEBUG=1
+      - DEBUG=0
 
   proxy:
     image: knoriy/nginx_reverse_proxy

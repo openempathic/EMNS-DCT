@@ -11,7 +11,7 @@ def create_utterance(user, utterance, prosody):
 	post.save()
 
 def main():
-	prosodies = ['Happy', 'Sad', 'Angry', 'Excited']
+	prosodies = ['Happy', 'Sad', 'Angry', 'Excited', 'Sarcastic', 'Neutral', 'Disgust', 'Surprised' ]
 	user = User.objects.filter(username="knoriy").first()
 	df = pd.read_csv("/home/knoriy/Documents/phd/dataset_collection_tool/src/data/sample.tsv", sep="\t")
 	print(df)

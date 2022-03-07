@@ -3,8 +3,8 @@
 This container was tested on `Pop!_OS 20.04`.
 Additinal changes may be required such as paths, please read the appropreate `README.md`.
 
-### Prerequisite
-# Create ssl certificate
+# Prerequisite
+## Create ssl certificate
 ```
 docker exec -it dataset_collection_tool_proxy_1 sh
 ```
@@ -12,7 +12,11 @@ docker exec -it dataset_collection_tool_proxy_1 sh
 certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com --redirect --test-cert
 ```
 
-# Create Utterances
+## Create Utterances
+```
+cd dataset_collection_tool
+python manage.py shell
+```
 ```
 from audio_recorder.models import Utterances
 from django.contrib.auth.models import User

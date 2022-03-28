@@ -10,4 +10,4 @@ admin.site.register(Utterances)
 class UtterancesResource(resources.ModelResource):
     class Meta:
         model = Utterances
-        fields = ['utterance', 'prosody', 'author', 'date_created', 'status', 'audio_recording']
+        fields = ['utterance', 'prosody', 'author_id', 'age', 'gender', 'date_created', 'status', 'audio_recording']

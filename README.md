@@ -4,14 +4,6 @@ This container was tested on `Pop!_OS 20.04`.
 Additinal changes may be required such as paths, please read the appropreate `README.md`.
 
 # Prerequisite
-## Create ssl certificate
-```
-docker exec -it dataset_collection_tool_proxy_1 sh
-```
-```
-certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com --redirect --test-cert
-```
-
 ## Create Utterances
 ```
 cd dataset_collection_tool
@@ -46,3 +38,15 @@ def main(csv_dir, sep="/t"):
 
 main("/home/knoriy/Documents/phd/dataset_collection_tool/src/data/sample.tsv")
 ```
+## Start container
+```
+make run
+```
+## Create ssl certificate
+```
+docker exec -it dataset_collection_tool_proxy_1 sh
+```
+```
+certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com --redirect --test-cert
+```
+Remove `--test-cert` after confirming that everything loaded as expected.

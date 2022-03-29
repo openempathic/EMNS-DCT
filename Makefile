@@ -28,9 +28,3 @@ run:
 
 down:
 	@docker-compose -f docker-compose-deploy.yml down
-
-reset_migrations:
-	@find . -path "*/*/migrations/*.py" -not -name "__init__.py" -delete
-	@find . -path "*/*/migrations/*.pyc"  -delete
-	@python django_dataset_collection_tool/manage.py makemigrations
-	@python django_dataset_collection_tool/manage.py migrate

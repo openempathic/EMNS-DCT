@@ -4,14 +4,19 @@ This container was tested on `Pop!_OS 20.04`.
 Additinal changes may be required such as paths, please read the appropreate `README.md`.
 
 # Prerequisite
-## create super user
+## reset migrations
 ```
+find . -path "*/*/migrations/*.py" -not -name "__init__.py" -delete
+find . -path "*/*/migrations/*.pyc"  -delete
+find . -path "*/db.sqlite3"  -delete
+python manage.py makemigrations
+python manage.py migrate
 python manage.py createsuperuser
 ```
 
 ## Create Utterances
 ```
-cd dataset_collection_tool
+cd dataset_collection_tool/django_dataset_collection_tool
 python manage.py shell
 ```
 ```

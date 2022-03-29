@@ -1,51 +1,50 @@
-sentence	mood
-She'll be all right.	disgust
-six	angry
-All's well that ends well.	angry
-Do you mean it?	angry
-The new patch is less invasive than the old one, but still causes regressions.	happy
-How is Mozilla going to handle ambiguities like queue and cue?	disgust
-I guess you must think I'm kinda batty.	sad
-No one near the remote machine you could ring?	disgust
-Sauce for the goose is sauce for the gander.	sad
-Groves started writing songs when she was four years old.	happy
-The long-lived bridge still stands today.	happy
-There was nothing to hold him back except himself.	disgust
-We spoke often.	angry
-The electrician looked puzzled.	sad
-The ladder on the fire truck was not long enough.	angry
-I will tell her what we decided.	disgust
-Enoxaparin belongs to the class of drugs known as low molecular weight heparins.	angry
-Good things come in small packages.	sad
-It is a member theater of the Union of the Theatres of Europe.	sad
-YOU WANNA TAKE THIS OUTSIDE?	angry
-The immersion in hot water also kills the silkworm pupa.	disgust
-She married her business partner, Steve Lane.	disgust
-The attack on our root server overstrained our senior administrator.	happy
-Do you want me?	angry
-That would be funny if he did.	angry
-Although she had flowers and applause, Mavis said she was not content.	happy
-Add the column and put the sum here.	happy
-A mansion was usually set on a one square.	sad
-"Alston commented that he felt the cartoonist ""might have had some racial intent""."	happy
-Doing a handstand needs a lot of practice to learn.	disgust
-Man in red tshirt and baseball cap viewed from above he is has a pile of posters	happy
-The two films were then released within one day of each other.	happy
-‘What did he say his name was?’ asked the captain.	angry
-yes	angry
-After experiencing a mind-blowing sensual orgy, Mike was sure he had taken an overdose.	happy
-Religious festivals include the Muslim Eids and the Christian Christmas and Easter.	disgust
-What do you advise, sir?	sad
-Charles looked on, angry that there was nothing he could do.	angry
-"Karina Smirnoff of ""Dancing With The Stars"" hosted the following month."	sad
-It is inhibited by the pneumotaxic centre.	disgust
-His wide grin earned many friends.	sad
-In the United States, Federal Vehicle fleets refers to the federal government's vehicles.	sad
-The prints are then delivered to the customer.	happy
-In spite of this, I still believed that there were men in Mars.	sad
-The land was ruined, and I had to find some other way to earn a living.	sad
-Footprints of mud and clay were on the floor.	happy
-I pointed out Mars, a bright dot of light.	happy
-I know why I want to get back to my flock, he thought.	happy
-You should see the other guy, specifically, how good at fighting he is.	angry
-He is of African-American and Italian descent.	sad
+She'll be all right.	Disgust
+six	Happy
+All's well that ends well.	Sad
+Do you mean it?	Sarcastic
+The new patch is less invasive than the old one, but still causes regressions.	Disgust
+How is Mozilla going to handle ambiguities like queue and cue?	Surprised
+I guess you must think I'm kinda batty.	Neutral
+No one near the remote machine you could ring?	Happy
+Sauce for the goose is sauce for the gander.	Surprised
+Groves started writing songs when she was four years old.	Sad
+The long-lived bridge still stands today.	Excited
+There was nothing to hold him back except himself.	Sarcastic
+We spoke often.	Neutral
+The electrician looked puzzled.	Angry
+The ladder on the fire truck was not long enough.	Sad
+I will tell her what we decided.	Surprised
+Enoxaparin belongs to the class of drugs known as low molecular weight heparins.	Sarcastic
+Good things come in small packages.	Happy
+It is a member theater of the Union of the Theatres of Europe.	Happy
+YOU WANNA TAKE THIS OUTSIDE?	Disgust
+The immersion in hot water also kills the silkworm pupa.	Sarcastic
+She married her business partner, Steve Lane.	Surprised
+The attack on our root server overstrained our senior administrator.	Disgust
+Do you want me?	Neutral
+That would be funny if he did.	Surprised
+Although she had flowers and applause, Mavis said she was not content.	Happy
+Add the column and put the sum here.	Excited
+A mansion was usually set on a one square.	Sarcastic
+"Alston commented that he felt the cartoonist ""might have had some racial intent""."	Excited
+Doing a handstand needs a lot of practice to learn.	Neutral
+Man in red tshirt and baseball cap viewed from above he is has a pile of posters	Disgust
+The two films were then released within one day of each other.	Sad
+‘What did he say his name was?’ asked the captain.	Sad
+yes	Neutral
+After experiencing a mind-blowing sensual orgy, Mike was sure he had taken an overdose.	Surprised
+Religious festivals include the Muslim Eids and the Christian Christmas and Easter.	Sarcastic
+What do you advise, sir?	Excited
+Charles looked on, angry that there was nothing he could do.	Happy
+"Karina Smirnoff of ""Dancing With The Stars"" hosted the following month."	Neutral
+It is inhibited by the pneumotaxic centre.	Disgust
+His wide grin earned many friends.	Sad
+In the United States, Federal Vehicle fleets refers to the federal government's vehicles.	Sad
+The prints are then delivered to the customer.	Surprised
+In spite of this, I still believed that there were men in Mars.	Excited
+The land was ruined, and I had to find some other way to earn a living.	Excited
+Footprints of mud and clay were on the floor.	Happy
+I pointed out Mars, a bright dot of light.	Sad
+I know why I want to get back to my flock, he thought.	Sarcastic
+You should see the other guy, specifically, how good at fighting he is.	Sad
+He is of African-American and Italian descent.	Sad

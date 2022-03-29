@@ -115,7 +115,7 @@ class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class UtteranceListView(LoginRequiredMixin, FilterView):
 	model = Utterances
-	ordering = ['prosody']
+	# ordering = ['prosody']
 	paginate_by = 10
 
 	filterset_class = OrderFilter

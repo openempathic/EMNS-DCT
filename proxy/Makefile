@@ -2,8 +2,8 @@
 user 					= 1000:1000
 
 # docker image and container details
-Docker_name				= $(shell whoami)/test_proxy
-container_name 			= test_proxy
+Docker_name				= $(shell whoami)/nginx_reverse_proxy
+container_name 			= nginx_reverse_proxy
 
 # forwards ports
 ports 					= -p 80:80 -p 443:443

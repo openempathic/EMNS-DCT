@@ -10,10 +10,10 @@ def create_utterance(user, utterance, prosody):
 						author=user)
 	post.save()
 
-def main():
-	prosodies = ['Happy', 'Sad', 'Angry', 'Excited', 'Sarcastic', 'Neutral', 'Disgust', 'Surprised' ]
+def main(csv_dir, sep="/t"):
+	prosodies = ['Happy', 'Sad', 'Angry', 'Excited', 'Sarcastic', 'Neutral', 'Disgust', 'Surprised']
 	user = User.objects.filter(username="knoriy").first()
-	df = pd.read_csv("/home/knoriy/Documents/phd/dataset_collection_tool/src/data/sample.tsv", sep="\t")
+	df = pd.read_csv(csv_dir, sep=sep, header=None)
 	print(df)
 	print('#'*100)
 	for i, row in df.iterrows():
@@ -23,5 +23,4 @@ def main():
 			create_utterance(user, row['sentence'], random.choice(prosodies))
 			print("Found nan: ", i)
 
-
-main()
+main("/home/knoriy/Documents/phd/dataset_collection_tool/src/data/train.tsv")

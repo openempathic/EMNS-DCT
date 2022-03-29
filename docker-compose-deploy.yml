@@ -19,7 +19,6 @@ services:
     volumes:
       - ./django_dataset_collection_tool/static:/vol/static
       - ./django_dataset_collection_tool/media/:/vol/media
-    # command: 'certbot --nginx --test-cert --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com'
     ports:
       - "80:80"
       - "443:443"

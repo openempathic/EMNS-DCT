@@ -4,6 +4,11 @@ This container was tested on `Pop!_OS 20.04`.
 Additinal changes may be required such as paths, please read the appropreate `README.md`.
 
 # Prerequisite
+## create super user
+```
+python manage.py createsuperuser
+```
+
 ## Create Utterances
 ```
 cd dataset_collection_tool
@@ -25,7 +30,7 @@ def create_utterance(user, utterance, prosody):
 def main(csv_dir, sep="/t"):
 	prosodies = ['Happy', 'Sad', 'Angry', 'Excited', 'Sarcastic', 'Neutral', 'Disgust', 'Surprised' ]
 	user = User.objects.filter(username="knoriy").first()
-	df = pd.read_csv(csv_dir, sep=sep)
+	df = pd.read_csv(csv_dir, sep=sep, header=None)
 	print(df)
 	print('#'*100)
 	for i, row in df.iterrows():
@@ -34,7 +39,6 @@ def main(csv_dir, sep="/t"):
 		else:
 			create_utterance(user, row['sentence'], random.choice(prosodies))
 			print("Found nan: ", i)
-
 
 main("/home/knoriy/Documents/phd/dataset_collection_tool/src/data/sample.tsv")
 ```
@@ -47,6 +51,6 @@ make run
 docker exec -it dataset_collection_tool_proxy_1 sh
 ```
 ```
-certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.knoriy.com -d www.dct.knoriy.com --redirect --test-cert
+certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d emns.knoriy.com -d www.emns.knoriy.com --redirect --test-cert
 ```
 Remove `--test-cert` after confirming that everything loaded as expected.

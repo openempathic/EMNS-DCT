@@ -17,8 +17,6 @@ def main(csv_dir, sep="\t", prosodies=None):
 	user = User.objects.filter(username="knoriy").first()
 	df = pd.read_csv(csv_dir, sep=sep, header=None).head(20_000)
 	
-	print(df)
-	print('#'*100)
 	for i, row in df.iterrows():
 		if not row.isnull().any():
 			create_utterance(user, row[0], row[1])

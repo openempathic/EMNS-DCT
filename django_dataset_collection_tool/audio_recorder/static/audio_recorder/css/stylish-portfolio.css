@@ -137,7 +137,7 @@ h6 {
   height: 100%;
   transition: all 0.4s ease 0s;
   transform: translateX(250px);
-  background: #070707;
+  background: #222222;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -159,7 +159,7 @@ h6 {
 
 .sidebar-nav li a:hover {
   text-decoration: none;
-  color: #070707;
+  color: #222222;
   background: #ecb807;
 }
 
@@ -329,12 +329,12 @@ footer.footer .social-link {
   font-size: 1.5rem;
   background-color: #ecb807;
   transition: background-color 0.15s ease-in-out;
-  box-shadow: 0 3px 3px 0 #070707;
-  color: #070707;
+  box-shadow: 0 3px 3px 0 #222222;
+  color: #222222;
 }
 
 footer.footer .social-link:hover {
-  background-color: #070707;
+  background-color: #222222;
   text-decoration: none;
   color: #ecb807;
 
@@ -351,19 +351,19 @@ a:hover, a:focus, a:active {
 .btn-primary {
   background-color: #ecb807 !important;
   border-color: #ecb807 !important;
-  color: #070707 !important;
+  color: #222222 !important;
 }
 
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
-  background-color: #070707 !important;
-  border-color: #070707 !important;
+  background-color: #222222 !important;
+  border-color: #222222 !important;
   color: #ecb807 !important;
 
 }
 
 .btn-secondary {
-  background-color: #070707 !important;
+  background-color: #222222 !important;
   border-color: #fff !important;
   color: #fff !important;
 }
@@ -371,7 +371,7 @@ a:hover, a:focus, a:active {
 .btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
   background-color: #ecb807 !important;
   border-color: #ecb807!important;
-  color: #070707 !important;
+  color: #222222 !important;
 }
 
 /* .btn-secondary.dropdown-toggle {
@@ -394,11 +394,11 @@ a:hover, a:focus, a:active {
 }
 
 .bg-primary {
-  background-color: #131313 !important;
+  background-color: #303030 !important;
 }
 
 .bg-secondary {
-  background-color: #070707 !important;
+  background-color: #222222 !important;
 }
 
 .text-primary {

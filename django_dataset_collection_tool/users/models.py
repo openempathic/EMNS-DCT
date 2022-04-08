@@ -6,7 +6,7 @@ import uuid
 
 
 class Profile(models.Model):
-    user        = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+    user        = models.OneToOneField(User, on_delete=models.CASCADE)
     image       = models.ImageField(default='media/default.jpg', upload_to='media/profile_picks')
     status      = models.CharField(max_length=70, null=True, choices=(('Admin', 'Admin'), ('Actor', 'Actor'), ('Viewer', 'Viewer')), default='Viewer' )
 

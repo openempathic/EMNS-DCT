@@ -17,6 +17,11 @@ from django.views.generic.edit import FormMixin, FormView
 
 from django.urls import reverse
 
+# used to update date created
+from django.utils import timezone
+
+
+
 from django_filters.views import FilterView
 from django.core.mail import send_mail
 from django.conf import settings
@@ -61,9 +66,8 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 		if not request.user.is_authenticated:
 			return HttpResponseForbidden()
 		form = RecordingUpdateForm(request.POST)
-		
-		print('form posted','#'*100)
 
+		print('form posted','#'*100)
 
 		if form.is_valid():
 			print('form valid','#'*100)
@@ -75,6 +79,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 	def form_valid(self, form) -> HttpResponse:
 		if self.request.user.profile.status == 'Actor':
 			self.object.author = self.request.user
+			self.object.date_created = timezone.now()
 			self.object.audio_recording = self.request.FILES.get("recorded_audio")
 			self.object.status = 'Awaiting Review'
 			self.object.save()
@@ -115,10 +120,15 @@ class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class UtteranceListView(LoginRequiredMixin, FilterView):
 	model = Utterances
-	# ordering = ['prosody']
 	paginate_by = 10
-
 	filterset_class = OrderFilter
+
+	def get_queryset(self):
+		if self.request.user.groups.filter(user=self.request.user).exists():
+			return 
+		else:
+			return Utterances.objects.filter(author=self.request.user)
+
 
 class UserUtteranceListView(LoginRequiredMixin, FilterView):
 	model = Utterances
@@ -127,7 +137,7 @@ class UserUtteranceListView(LoginRequiredMixin, FilterView):
 
 	def get_queryset(self):
 		user = get_object_or_404(User, username=self.kwargs.get('username'))
-		return Utterances.objects.filter(author=user).order_by('-date_created').order_by('-prosody')
+		return Utterances.objects.filter(author=user)#.order_by('-date_created')#.order_by('-prosody')
 
 class UtteranceCreateView(LoginRequiredMixin, CreateView):
 	model = Utterances

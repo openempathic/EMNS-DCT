@@ -67,8 +67,6 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			return HttpResponseForbidden()
 		form = RecordingUpdateForm(request.POST)
 
-		print('form posted','#'*100)
-
 		if form.is_valid():
 			print('form valid','#'*100)
 			return self.form_valid(form)

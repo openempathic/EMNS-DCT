@@ -88,17 +88,12 @@ $("#submit").on("click", function (event) {
 	//   create a new File with the recordedData and its name
 	const recordedFile = new File([player.recordedData], `recorded_audio.webm`);
 	//   initializes an empty FormData
-	let data = new FormData();
+	let form = document.getElementById("id_utterance_detail_form")
+	let data = new FormData(form);
 	//   appends the recorded file and language value
-	// try{
 	console.log(recordedFile);
 	data.append("recorded_audio", recordedFile);
 
-
-	// get m_slider data
-	data.append("m_slider", document.getElementById("id_m_slider").value);
-
-	// }
 	//   post url endpoint
 	const url = ""
 

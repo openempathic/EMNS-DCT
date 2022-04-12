@@ -73,7 +73,7 @@
 				</div>
 			</div>
 
-			<form method="POST">
+			<form id="id_utterance_detail_form" method="POST">
 				{% csrf_token %}
 				<div class="field">
 					<Fieldset class="form-group">
@@ -90,8 +90,6 @@
 													<option value="Complete">Complete</option> 
 													<option value="Needs Updating">Needs Updating</option>
 												</select>
-
-												<input name="m_slider" type="range" class="form-range" id="id_m_slider">
 											</div>
 												<button class="btn btn-outline-info" id="submit">Submit</button>
 										</div>
@@ -101,8 +99,8 @@
 						{% elif request.user.profile.status == 'Actor' %}
 							<div class="container mb-5">
 								<div class="col">
-									<input name="m_slider" type="range" class="form-range" id="id_m_slider" min="0" max="10" value="5">
-									<span id="id_slider_text" class="text-primary">Expressiveness level: <span id="ex6SliderVal">5</span></span>
+									<input name="m_slider" type="range" class="form-range" id="id_m_slider" min="0" max="10" value={{object.level}}>
+									<span id="id_slider_text" class="text-primary">Expressiveness level: <span id="ex6SliderVal">{{object.level}}</span></span>
 								</div>
 								<p class="text-secondary">0 = Neutral, 5 = moderately expressive, 10 = very expressive</p>
 							</div>

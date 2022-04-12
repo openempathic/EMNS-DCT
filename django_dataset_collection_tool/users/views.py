@@ -24,6 +24,13 @@ def profile(request):
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         
         if u_form.is_valid() and p_form.is_valid():
+            request.user.age = request.user.profile.age = u_form['age'].value()
+            request.user.gender = request.user.profile.gender = u_form['gender'].value()
+            request.user.email = request.user.profile.email = u_form['email'].value()
+            request.user.first_name = request.user.profile.first_name = u_form['first_name'].value()
+            request.user.last_name = request.user.profile.last_name = u_form['last_name'].value()
+
+
             u_form.save()
             p_form.save()
 

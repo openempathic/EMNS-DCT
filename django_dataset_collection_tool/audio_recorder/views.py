@@ -77,7 +77,9 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 	def form_valid(self, form) -> HttpResponse:
 		if self.request.user.profile.status == 'Actor':
 			self.object.author = self.request.user
+			self.object.gender = self.request.user.profile.gender
 			self.object.date_created = timezone.now()
+			self.object.level = self.request.POST.get("m_slider")
 			self.object.audio_recording = self.request.FILES.get("recorded_audio")
 			self.object.status = 'Awaiting Review'
 			self.object.save()

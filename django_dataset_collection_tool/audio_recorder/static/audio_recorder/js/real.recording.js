@@ -86,7 +86,15 @@ $("#submit").on("click", function (event) {
 	let data = new FormData();
 	//   appends the recorded file and language value
 	// try{
+	console.log(recordedFile);
 	data.append("recorded_audio", recordedFile);
+
+
+	// get m_slider data
+	console.log("HELLOW WORLD", document.getElementById("id_m_slider").value);
+	data.append("m_slider", document.getElementById("id_m_slider").value);
+
+
 	// }
 	//   post url endpoint
 	const url = ""

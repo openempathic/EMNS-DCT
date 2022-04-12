@@ -87,6 +87,8 @@
 													<option value="Complete">Complete</option> 
 													<option value="Needs Updating">Needs Updating</option>
 												</select>
+
+												<input name="m_slider" type="range" class="form-range" id="id_m_slider">
 											</div>
 												<button class="btn btn-outline-info" id="submit">Submit</button>
 										</div>
@@ -94,12 +96,12 @@
 								</div>
 							</div>
 						{% elif request.user.profile.status == 'Actor' %}
-							<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
-								<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
-							</div>
-							<div class="control mb-4 mt-2" style="margin-top: 1rem">
+								<input name="m_slider" type="range" class="form-range" id="id_m_slider">
+
+								<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
+									<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
+								</div>
 								<button class="btn btn-primary" id="submit">Submit</button>
-							</div>
 						{% endif %}
 					</Fieldset>
 				</div>
@@ -113,7 +115,7 @@
 {% endblock content %}
 
 {% block js %}
-	{% if request.user.profile.status == 'Admin' or request.user.profile.status == 'Actor' %}
+	{% if request.user.profile.status == 'Actor' %}
 		<script src="{% static 'audio_recorder/js/real.recording.js' %}"></script>
 	{% endif %}
 {% endblock js %}

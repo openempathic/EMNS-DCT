@@ -6,16 +6,16 @@ from .models import Profile
 
 class UserResisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    gender = forms.ChoiceField(choices=(('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')))
-    age = forms.IntegerField()
+    gender = forms.ChoiceField(choices=(('Other', 'Other'),('Male', 'Male'), ('Female', 'Female')), required=False)
+    age = forms.IntegerField(required=False)
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'age', 'gender', 'email', 'password1', 'password2']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField(required=True)
-    gender = forms.ChoiceField(choices=(('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')))
+    gender = forms.ChoiceField(choices=(('Other', 'Other'),('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')))
     age = forms.IntegerField()
 
     class Meta:

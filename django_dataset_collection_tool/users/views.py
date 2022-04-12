@@ -10,8 +10,9 @@ def register(request):
         form = UserResisterForm(request.POST)
         if form.is_valid():
             form.save()
+
             messages.success(request, f"{form.cleaned_data.get('username')} Account created.")
-            return redirect('login')
+            return redirect('profile')
     else:
         form = UserResisterForm()
 
@@ -29,7 +30,6 @@ def profile(request):
             request.user.email = request.user.profile.email = u_form['email'].value()
             request.user.first_name = request.user.profile.first_name = u_form['first_name'].value()
             request.user.last_name = request.user.profile.last_name = u_form['last_name'].value()
-
 
             u_form.save()
             p_form.save()

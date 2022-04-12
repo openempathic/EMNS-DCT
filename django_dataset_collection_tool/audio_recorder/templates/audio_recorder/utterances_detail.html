@@ -62,11 +62,14 @@
 			{% endif %}
 			
 			<div class="row mb-2 mt-5">
-				<div class="col-md-6">
+				<div class="col-md-4">
 					<p class="text-primary mb-5"> Prosody: {{object.prosody}} </p>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-4">
 					<p class="text-info mb-5"> Status: {{object.status}} </p>
+				</div>
+				<div class="col-md-4">
+					<p class="text-info mb-5"> Expressiveness level: {{object.level}} </p>
 				</div>
 			</div>
 
@@ -96,7 +99,8 @@
 								</div>
 							</div>
 						{% elif request.user.profile.status == 'Actor' %}
-								<input name="m_slider" type="range" class="form-range" id="id_m_slider">
+								<input name="m_slider" type="range" class="form-range" id="id_m_slider" min="0" max="10" value="5">
+								<span id="id_slider_text" class="text-primary">Expressiveness level: <span id="ex6SliderVal">5</span></span>
 
 								<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
 									<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>

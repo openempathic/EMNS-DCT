@@ -74,6 +74,11 @@ player.on("finishRecord", function () {
 	$("#submit").prop("disabled", false);
 });
 
+// update level slider on input
+$("#id_m_slider").on("input", function() {
+	$("#ex6SliderVal").text(document.getElementById("id_m_slider").value);
+});
+
 // Give event listener to the submit button
 $("#submit").on("click", function (event) {
 	event.preventDefault();
@@ -91,9 +96,7 @@ $("#submit").on("click", function (event) {
 
 
 	// get m_slider data
-	console.log("HELLOW WORLD", document.getElementById("id_m_slider").value);
 	data.append("m_slider", document.getElementById("id_m_slider").value);
-
 
 	// }
 	//   post url endpoint

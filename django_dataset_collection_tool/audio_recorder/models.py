@@ -10,6 +10,7 @@ import uuid
 
 class Utterances(models.Model):
     utterance       = models.TextField()
+    description     = models.TextField(null=True)
     prosody         = models.CharField(max_length=70)
     author          = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     date_created    = models.DateTimeField(default=timezone.now)

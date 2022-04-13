@@ -78,6 +78,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 		if self.request.user.profile.status == 'Actor':
 			self.object.author = self.request.user
 			self.object.gender = self.request.user.profile.gender
+			self.object.age = self.request.user.profile.age
 			self.object.date_created = timezone.now()
 			self.object.level = self.request.POST.get("m_slider")
 			self.object.audio_recording = self.request.FILES.get("recorded_audio")
@@ -89,6 +90,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 				})
 		elif self.request.user.profile.status == 'Admin':
 			self.object.status = self.request.POST.get("status")
+			self.object.description = self.request.POST.get("description_textarea")
 			self.object.save()
 		
 		return super().form_valid(form)

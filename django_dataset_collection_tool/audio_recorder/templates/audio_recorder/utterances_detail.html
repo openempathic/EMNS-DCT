@@ -79,24 +79,19 @@
 					<Fieldset class="form-group">
 						{% if request.user.profile.status == 'Admin' %}
 							<div class="container">
-								<div class="row">
-									<div class="col-md-6 mb-4 offset-md-3">
-										<div class="row">
-											<div class="col">
-												<select name="status" class="select form-control" id="id_status"> 
-													<option value="Pending" selected="">Pending</option> 
-													<option value="Awaiting Review">Awaiting Review</option> 
-													<option value="Complete">Complete</option> 
-													<option value="Needs Updating">Needs Updating</option>
-												</select>
-											</div>
-											<div class="form-group">
-												<label for="id_description_textarea">Description</label>
-												<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4"></textarea>
-											</div>
-												<button class="btn btn-outline-info" id="submit">Submit</button>
-										</div>
-									</div>
+								<div class="col">
+									<select name="status" class="select form-control" id="id_status"> 
+										<option value="Pending" selected="">Pending</option> 
+										<option value="Awaiting Review">Awaiting Review</option> 
+										<option value="Complete">Complete</option> 
+										<option value="Needs Updating">Needs Updating</option>
+									</select>
+								</div>
+								<div class="col mt-2">
+									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" placeholder="Description"></textarea>
+								</div>
+								<div class="mt-5">
+									<button class="btn btn-outline-info" id="submit">Submit</button>
 								</div>
 							</div>
 						{% elif request.user.profile.status == 'Actor' %}

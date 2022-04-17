@@ -4,12 +4,6 @@ This container was tested on `Pop!_OS 20.04`.
 Additinal changes may be required such as paths, please read the appropreate `README.md`.
 
 # Prerequisite
-
-## Collect static file
-Only run this if static files are changed
-```
-python manage.py collectstatic
-```
 ## reset migrations
 ```
 find . -path "*/*/migrations/*.py" -not -name "__init__.py" -delete
@@ -19,7 +13,11 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
 ```
-
+## Collect static file
+Only run this if static files are changed
+```
+python manage.py collectstatic
+```
 ## Create Utterances
 ```
 cd dataset_collection_tool/django_dataset_collection_tool

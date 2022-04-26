@@ -121,7 +121,7 @@ h6 {
 
 @media (min-width: 992px) {
   .masthead {
-    height: 100%;
+    height: 100vh;
   }
   .masthead h1 {
     font-size: 5.5rem;
@@ -137,7 +137,7 @@ h6 {
   height: 100%;
   transition: all 0.4s ease 0s;
   transform: translateX(250px);
-  background: #030303;
+  background: #222222;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -159,8 +159,8 @@ h6 {
 
 .sidebar-nav li a:hover {
   text-decoration: none;
-  color: #030303;
-  background: #ec1607;
+  color: #222222;
+  background: #ecb807;
 }
 
 .sidebar-nav li a:active,
@@ -327,16 +327,16 @@ footer.footer .social-link {
   width: 4rem;
   line-height: 4.3rem;
   font-size: 1.5rem;
-  background-color: #ec1607;
+  background-color: #ecb807;
   transition: background-color 0.15s ease-in-out;
-  box-shadow: 0 3px 3px 0 #030303;
-  color: #030303;
+  box-shadow: 0 3px 3px 0 #222222;
+  color: #222222;
 }
 
 footer.footer .social-link:hover {
-  background-color: #030303;
+  background-color: #222222;
   text-decoration: none;
-  color: #ec1607;
+  color: #ecb807;
 
 }
 
@@ -349,29 +349,29 @@ a:hover, a:focus, a:active {
 }
 
 .btn-primary {
-  background-color: #ec1607 !important;
-  border-color: #ec1607 !important;
-  color: #030303 !important;
+  background-color: #ecb807 !important;
+  border-color: #ecb807 !important;
+  color: #222222 !important;
 }
 
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
-  background-color: #030303 !important;
-  border-color: #030303 !important;
-  color: #ec1607 !important;
+  background-color: #222222 !important;
+  border-color: #222222 !important;
+  color: #ecb807 !important;
 
 }
 
 .btn-secondary {
-  background-color: #030303 !important;
+  background-color: #222222 !important;
   border-color: #fff !important;
   color: #fff !important;
 }
 
 .btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
-  background-color: #ec1607 !important;
-  border-color: #ec1607!important;
-  color: #030303 !important;
+  background-color: #ecb807 !important;
+  border-color: #ecb807!important;
+  color: #222222 !important;
 }
 
 /* .btn-secondary.dropdown-toggle {
@@ -394,11 +394,11 @@ a:hover, a:focus, a:active {
 }
 
 .bg-primary {
-  background-color: #0e0e0e !important;
+  background-color: #303030 !important;
 }
 
 .bg-secondary {
-  background-color: #030303 !important;
+  background-color: #222222 !important;
 }
 
 .text-primary {
@@ -406,7 +406,7 @@ a:hover, a:focus, a:active {
 }
 
 .text-secondary {
-  color: #ec1607 !important;
+  color: #ecb807 !important;
 }
 
 .fillv {

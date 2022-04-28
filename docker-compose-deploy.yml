@@ -11,6 +11,7 @@ services:
       - ./env_variables.conf
     environment:
       - DEBUG=0
+    restart: always
 
   proxy:
     image: knoriy/nginx_reverse_proxy
@@ -24,3 +25,4 @@ services:
       - "443:443"
     depends_on:
       - app
+    restart: always

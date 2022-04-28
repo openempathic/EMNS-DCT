@@ -28,3 +28,6 @@ run:
 
 down:
 	@docker-compose -f docker-compose-deploy.yml down
+
+restart:
+	@docker-compose -f docker-compose-deploy.yml restart

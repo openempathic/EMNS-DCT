@@ -89,14 +89,14 @@
 								</div>
 								<div class="col mt-2">
 									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" placeholder="Description">
-In an {prosody} voice, {user_id} says {transcription}. Emphesising on {Word} and {Word}.
+{% if object.description == None %}In an {prosody} voice, {user_id} says {transcription}. Emphesising on {Word} and {Word}.
 With a {prosody} voice, {user_id} said {transcription}. Placing emphesis on {Word} and {Word}.
 {user_id} said {transcription} With a {prosody} voice. Placing emphesis on {Word} and {Word}.
 {transcription} said {user_id} in a {prosody} voice. Placing emphesis on {Word} and {Word}.
 Placing emphesis on {Word} and {Word}, {user_id} said {transcription}.
 {user_id} said {transcription} With a {prosody} voice.
 {user_id} said {transcription}.
-
+{% else %}{{object.description}}{% endif %}
 									</textarea>
 								</div>
 								<div class="mt-5">

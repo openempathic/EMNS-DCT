@@ -21,7 +21,7 @@ services:
       - ./django_dataset_collection_tool/static:/vol/static
       - ./django_dataset_collection_tool/media/:/vol/media
     ports:
-      # - "80:80"
+      - "80:80"
       - "443:443"
     depends_on:
       - app

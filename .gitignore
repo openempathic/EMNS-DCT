@@ -143,3 +143,6 @@ django_dataset_collection_tool/audio_recorder/migrations/
 django_dataset_collection_tool/users/migrations/
 
 env_variables.conf
+
+update_google_domain_dns.sh
+backup.sh

@@ -81,9 +81,9 @@
 							<div class="container">
 								<div class="col">
 									<select name="status" class="select form-control" id="id_status"> 
-										<option value="Pending" selected="">Pending</option> 
+										<option value="Pending">Pending</option> 
 										<option value="Awaiting Review">Awaiting Review</option> 
-										<option value="Complete">Complete</option> 
+										<option value="Complete" selected="">Complete</option> 
 										<option value="Needs Updating">Needs Updating</option>
 									</select>
 								</div>
@@ -96,8 +96,7 @@ With a {prosody} voice, {user_id} said {transcription}. Placing emphesis on {Wor
 Placing emphesis on {Word} and {Word}, {user_id} said {transcription}.
 {user_id} said {transcription} With a {prosody} voice.
 {user_id} said {transcription}.
-{% else %}{{object.description}}{% endif %}
-									</textarea>
+{% else %}{{object.description}}{% endif %}</textarea>
 								</div>
 								<div class="mt-5">
 									<button class="btn btn-outline-info" id="submit">Submit</button>

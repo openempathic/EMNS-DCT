@@ -62,7 +62,7 @@
 			{% endif %}
 			
 			<div class="row mb-2 mt-5">
-				<div class="col-md-4">
+				<!-- <div class="col-md-4">
 					<p class="text-primary mb-5"> Prosody: {{object.prosody}} </p>
 				</div>
 				<div class="col-md-4">
@@ -70,7 +70,7 @@
 				</div>
 				<div class="col-md-4">
 					<p class="text-info mb-5"> Expressiveness level: {{object.level}} </p>
-				</div>
+				</div> -->
 			</div>
 
 			<form id="id_utterance_detail_form" method="POST">
@@ -88,7 +88,7 @@
 									</select>
 								</div>
 								<div class="col mt-2">
-									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" placeholder="Description">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
+									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{object.description}}{% endif %}</textarea>
 								</div>
 								<div class="mt-5">
 									<button class="btn btn-outline-info" id="submit">Submit</button>
@@ -107,6 +107,16 @@
 								<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
 							</div>
 							<button class="btn btn-primary" id="submit">Submit</button>
+
+						{% elif request.user.profile.status == 'NLD' %}
+							<div class="container">
+								<div class="col mt-2">
+									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{object.description}}{% endif %}</textarea>
+								</div>
+								<div class="mt-5">
+									<button class="btn btn-outline-info" id="submit">Submit</button>
+								</div>
+							</div>
 						{% endif %}
 					</Fieldset>
 				</div>

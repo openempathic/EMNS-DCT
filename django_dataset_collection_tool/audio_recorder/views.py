@@ -54,13 +54,6 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['form'] = self.get_form()
-		description_option = ["In an {prosody} voice, {user_id} says {transcription}. Emphesising on {Word} and {Word}.",
-										"With a {prosody} voice, {user_id} said {transcription}. Placing emphesis on {Word} and {Word}.",
-										"{user_id} said {transcription} With a {prosody} voice. Placing emphesis on {Word} and {Word}.",
-										"{transcription} said {user_id} in a {prosody} voice. Placing emphesis on {Word} and {Word}.",
-										"Placing emphesis on {Word} and {Word}, {user_id} said {transcription}.",
-										]
-		context['sample_description'] = random.choice(description_option)
 		return context
 
 	def get_success_url(self):

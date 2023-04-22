@@ -58,7 +58,7 @@ def main(csv_dir, sep="\t", prosodies=None):
    create_utterance(user, row[0], random.choice(prosodies))
    print("Found nan: ", i)
 
-main("/home/knoriy/Documents/phd/dataset_collection_tool/src/data/train.tsv")
+main("/app/src/data/train.tsv")
 ```
 
 ### Start container

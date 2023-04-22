@@ -85,10 +85,10 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			self.object.audio_recording = self.request.FILES.get("recorded_audio")
 			self.object.status = 'Awaiting Review'
 			self.object.save()
-			return JsonResponse({
-					"url": self.get_success_url(),
-					"success": True,
-				})
+		elif self.request.user.profile.status == 'NLD':
+			self.object.description = self.request.POST.get("description_textarea")
+			self.object.status = 'Awaiting Review'
+			self.object.save()
 		elif self.request.user.profile.status == 'Admin':
 			self.object.status = self.request.POST.get("status")
 			self.object.description = self.request.POST.get("description_textarea")

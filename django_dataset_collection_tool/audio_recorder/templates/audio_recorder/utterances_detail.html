@@ -88,7 +88,7 @@
 									</select>
 								</div>
 								<div class="col mt-2">
-									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{object.description}}{% endif %}</textarea>
+									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
 								</div>
 								<div class="mt-5">
 									<button class="btn btn-outline-info" id="submit">Submit</button>
@@ -111,7 +111,8 @@
 						{% elif request.user.profile.status == 'NLD' %}
 							<div class="container">
 								<div class="col mt-2">
-									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{object.description}}{% endif %}</textarea>
+									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" 
+									placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
 								</div>
 								<div class="mt-5">
 									<button class="btn btn-outline-info" id="submit">Submit</button>

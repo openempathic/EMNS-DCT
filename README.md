@@ -72,12 +72,12 @@ def create_utterance(user, utterance, prosody):
       author=user)
  post.save()
 
-def main(csv_dir, sep="\t", emotions=None):
+def main(csv_dir, sep="\t", emotions=None, header=None):
  if emotions==None:
   emotions = ['Happy', 'Sad', 'Angry', 'Excited', 'Sarcastic', 'Neutral', 'Disgust', 'Surprised']
  
  user = User.objects.filter(username="knoriy").first()
- df = pd.read_csv(csv_dir, sep=sep, header=None).head(20_000)
+ df = pd.read_csv(csv_dir, sep=sep, header=header)
  
  for i, row in df.iterrows():
   if not row.isnull().any():

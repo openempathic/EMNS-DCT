@@ -1,6 +1,6 @@
 # EMNS-DCT: An Audio Remote Creation and Validation Tool for Researchers
 
-EMNS-DCT is a Django-based web tool that facilitates the creation and validation of audio remotely for researchers. It uses Docker for deployment and allows researchers to create, record, and validate audio utterances with ease.
+EMNS-DCT is a Django-based web tool that enables researchers to remotely create and validate audio utterances. The tool is designed to simplify the process of generating high-quality audio data for research projects, reducing the need for expensive recording equipment and extensive in-person collaboration. The tool uses Docker for deployment, allowing for easy installation and configuration across different environments.
 
 ## Prerequisite
 
@@ -52,7 +52,7 @@ python manage.py collectstatic
 
 ### Create Utterances
 
-To create utterances for recording, validation etc, use the following commands, the function expect a `.tsv` file containing the `transcript` and `emotion`.
+To create utterances for recording, validation, etc., use the following commands. The function expects a .tsv file containing the transcript and emotion.
 
 ``` bash
 cd dataset_collection_tool/django_dataset_collection_tool

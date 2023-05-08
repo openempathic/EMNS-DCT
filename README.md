@@ -1,11 +1,37 @@
-# Default
+# EMNS-DCT: An Audio Remote Creation and Validation Tool for Researchers
 
-This container was tested on `Pop!_OS 20.04`.
-Additional changes may be required such as paths, please read the appropriate `README.md`.
+EMNS-DCT is a Django-based web tool that facilitates the creation and validation of audio remotely for researchers. It uses Docker for deployment and allows researchers to create, record, and validate audio utterances with ease.
 
 ## Prerequisite
 
-### reset migrations
+The EMNS-DCT tool requires the following prerequisites to be installed:
+
+- `Docker`
+- `docker-compose`
+
+## Getting Started
+
+### Enviroment Variables
+
+Before running the tool, you need to set the environment variables in the env_variables.conf file. The following environment variables are required:
+
+- `SECRET_KEY`: A secret key for Django
+- `ALLOWED_HOSTS`: A comma-separated list of allowed hosts
+- `EMAIL_USER`: Email ID for sending email notifications
+- `EMAIL_PASS`: Password for email account
+
+### Docker
+
+Docker is used for deploying the tool. Once you have Docker and docker-compose installed, you can build and run the tool using the provided Makefile. Here are some useful commands to get started:
+
+- `make build`: Build the Docker container
+- `make run`: Start the Docker container
+- `make restart`: Restart the Docker container
+- `make down`: Stop and remove the Docker container
+
+### Reset migrations
+
+If you want to reset the migrations, you can use the following commands:
 
 ``` bash
 find . -path "*/*/migrations/*.py" -not -name "__init__.py" -delete
@@ -18,13 +44,15 @@ python manage.py createsuperuser
 
 ### Collect static file
 
-Only run this if static files are changed
+If there are changes to static files, run the following command to collect them:
 
 ``` bash
 python manage.py collectstatic
 ```
 
 ### Create Utterances
+
+To create utterances for recording, validation etc, use the following commands, the function expect a `.tsv` file containing the `transcript` and `emotion`.
 
 ``` bash
 cd dataset_collection_tool/django_dataset_collection_tool
@@ -63,18 +91,22 @@ main("/app/src/data/train.tsv")
 
 ### Start container
 
+After you have created the utterances, you can start the container with the following command:
+
 ``` bash
 make run
 ```
 
 ### Create ssl certificate
 
+To create an SSL certificate, you can use the following commands:
+
 ``` bash
 docker exec -it dataset_collection_tool_proxy_1 sh
 ```
 
 ``` bash
-certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d emns.knoriy.com -d www.emns.knoriy.com --redirect --test-cert
+certbot --nginx --noninteractive --agree-tos -m name@email.com -d emns.com -d www.emns.com --redirect --test-cert
 ```
 
 Remove `--test-cert` after confirming that everything loaded as expected.

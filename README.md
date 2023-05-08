@@ -72,9 +72,9 @@ def create_utterance(user, utterance, prosody):
       author=user)
  post.save()
 
-def main(csv_dir, sep="\t", prosodies=None):
- if prosodies==None:
-  prosodies = ['Happy', 'Sad', 'Angry', 'Excited', 'Sarcastic', 'Neutral', 'Disgust', 'Surprised']
+def main(csv_dir, sep="\t", emotions=None):
+ if emotions==None:
+  emotions = ['Happy', 'Sad', 'Angry', 'Excited', 'Sarcastic', 'Neutral', 'Disgust', 'Surprised']
  
  user = User.objects.filter(username="knoriy").first()
  df = pd.read_csv(csv_dir, sep=sep, header=None).head(20_000)
@@ -83,7 +83,7 @@ def main(csv_dir, sep="\t", prosodies=None):
   if not row.isnull().any():
    create_utterance(user, row[0], row[1])
   else:
-   create_utterance(user, row[0], random.choice(prosodies))
+   create_utterance(user, row[0], random.choice(emotions))
    print("Found nan: ", i)
 
 main("/app/src/data/train.tsv")

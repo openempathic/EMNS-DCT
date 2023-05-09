@@ -29,6 +29,16 @@ Docker is used for deploying the tool. Once you have Docker and docker-compose i
 - `make restart`: Restart the Docker container
 - `make down`: Stop and remove the Docker container
 
+### Debug Mode modifying the tool
+
+To make debugging and modifying the tool easier, we have created a separate compose file. You can access this mode by executing the following command:
+
+```sh
+docker-compose -f docker-compose.yml up
+```
+
+This command will enable the debug mode and start the tool. With this mode, you can easily modify the tool's code and see the changes in real-time. It is important to note that this mode is intended for development purposes only and should not be used in a production environment.
+
 ### Reset migrations
 
 If you want to reset the migrations, you can use the following commands:

@@ -1,6 +1,7 @@
 from email import header
 import tablib
 import random
+import json
 
 from urllib import response
 from django.http import HttpResponse, HttpResponseForbidden
@@ -76,18 +77,42 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			return self.form_invalid(form)
 
 	def form_valid(self, form) -> HttpResponse:
-		if self.request.user.profile.status == 'Actor':
+		emotions = {
+			'curious_and_fascinated':self.request.POST.get('curious_and_fascinated'),
+			'pensive_and_reflective':self.request.POST.get('pensive_and_reflective'),
+			'fearful_and_anxious':self.request.POST.get('fearful_and_anxious'),
+			'happy_and_energetic':self.request.POST.get('happy_and_energetic'),
+			'calm_and_composed':self.request.POST.get('calm_and_composed'),
+			'focused_and_attentive':self.request.POST.get('focused_and_attentive'),
+			'surprised_and_confused':self.request.POST.get('surprised_and_confused'),
+			'sad_and_despondent':self.request.POST.get('sad_and_despondent'),
+			'romantic_and_passionate':self.request.POST.get('romantic_and_passionate'),
+			'seductive_and_enticing':self.request.POST.get('seductive_and_enticing'),
+			'angry_and_irritated':self.request.POST.get('angry_and_irritated'),
+			'persistent_and_determined':self.request.POST.get('persistent_and_determined'),
+			'discomposed_and_unsettled':self.request.POST.get('discomposed_and_unsettled'),
+			'grumpy_and_cranky':self.request.POST.get('grumpy_and_cranky'),
+		}
+		if self.request.user.profile.status == 'NLD':
 			self.object.author = self.request.user
 			self.object.gender = self.request.user.profile.gender
 			self.object.age = self.request.user.profile.age
 			self.object.date_created = timezone.now()
-			self.object.level = self.request.POST.get("m_slider")
-			self.object.audio_recording = self.request.FILES.get("recorded_audio")
+			self.object.level = self.request.POST.get("level_slider")
+			self.object.arousal = self.request.POST.get("arousal_slider")
+			self.object.valence = self.request.POST.get("valence_slider")
+			self.object.description = self.request.POST.get("description_textarea")
+			self.object.emotion = json.dumps(emotions)
 			self.object.status = 'Awaiting Review'
 			self.object.save()
-		elif self.request.user.profile.status == 'NLD':
-			self.object.description = self.request.POST.get("description_textarea")
+		elif self.request.user.profile.status == 'Actor':
+			self.object.author = self.request.user
+			self.object.author = self.request.user
+			self.object.gender = self.request.user.profile.gender
+			self.object.age = self.request.user.profile.age
+			self.object.level = self.request.POST.get("level_slider")
 			self.object.status = 'Awaiting Review'
+			self.object.audio_recording = self.request.FILES.get("recorded_audio")
 			self.object.save()
 		elif self.request.user.profile.status == 'Admin':
 			self.object.status = self.request.POST.get("status")

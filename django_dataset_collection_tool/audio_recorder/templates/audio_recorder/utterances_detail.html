@@ -89,21 +89,33 @@
 							</div>
 							
 							<div class="container">
-								<div class="d-flex justify-content-between col mt-2">
-									<div class="col">
-										<input name="m_slider" type="range" class="form-range" id="id_m_slider" min="0" max="10" value={{object.level}}>
-										<span id="id_slider_text" class="text-primary">Expressiveness level: <span id="ex6SliderVal">{{object.level}}</span></span>
+								<div class="row mt-2">
+									<div class="col-4">
+										<div class="row">
+											<input name="level_slider" type="range" class="form-range" id="id_level_slider" min="0" max="10" value={{object.level}}>
+										</div>
+										<div class="row">
+											<span id="id_slider_text" class="text-primary">Expressiveness level: <span id="ex6SliderVal">{{object.level}}</span></span>
+										</div>
 									</div>
-									<div class="col">
-										<input name="m_slider" type="range" class="form-range" id="id_m_slider" min="0" max="10" value={{object.arousal}}>
-										<span id="id_slider_text" class="text-primary">Arousal level: <span id="ex6SliderVal">{{object.arousal}}</span></span>
+									<div class="col-4">
+										<div class="row">
+											<input name="arousal_slider" type="range" class="form-range" id="id_arousal_slider" min="0" max="10" value={{object.arousal}}>
+										</div>
+										<div class="row">
+											<span id="id_slider_text" class="text-primary">Arousal level: <span id="ex6SliderVal">{{object.arousal}}</span></span>
+										</div>
 									</div>
-									<div class="col">
-										<input name="m_slider" type="range" class="form-range" id="id_m_slider" min="0" max="10" value={{object.valence}}>
-										<span id="id_slider_text" class="text-primary">Valence level: <span id="ex6SliderVal">{{object.valence}}</span></span>
+									<div class="col-4">
+										<div class="row">
+											<input name="valence_slider" type="range" class="form-range" id="id_valence_slider" min="0" max="10" value={{object.valence}}>
+										</div>
+										<div class="row">
+											<span id="id_slider_text" class="text-primary">Valence level: <span id="ex6SliderVal">{{object.valence}}</span></span>
+										</div>
 									</div>
 								</div>
-								<p class="text-secondary">0 = Neutral, 5 = moderate valence, 10 = extreme valence</p>
+								<p class="text-secondary">0 = Neutral, 5 = moderate, 10 = extreme</p>
 							</div>
 							
 							<div class="container text-primary mt-5 mb-5">
@@ -114,6 +126,7 @@
 											<div class="col">
 												<label for="curious_and_fascinated">Curious and Fascinated:</label>
 												<select name="curious_and_fascinated" class="select form-control" id="id_curious_and_fascinated"> 
+													<option value=""selected></option> 
 													<option value="wondering">wondering</option> 
 													<option value="intrigued">intrigued</option> 
 													<option value="spellbinding">spellbinding</option> 
@@ -143,6 +156,7 @@
 											<div class="col">
 												<label for="pensive_and_reflective">Pensive and Reflective:</label>
 												<select name="pensive_and_reflective" class="select form-control" id="id_pensive_and_reflective"> 
+													<option value=""selected></option> 
 													<option value="pensive">pensive</option> 
 													<option value="ruminative">ruminative</option> 
 													<option value="brooding">brooding</option> 
@@ -161,6 +175,7 @@
 											<div class="col">
 												<label for="fearful_and_anxious">Fearful and Anxious:</label>
 												<select name="fearful_and_anxious" class="select form-control" id="id_fearful_and_anxious"> 
+													<option value=""selected></option> 
 													<option value="trembling">trembling</option> 
 													<option value="shuddery">shuddery</option> 
 													<option value="afraid">afraid</option> 
@@ -209,6 +224,7 @@
 											<div class="col">
 												<label for="happy_and_energetic">Happy and Energetic:</label>
 												<select name="happy_and_energetic" class="select form-control" id="id_happy_and_energetic"> 
+													<option value=""selected></option> 
 													<option value="ebullient">ebullient</option> 
 													<option value="merry">merry</option> 
 													<option value="jovial">jovial</option> 
@@ -253,6 +269,7 @@
 											<div class="col">
 												<label for="calm_and_composed">Calm and Composed:</label>
 												<select name="calm_and_composed" class="select form-control" id="id_calm_and_composed"> 
+													<option value=""selected></option> 
 													<option value="mindful">mindful</option> 
 													<option value="unruffled">unruffled</option> 
 													<option value="coolheaded">coolheaded</option> 
@@ -287,6 +304,7 @@
 											<div class="col">
 												<label for="focused_and_attentive">Focused and Attentive:</label>
 												<select name="focused_and_attentive" class="select form-control" id="id_focused_and_attentive"> 
+													<option value=""selected></option> 
 													<option value="engaging">engaging</option> 
 													<option value="focused">focused</option> 
 													<option value="watchful">watchful</option> 
@@ -316,6 +334,7 @@
 											<div class="col">
 												<label for="surprised_and_confused">Surprised and Confused:</label>
 												<select name="surprised_and_confused" class="select form-control" id="id_surprised_and_confused"> 
+													<option value=""selected></option> 
 													<option value="dumbstruck">dumbstruck</option> 
 													<option value="bewildered">bewildered</option> 
 													<option value="dumbfounded">dumbfounded</option> 
@@ -346,6 +365,7 @@
 											<div class="col">
 												<label for="sad_and_despondent">Sad and Despondent:</label>
 												<select name="sad_and_despondent" class="select form-control" id="id_sad_and_despondent"> 
+													<option value=""selected></option> 
 													<option value="sad">sad</option> 
 													<option value="dismal">dismal</option> 
 													<option value="forlorn">forlorn</option> 
@@ -377,6 +397,7 @@
 											<div class="col">
 												<label for="romantic_and_passionate">Romantic and Passionate:</label>
 												<select name="romantic_and_passionate" class="select form-control" id="id_romantic_and_passionate"> 
+													<option value=""selected></option> 
 													<option value="romantic">romantic</option> 
 													<option value="amorous">amorous</option> 
 													<option value="passionate">passionate</option> 
@@ -410,6 +431,7 @@
 											<div class="col">
 												<label for="seductive_and_enticing">Seductive and Enticing:</label>
 												<select name="seductive_and_enticing" class="select form-control" id="id_seductive_and_enticing"> 
+													<option value=""selected></option> 
 													<option value="seductive">seductive</option> 
 													<option value="titillating">titillating</option> 
 													<option value="awakened">awakened</option> 
@@ -434,6 +456,7 @@
 											<div class="col">
 												<label for="angry_and_irritated">Angry and Irritated:</label>
 												<select name="angry_and_irritated" class="select form-control" id="id_angry_and_irritated"> 
+													<option value=""selected></option> 
 													<option value="aggravated">aggravated</option> 
 													<option value="perturbed">perturbed</option> 
 													<option value="enraged">enraged</option> 
@@ -475,6 +498,7 @@
 											<div class="col">
 												<label for="persistent_and_determined">Persistent and Determined:</label>
 												<select name="persistent_and_determined" class="select form-control" id="id_persistent_and_determined"> 
+													<option value=""selected></option> 
 													<option value="persistent">persistent</option> 
 													<option value="resilient">resilient</option> 
 													<option value="determined">determined</option> 
@@ -507,6 +531,7 @@
 											<div class="col">
 												<label for="discomposed_and_unsettled">Discomposed and Unsettled:</label>
 												<select name="discomposed_and_unsettled" class="select form-control" id="id_discomposed_and_unsettled"> 
+													<option value=""selected></option> 
 													<option value="discomposed">discomposed</option> 
 													<option value="nonplussed">nonplussed</option> 
 													<option value="disconcerted">disconcerted</option> 
@@ -536,6 +561,7 @@
 											<div class="col">
 												<label for="grumpy_and_cranky">Grumpy and Cranky:</label>
 												<select name="grumpy_and_cranky" class="select form-control" id="id_grumpy_and_cranky"> 
+													<option value=""selected></option> 
 													<option value="belligerent">belligerent</option> 
 													<option value="pugnacious">pugnacious</option> 
 													<option value="contentious">contentious</option> 

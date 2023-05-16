@@ -12,17 +12,20 @@ class Utterances(models.Model):
     utterance       = models.TextField()
     description     = models.TextField(null=True)
     prosody         = models.CharField(max_length=70)
+    emotion         = models.CharField(max_length=70, default='')
     author          = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     date_created    = models.DateTimeField(default=timezone.now)
     status          = models.CharField(max_length=70, null=True, choices=(('Pending', 'Pending'), ('Awaiting Review', 'Awaiting Review'), ('Complete', 'Complete'), ('Needs Updating', 'Needs Updating' )), default='Pending' )
     gender          = models.CharField(max_length=70, null=True, choices=(('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')), default='Female')
     age             = models.IntegerField(default=0)
     level           = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
+    arousal         = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
+    valence         = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
 
     audio_recording = models.FileField(upload_to='media/wavs')
 
     def __str__(self) -> str:
-        return f"{self.utterance}, Prosody: {self.prosody}"
+        return f"{self.utterance}, emotion: {self.emotion}"
 
     def get_absolute_url(self):
         return reverse('utterance-detail', kwargs={'pk':self.pk})

@@ -48,29 +48,18 @@
 					</div>
 				</div>
 			{% endif %}
-			<div class="p-5 mb-5 mt-2 bg-light">
+			<div class="p-5 mb-3 mt-2 bg-light">
 				<h4 class="text-justify mb-5 mt-5"> {{ object.utterance }} </h4>
 			</div>
 
-
-			{% if object.audio_recording %}
-				<audio controls> <source src="{{ BASIC_DIR }}/{{ object.audio_recording }}"> Your browser does not support the audio element. </audio>
-			{% elif request.user.profile.status == 'Actor' %}
-				<p class="text-warning">Please record an utterance.</p>
-			{% else %}
-				<p class="text-info">There is no corresponding audio.</p>
-			{% endif %}
-			
-			<div class="row mb-2 mt-5">
-				<!-- <div class="col-md-4">
-					<p class="text-primary mb-5"> Prosody: {{object.prosody}} </p>
-				</div>
-				<div class="col-md-4">
-					<p class="text-info mb-5"> Status: {{object.status}} </p>
-				</div>
-				<div class="col-md-4">
-					<p class="text-info mb-5"> Expressiveness level: {{object.level}} </p>
-				</div> -->
+			<div class="mb-2 mt-2">
+				{% if object.audio_recording %}
+					<audio controls> <source src="{{ BASIC_DIR }}/{{ object.audio_recording }}"> Your browser does not support the audio element. </audio>
+				{% elif request.user.profile.status == 'Actor' %}
+					<p class="text-warning">Please record an utterance.</p>
+				{% else %}
+					<p class="text-info">There is no corresponding audio.</p>
+				{% endif %}
 			</div>
 
 			<form id="id_utterance_detail_form" method="POST">
@@ -90,148 +79,37 @@
 								<div class="col mt-2">
 									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
 								</div>
-								<div class="mt-5">
-									<button class="btn btn-outline-info" id="submit">Submit</button>
-								</div>
 							</div>
-						{% elif request.user.profile.status == 'Actor' %}
-							<div class="row">
-								<div class="container mb-5">
+						{% elif request.user.profile.status == 'NLD' %}
+						
+						<div class="container">
+							<div class="col mb-5">
+								<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" 
+								placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
+							</div>
+							
+							<div class="container">
+								<div class="d-flex justify-content-between col mt-2">
 									<div class="col">
 										<input name="m_slider" type="range" class="form-range" id="id_m_slider" min="0" max="10" value={{object.level}}>
 										<span id="id_slider_text" class="text-primary">Expressiveness level: <span id="ex6SliderVal">{{object.level}}</span></span>
 									</div>
-									<p class="text-secondary">0 = Neutral, 5 = moderately expressive, 10 = very expressive</p>
-								</div>
-								<div class="container mb-5">
 									<div class="col">
 										<input name="m_slider" type="range" class="form-range" id="id_m_slider" min="0" max="10" value={{object.arousal}}>
 										<span id="id_slider_text" class="text-primary">Arousal level: <span id="ex6SliderVal">{{object.arousal}}</span></span>
 									</div>
-									<p class="text-secondary">0 = Neutral, 5 = moderately aroused, 10 = very aroused</p>
-								</div>
-								<div class="container mb-5">
 									<div class="col">
 										<input name="m_slider" type="range" class="form-range" id="id_m_slider" min="0" max="10" value={{object.valence}}>
 										<span id="id_slider_text" class="text-primary">Valence level: <span id="ex6SliderVal">{{object.valence}}</span></span>
 									</div>
-									<p class="text-secondary">0 = Neutral, 5 = moderate valence, 10 = extreme valence</p>
 								</div>
+								<p class="text-secondary">0 = Neutral, 5 = moderate valence, 10 = extreme valence</p>
 							</div>
-
-							<div>How do you think does the speaker feel? Describe in detail with your own words.</div>
-							<div class="column">
+							
+							<div class="container text-primary mt-5 mb-5">
 								
-								<textarea>
-
-								</textarea>
-							</div>
-
-							<div class="container">
-								<div class="row">
-									<div>
-										<label for="happy_and_energetic">Happy and Energetic:</label>
-										<select name="happy_and_energetic" class="select form-control" id="id_happy_and_energetic"> 
-											<option value="ebullient">ebullient</option> 
-											<option value="merry">merry</option> 
-											<option value="jovial">jovial</option> 
-											<option value="cheerful">cheerful</option> 
-											<option value="lighthearted">lighthearted</option> 
-											<option value="joyful">joyful</option> 
-											<option value="beaming">beaming</option> 
-											<option value="grinning">grinning</option> 
-											<option value="elated">elated</option> 
-											<option value="gleeful">gleeful</option> 
-											<option value="happy">happy</option> 
-											<option value="buoyant">buoyant</option> 
-											<option value="upbeat">upbeat</option> 
-											<option value="vibrant">vibrant</option> 
-											<option value="radiant">radiant</option> 
-											<option value="exuberant">exuberant</option> 
-											<option value="zestful">zestful</option> 
-											<option value="chirpy">chirpy</option> 
-											<option value="peppy">peppy</option> 
-											<option value="jaunty">jaunty</option> 
-											<option value="sprightly">sprightly</option> 
-											<option value="brisk">brisk</option> 
-											<option value="lively">lively</option> 
-											<option value="animated">animated</option> 
-											<option value="energized">energized</option> 
-											<option value="revitalized">revitalized</option> 
-											<option value="invigorated">invigorated</option> 
-											<option value="activated">activated</option> 
-											<option value="energetic">energetic</option> 
-											<option value="dynamic">dynamic</option> 
-											<option value="electrified">electrified</option> 
-											<option value="bouncy">bouncy</option> 
-											<option value="effervescent">effervescent</option> 
-											<option value="chipper">chipper</option> 
-											<option value="jubilant">jubilant</option>
-										</select>
-									</div>
-									<div>
-										<div class="container">
-											<div class="col">
-												<label for="calm_and_composed">Calm and Composed:</label>
-												<select name="calm_and_composed" class="select form-control" id="id_calm_and_composed"> 
-													<option value="mindful">mindful</option> 
-													<option value="unruffled">unruffled</option> 
-													<option value="coolheaded">coolheaded</option> 
-													<option value="levelheaded">levelheaded</option> 
-													<option value="poised">poised</option> 
-													<option value="self-possessed">self-possessed</option> 
-													<option value="unflappable">unflappable</option> 
-													<option value="collected">collected</option> 
-													<option value="unperturbed">unperturbed</option> 
-													<option value="untroubled">untroubled</option> 
-													<option value="unrattled">unrattled</option> 
-													<option value="unshaken">unshaken</option> 
-													<option value="unflustered">unflustered</option> 
-													<option value="composed">composed</option> 
-													<option value="relaxed">relaxed</option> 
-													<option value="tranquil">tranquil</option> 
-													<option value="serene">serene</option> 
-													<option value="calm">calm</option> 
-													<option value="centered">centered</option> 
-													<option value="peaceful">peaceful</option> 
-													<option value="imperturbable">imperturbable</option> 
-													<option value="reposeful">reposeful</option> 
-													<option value="grounded">grounded</option> 
-													<option value="equanimous">equanimous</option> 
-													<option value="harmonious">harmonious</option> 
-												</select>
-											</div>
-										</div>
-									</div>
-
-									<div>
-										<div class="container">
-											<div class="col">
-												<label for="focused_and_attentive">Focused and Attentive:</label>
-												<select name="focused_and_attentive" class="select form-control" id="id_focused_and_attentive"> 
-													<option value="engaging">engaging</option> 
-													<option value="focused">focused</option> 
-													<option value="watchful">watchful</option> 
-													<option value="attentive">attentive</option> 
-													<option value="heedful">heedful</option> 
-													<option value="scrutinizing">scrutinizing</option> 
-													<option value="investigating">investigating</option> 
-													<option value="alert">alert</option> 
-													<option value="studious">studious</option> 
-													<option value="analyzing">analyzing</option> 
-													<option value="examining">examining</option> 
-													<option value="cognizant">cognizant</option> 
-													<option value="inquiring">inquiring</option> 
-													<option value="questioning">questioning</option> 
-													<option value="probing">probing</option> 
-													<option value="introspecting">introspecting</option> 
-													<option value="introspective">introspective</option> 
-													<option value="observant">observant</option> 
-												</select>
-											</div>
-										</div>
-									</div>
-									<div>
+								<div class="row mt-3">
+									<div class="col">
 										<div class="container">
 											<div class="col">
 												<label for="curious_and_fascinated">Curious and Fascinated:</label>
@@ -260,9 +138,7 @@
 											</div>
 										</div>
 									</div>
-
-
-									<div>
+									<div class="col">
 										<div class="container">
 											<div class="col">
 												<label for="pensive_and_reflective">Pensive and Reflective:</label>
@@ -280,8 +156,7 @@
 											</div>
 										</div>
 									</div>
-
-									<div>
+									<div class="col">
 										<div class="container">
 											<div class="col">
 												<label for="fearful_and_anxious">Fearful and Anxious:</label>
@@ -327,8 +202,116 @@
 										</div>
 										
 									</div>
-
-									<div>
+								</div>
+								<div class="row mt-3">
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="happy_and_energetic">Happy and Energetic:</label>
+												<select name="happy_and_energetic" class="select form-control" id="id_happy_and_energetic"> 
+													<option value="ebullient">ebullient</option> 
+													<option value="merry">merry</option> 
+													<option value="jovial">jovial</option> 
+													<option value="cheerful">cheerful</option> 
+													<option value="lighthearted">lighthearted</option> 
+													<option value="joyful">joyful</option> 
+													<option value="beaming">beaming</option> 
+													<option value="grinning">grinning</option> 
+													<option value="elated">elated</option> 
+													<option value="gleeful">gleeful</option> 
+													<option value="happy">happy</option> 
+													<option value="buoyant">buoyant</option> 
+													<option value="upbeat">upbeat</option> 
+													<option value="vibrant">vibrant</option> 
+													<option value="radiant">radiant</option> 
+													<option value="exuberant">exuberant</option> 
+													<option value="zestful">zestful</option> 
+													<option value="chirpy">chirpy</option> 
+													<option value="peppy">peppy</option> 
+													<option value="jaunty">jaunty</option> 
+													<option value="sprightly">sprightly</option> 
+													<option value="brisk">brisk</option> 
+													<option value="lively">lively</option> 
+													<option value="animated">animated</option> 
+													<option value="energized">energized</option> 
+													<option value="revitalized">revitalized</option> 
+													<option value="invigorated">invigorated</option> 
+													<option value="activated">activated</option> 
+													<option value="energetic">energetic</option> 
+													<option value="dynamic">dynamic</option> 
+													<option value="electrified">electrified</option> 
+													<option value="bouncy">bouncy</option> 
+													<option value="effervescent">effervescent</option> 
+													<option value="chipper">chipper</option> 
+													<option value="jubilant">jubilant</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="calm_and_composed">Calm and Composed:</label>
+												<select name="calm_and_composed" class="select form-control" id="id_calm_and_composed"> 
+													<option value="mindful">mindful</option> 
+													<option value="unruffled">unruffled</option> 
+													<option value="coolheaded">coolheaded</option> 
+													<option value="levelheaded">levelheaded</option> 
+													<option value="poised">poised</option> 
+													<option value="self-possessed">self-possessed</option> 
+													<option value="unflappable">unflappable</option> 
+													<option value="collected">collected</option> 
+													<option value="unperturbed">unperturbed</option> 
+													<option value="untroubled">untroubled</option> 
+													<option value="unrattled">unrattled</option> 
+													<option value="unshaken">unshaken</option> 
+													<option value="unflustered">unflustered</option> 
+													<option value="composed">composed</option> 
+													<option value="relaxed">relaxed</option> 
+													<option value="tranquil">tranquil</option> 
+													<option value="serene">serene</option> 
+													<option value="calm">calm</option> 
+													<option value="centered">centered</option> 
+													<option value="peaceful">peaceful</option> 
+													<option value="imperturbable">imperturbable</option> 
+													<option value="reposeful">reposeful</option> 
+													<option value="grounded">grounded</option> 
+													<option value="equanimous">equanimous</option> 
+													<option value="harmonious">harmonious</option> 
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="focused_and_attentive">Focused and Attentive:</label>
+												<select name="focused_and_attentive" class="select form-control" id="id_focused_and_attentive"> 
+													<option value="engaging">engaging</option> 
+													<option value="focused">focused</option> 
+													<option value="watchful">watchful</option> 
+													<option value="attentive">attentive</option> 
+													<option value="heedful">heedful</option> 
+													<option value="scrutinizing">scrutinizing</option> 
+													<option value="investigating">investigating</option> 
+													<option value="alert">alert</option> 
+													<option value="studious">studious</option> 
+													<option value="analyzing">analyzing</option> 
+													<option value="examining">examining</option> 
+													<option value="cognizant">cognizant</option> 
+													<option value="inquiring">inquiring</option> 
+													<option value="questioning">questioning</option> 
+													<option value="probing">probing</option> 
+													<option value="introspecting">introspecting</option> 
+													<option value="introspective">introspective</option> 
+													<option value="observant">observant</option> 
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col">
 										<div class="container">
 											<div class="col">
 												<label for="surprised_and_confused">Surprised and Confused:</label>
@@ -358,8 +341,7 @@
 										</div>
 										
 									</div>
-
-									<div>
+									<div class="col">
 										<div class="container">
 											<div class="col">
 												<label for="sad_and_despondent">Sad and Despondent:</label>
@@ -390,8 +372,7 @@
 										</div>
 										
 									</div>
-
-									<div>
+									<div class="col">
 										<div class="container">
 											<div class="col">
 												<label for="romantic_and_passionate">Romantic and Passionate:</label>
@@ -422,8 +403,9 @@
 										</div>
 										
 									</div>
-
-									<div>
+								</div>
+								<div class="row mt-3">
+									<div class="col">
 										<div class="container">
 											<div class="col">
 												<label for="seductive_and_enticing">Seductive and Enticing:</label>
@@ -447,7 +429,7 @@
 											</div>
 										</div>										
 									</div>
-									<div>
+									<div class="col">
 										<div class="container">
 											<div class="col">
 												<label for="angry_and_irritated">Angry and Irritated:</label>
@@ -488,7 +470,7 @@
 											</div>
 										</div>
 									</div>
-									<div>
+									<div class="col">
 										<div class="container">
 											<div class="col">
 												<label for="persistent_and_determined">Persistent and Determined:</label>
@@ -516,7 +498,11 @@
 										</div>
 										
 									</div>
-									<div>
+								</div>
+								<div class="row mt-3">
+									<div class="col">
+									</div>
+									<div class="col-4">
 										<div class="container">
 											<div class="col">
 												<label for="discomposed_and_unsettled">Discomposed and Unsettled:</label>
@@ -545,7 +531,7 @@
 										</div>
 										
 									</div>
-									<div>
+									<div class="col-4">
 										<div class="container">
 											<div class="col">
 												<label for="grumpy_and_cranky">Grumpy and Cranky:</label>
@@ -570,51 +556,25 @@
 										</div>
 										
 									</div>
+									<div class="col">
+									</div>
 								</div>
-								
 							</div>
-							
-
-							
-							<!-- <div class="row" stye="display: grid; grid-template-columns: 50px 50px 50px 50px; grid-template-rows: auto;">
-								<div>
-									<label for="happy_and_energetic">Happy and Energetic:</label>
-									<select name="happy_and_energetic" class="select form-control" id="id_happy_and_energetic"> 
-										<option value="ebullient">ebullient</option> 
-										<option value="merry">merry</option> 
-
-										<option value="jubilant">jubilant</option>
-									</select>
+							{% elif request.user.profile.status == 'Actor' %}
+							<div class="container mb-5">
+								<div class="col">
+									<input name="m_slider" type="range" class="form-range" id="id_m_slider" min="0" max="10" value={{object.level}}>
+									<span id="id_slider_text" class="text-primary">Expressiveness level: <span id="ex6SliderVal">{{object.level}}</span></span>
 								</div>
-								<div>
-									<label for="happy_and_energetic">Happy and Energetic:</label>
-									<select name="happy_and_energetic" class="select form-control" id="id_happy_and_energetic"> 
-										<option value="ebullient">ebullient</option> 
-										<option value="merry">merry</option> 
-
-										<option value="jubilant">jubilant</option>
-									</select>
-								</div>
-							</div> -->
-
-
+								<p class="text-secondary">0 = Neutral, 5 = moderately expressive, 10 = very expressive</p>
+							</div>
 
 							<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
 								<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
 							</div>
-							<button class="btn btn-primary" id="submit">Submit</button>
 
-						{% elif request.user.profile.status == 'NLD' %}
-							<div class="container">
-								<div class="col mt-2">
-									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" 
-									placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
-								</div>
-								<div class="mt-5">
-									<button class="btn btn-outline-info" id="submit">Submit</button>
-								</div>
-							</div>
 						{% endif %}
+						<button class="btn btn-primary mt-2" id="submit">Submit</button>
 					</Fieldset>
 				</div>
 			</form>

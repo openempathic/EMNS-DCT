@@ -47,9 +47,10 @@ If you want to reset the migrations, you can use the following commands:
 find . -path "*/*/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/*/migrations/*.pyc"  -delete
 find . -path "*/db.sqlite3"  -delete
-python manage.py makemigrations
-python manage.py migrate
-python manage.py createsuperuser
+docker exec -it emns-dct_app_1 bash
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py createsuperuser
 ```
 
 ### Collect static file
@@ -57,7 +58,7 @@ python manage.py createsuperuser
 If there are changes to static files, run the following command to collect them:
 
 ``` bash
-python manage.py collectstatic
+python3 manage.py collectstatic
 ```
 
 ### Create Utterances
@@ -65,7 +66,7 @@ python manage.py collectstatic
 To create utterances for recording, validation, etc., use the following commands. The function expects a .tsv file containing the transcript and emotion.
 
 ``` bash
-cd dataset_collection_tool/django_dataset_collection_tool
+docker exec -it emns-dct_app_1 bash
 python manage.py shell
 ```
 
@@ -82,11 +83,11 @@ def create_utterance(user, utterance, prosody):
       author=user)
  post.save()
 
-def main(csv_dir, sep="\t", emotions=None, header=None):
+def main(csv_dir, username, sep="\t", emotions=None, header=None):
  if emotions==None:
   emotions = ['Happy', 'Sad', 'Angry', 'Excited', 'Sarcastic', 'Neutral', 'Disgust', 'Surprised']
  
- user = User.objects.filter(username="knoriy").first()
+ user = User.objects.filter(username=username).first()
  df = pd.read_csv(csv_dir, sep=sep, header=header)
  
  for i, row in df.iterrows():
@@ -96,7 +97,7 @@ def main(csv_dir, sep="\t", emotions=None, header=None):
    create_utterance(user, row[0], random.choice(emotions))
    print("Found nan: ", i)
 
-main("/app/src/data/train.tsv")
+main("/app/src/data/sample.tsv", "MY_USER_NAME")
 ```
 
 ### Start container
@@ -106,6 +107,13 @@ After you have created the utterances, you can start the container with the foll
 ``` bash
 make run
 ```
+
+If you want to run in debug mode you can use the following command:
+
+```bash
+docker-compose -f docker-compose.yml up
+```
+
 
 ### Create ssl certificate
 

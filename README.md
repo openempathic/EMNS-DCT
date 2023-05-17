@@ -67,7 +67,7 @@ To create utterances for recording, validation, etc., use the following commands
 
 ``` bash
 docker exec -it emns-dct_app_1 bash
-python manage.py shell
+python3 manage.py shell
 ```
 
 ``` python
@@ -97,7 +97,7 @@ def main(csv_dir, username, sep="\t", emotions=None, header=None):
    create_utterance(user, row[0], random.choice(emotions))
    print("Found nan: ", i)
 
-main("/app/src/data/sample.tsv", "MY_USER_NAME")
+main("/app/src/data/sample.tsv", "knoriy")
 ```
 
 ### Start container
@@ -117,10 +117,17 @@ docker-compose -f docker-compose.yml up
 
 ### Create ssl certificate
 
+Change `proxy/default.conf` to your domain name. you must also rebuild the proxy:
+
+``` bash
+cd proxy
+make no-cache
+```
+
 To create an SSL certificate, you can use the following commands:
 
 ``` bash
-docker exec -it dataset_collection_tool_proxy_1 sh
+docker exec -it emns-dct_proxy_1 sh
 ```
 
 ``` bash

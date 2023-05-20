@@ -8,7 +8,7 @@
 {% endblock title %}
 
 {% block scripts %}
-
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" rel="stylesheet"/>
 	<!-- videojd-record -->
 	<link href="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
 	<link href="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css' %}" rel="stylesheet">
@@ -125,8 +125,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="curious_and_fascinated">Curious and Fascinated:</label>
-												<select name="curious_and_fascinated" class="select form-control" id="id_curious_and_fascinated"> 
-													<option value=""selected></option> 
+												<select name="curious_and_fascinated" class="selectpicker" multiple id="id_curious_and_fascinated"> 
 													<option value="wondering">wondering</option> 
 													<option value="intrigued">intrigued</option> 
 													<option value="spellbinding">spellbinding</option> 
@@ -155,8 +154,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="pensive_and_reflective">Pensive and Reflective:</label>
-												<select name="pensive_and_reflective" class="select form-control" id="id_pensive_and_reflective"> 
-													<option value=""selected></option> 
+												<select name="pensive_and_reflective" class="selectpicker" multiple id="id_pensive_and_reflective"> 
 													<option value="pensive">pensive</option> 
 													<option value="ruminative">ruminative</option> 
 													<option value="brooding">brooding</option> 
@@ -174,8 +172,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="fearful_and_anxious">Fearful and Anxious:</label>
-												<select name="fearful_and_anxious" class="select form-control" id="id_fearful_and_anxious"> 
-													<option value=""selected></option> 
+												<select name="fearful_and_anxious" class="selectpicker" multiple id="id_fearful_and_anxious"> 
 													<option value="trembling">trembling</option> 
 													<option value="shuddery">shuddery</option> 
 													<option value="afraid">afraid</option> 
@@ -223,8 +220,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="happy_and_energetic">Happy and Energetic:</label>
-												<select name="happy_and_energetic" class="select form-control" id="id_happy_and_energetic"> 
-													<option value=""selected></option> 
+												<select name="happy_and_energetic" class="selectpicker" multiple id="id_happy_and_energetic"> 
 													<option value="ebullient">ebullient</option> 
 													<option value="merry">merry</option> 
 													<option value="jovial">jovial</option> 
@@ -268,8 +264,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="calm_and_composed">Calm and Composed:</label>
-												<select name="calm_and_composed" class="select form-control" id="id_calm_and_composed"> 
-													<option value=""selected></option> 
+												<select name="calm_and_composed" class="selectpicker" multiple id="id_calm_and_composed"> 
 													<option value="mindful">mindful</option> 
 													<option value="unruffled">unruffled</option> 
 													<option value="coolheaded">coolheaded</option> 
@@ -303,8 +298,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="focused_and_attentive">Focused and Attentive:</label>
-												<select name="focused_and_attentive" class="select form-control" id="id_focused_and_attentive"> 
-													<option value=""selected></option> 
+												<select name="focused_and_attentive" class="selectpicker" multiple id="id_focused_and_attentive"> 
 													<option value="engaging">engaging</option> 
 													<option value="focused">focused</option> 
 													<option value="watchful">watchful</option> 
@@ -333,8 +327,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="surprised_and_confused">Surprised and Confused:</label>
-												<select name="surprised_and_confused" class="select form-control" id="id_surprised_and_confused"> 
-													<option value=""selected></option> 
+												<select name="surprised_and_confused" class="selectpicker" multiple id="id_surprised_and_confused"> 
 													<option value="dumbstruck">dumbstruck</option> 
 													<option value="bewildered">bewildered</option> 
 													<option value="dumbfounded">dumbfounded</option> 
@@ -364,8 +357,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="sad_and_despondent">Sad and Despondent:</label>
-												<select name="sad_and_despondent" class="select form-control" id="id_sad_and_despondent"> 
-													<option value=""selected></option> 
+												<select name="sad_and_despondent" class="selectpicker" multiple id="id_sad_and_despondent"> 
 													<option value="sad">sad</option> 
 													<option value="dismal">dismal</option> 
 													<option value="forlorn">forlorn</option> 
@@ -396,8 +388,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="romantic_and_passionate">Romantic and Passionate:</label>
-												<select name="romantic_and_passionate" class="select form-control" id="id_romantic_and_passionate"> 
-													<option value=""selected></option> 
+												<select name="romantic_and_passionate" class="selectpicker" multiple id="id_romantic_and_passionate"> 
 													<option value="romantic">romantic</option> 
 													<option value="amorous">amorous</option> 
 													<option value="passionate">passionate</option> 
@@ -430,8 +421,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="seductive_and_enticing">Seductive and Enticing:</label>
-												<select name="seductive_and_enticing" class="select form-control" id="id_seductive_and_enticing"> 
-													<option value=""selected></option> 
+												<select name="seductive_and_enticing" class="selectpicker" multiple id="id_seductive_and_enticing"> 
 													<option value="seductive">seductive</option> 
 													<option value="titillating">titillating</option> 
 													<option value="awakened">awakened</option> 
@@ -455,8 +445,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="angry_and_irritated">Angry and Irritated:</label>
-												<select name="angry_and_irritated" class="select form-control" id="id_angry_and_irritated"> 
-													<option value=""selected></option> 
+												<select name="angry_and_irritated" class="selectpicker" multiple id="id_angry_and_irritated"> 
 													<option value="aggravated">aggravated</option> 
 													<option value="perturbed">perturbed</option> 
 													<option value="enraged">enraged</option> 
@@ -497,8 +486,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="persistent_and_determined">Persistent and Determined:</label>
-												<select name="persistent_and_determined" class="select form-control" id="id_persistent_and_determined"> 
-													<option value=""selected></option> 
+												<select name="persistent_and_determined" class="selectpicker" multiple id="id_persistent_and_determined"> 
 													<option value="persistent">persistent</option> 
 													<option value="resilient">resilient</option> 
 													<option value="determined">determined</option> 
@@ -530,8 +518,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="discomposed_and_unsettled">Discomposed and Unsettled:</label>
-												<select name="discomposed_and_unsettled" class="select form-control" id="id_discomposed_and_unsettled"> 
-													<option value=""selected></option> 
+												<select name="discomposed_and_unsettled" class="selectpicker" multiple id="id_discomposed_and_unsettled"> 
 													<option value="discomposed">discomposed</option> 
 													<option value="nonplussed">nonplussed</option> 
 													<option value="disconcerted">disconcerted</option> 
@@ -560,8 +547,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="grumpy_and_cranky">Grumpy and Cranky:</label>
-												<select name="grumpy_and_cranky" class="select form-control" id="id_grumpy_and_cranky"> 
-													<option value=""selected></option> 
+												<select name="grumpy_and_cranky" class="selectpicker" multiple id="id_grumpy_and_cranky"> 
 													<option value="belligerent">belligerent</option> 
 													<option value="pugnacious">pugnacious</option> 
 													<option value="contentious">contentious</option> 
@@ -616,4 +602,8 @@
 	{% if request.user.profile.status == 'Actor' %}
 		<script src="{% static 'audio_recorder/js/real.recording.js' %}"></script>
 	{% endif %}
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js" integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock js %}

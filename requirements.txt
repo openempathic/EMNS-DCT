@@ -7,3 +7,4 @@ pandas
 pathlib
 pillow
 uwsgi
+certbot

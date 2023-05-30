@@ -54,7 +54,10 @@
 
 			<div class="mb-2 mt-2">
 				{% if object.audio_recording %}
-					<audio controls> <source src="{{ BASIC_DIR }}/{{ object.audio_recording }}"> Your browser does not support the audio element. </audio>
+					</div class="row">
+						<audio id="audio_source" controls loop> <source src="{{ BASIC_DIR }}/{{ object.audio_recording }}"> Your browser does not support the audio element. </audio>
+						<button class="btn btn-dark mb-2 centered" id="toggle_button">Toggle Loop</button>
+					</div>
 				{% elif request.user.profile.status == 'Actor' %}
 					<p class="text-warning">Please record an utterance.</p>
 				{% else %}
@@ -87,33 +90,37 @@
 								<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" 
 								placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
 							</div>
-							
+
 							<div class="container">
-								<div class="row mt-2">
-									<div class="col-4">
-										<div class="row">
-											<input name="level_slider" type="range" class="form-range" id="id_level_slider" min="0" max="10" value={{object.level}}>
-										</div>
-										<div class="row">
-											<span id="id_slider_text" class="text-primary">Expressiveness level: <span id="ex6SliderVal">{{object.level}}</span></span>
-										</div>
-									</div>
-									<div class="col-4">
-										<div class="row">
-											<input name="arousal_slider" type="range" class="form-range" id="id_arousal_slider" min="0" max="10" value={{object.arousal}}>
-										</div>
-										<div class="row">
-											<span id="id_slider_text" class="text-primary">Arousal level: <span id="ex6SliderVal">{{object.arousal}}</span></span>
+								<div class="row mt-2 centered text-center">
+									<div class="col"></div>
+									<div class="col">
+										<div class="container">
+											<div class="col text-primary">
+												<label for="id_slider_text">Arousal level: <span id="ex6SliderVal">{{object.arousal}}</span></label><br/>
+												<input name="arousal_slider" type="range" class="form-range" id="id_arousal_slider" list="arousal_slider_markers" min="0" max="10" value={{object.arousal}}><br />
+												<datalist id="arousal_slider_markers">
+													<option value="0"></option>
+													<option value="5"></option>
+													<option value="10"></option>
+												</datalist>
+											</div>
 										</div>
 									</div>
-									<div class="col-4">
-										<div class="row">
-											<input name="valence_slider" type="range" class="form-range" id="id_valence_slider" min="0" max="10" value={{object.valence}}>
-										</div>
-										<div class="row">
-											<span id="id_slider_text" class="text-primary">Valence level: <span id="ex6SliderVal">{{object.valence}}</span></span>
+									<div class="col">
+										<div class="container">
+											<div class="col text-primary">
+												<label for="id_slider_text">Valence level: <span id="ex6SliderVal">{{object.valence}}</span></label><br/>
+												<input name="valence_slider" type="range" class="form-range" id="id_valence_slider" list="valence_slider_markers" min="0" max="10" value={{object.valence}}><br />
+												<datalist id="valence_slider_markers">
+													<option value="0"></option>
+													<option value="5"></option>
+													<option value="10"></option>
+												</datalist>
+											</div>
 										</div>
 									</div>
+									<div class="col"></div>
 								</div>
 								<p class="text-secondary">0 = Neutral, 5 = moderate, 10 = extreme</p>
 							</div>
@@ -644,4 +651,14 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js" integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script>
+		$("#toggle_button").click(function(){
+		var player = $("#audio_source");
+			if (player.prop('loop') == false) {
+				player.prop('loop', true);
+			} else {
+				player.prop('loop', false);
+			};
+		});
+	</script>
 {% endblock js %}

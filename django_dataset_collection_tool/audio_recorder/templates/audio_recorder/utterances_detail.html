@@ -48,15 +48,17 @@
 					</div>
 				</div>
 			{% endif %}
-			<div class="p-5 mb-3 mt-2 bg-light">
+			<!-- <div class="p-5 mb-3 mt-2 bg-light">
 				<h4 class="text-justify mb-5 mt-5"> {{ object.utterance }} </h4>
-			</div>
+			</div> -->
 
 			<div class="mb-2 mt-2">
 				{% if object.audio_recording %}
-					</div class="row">
+					<div class="container centered">
 						<audio id="audio_source" controls loop> <source src="{{ BASIC_DIR }}/{{ object.audio_recording }}"> Your browser does not support the audio element. </audio>
-						<button class="btn btn-dark mb-2 centered" id="toggle_button">Toggle Loop</button>
+					</div>
+					<div class="container centered">
+						<button class="btn btn-primary mb-2 centered" id="toggle_button">Toggle Loop</button>
 					</div>
 				{% elif request.user.profile.status == 'Actor' %}
 					<p class="text-warning">Please record an utterance.</p>
@@ -656,8 +658,11 @@
 		var player = $("#audio_source");
 			if (player.prop('loop') == false) {
 				player.prop('loop', true);
+				$(this).removeClass('btn-primary').addClass('btn-dark');
 			} else {
 				player.prop('loop', false);
+				$(this).removeClass('btn-dark').addClass('btn-primary');
+
 			};
 		});
 	</script>

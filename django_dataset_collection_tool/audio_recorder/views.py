@@ -48,6 +48,9 @@ def HomeView(request, *args, **argv):
 
 	return render(request, 'audio_recorder/home.html')
 
+def AnnotationGuideView(request, *args, **argv):
+	return render(request, 'audio_recorder/annotation_guide.html')
+
 class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, DetailView):
 	model = Utterances
 	form_class = RecordingUpdateForm

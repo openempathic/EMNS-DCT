@@ -31,3 +31,6 @@ down:
 
 restart:
 	@docker-compose -f docker-compose-deploy.yml restart
+
+debug:
+	@docker-compose -f docker-compose.yml up

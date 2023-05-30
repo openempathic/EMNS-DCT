@@ -19,6 +19,11 @@
         <li class="sidebar-nav-item">
             <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}#contact-us">Contact Us</a>
         </li>
+        {% if user.is_authenticated %}
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'annotation-guide' %}">Annotation Guide</a>
+            </li>
+        {% endif %}
 
         {% if user.is_authenticated %}
 

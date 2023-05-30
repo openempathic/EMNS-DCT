@@ -1,0 +1,158 @@
+{% extends "audio_recorder/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %}
+	Utterance Detail
+{% endblock title %}
+
+{% block scripts %}
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" rel="stylesheet"/>
+	<!-- videojd-record -->
+	<link href="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
+	<link href="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css' %}" rel="stylesheet">
+	<link href="{% static 'audio_recorder/videojs-record/dist/css/videojs.record.css' %}" rel="stylesheet">
+	<link href="{% static 'audio_recorder/videojs-record/examples/assets/css/examples.css' %}" rel="stylesheet">
+
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video.min.js' %}"></script>
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/recordrtc/RecordRTC.js' %}"></script>
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/webrtc-adapter/out/adapter.js' %}"></script>
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/wavesurfer.js/dist/wavesurfer.min.js' %}"></script>
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/wavesurfer.js/dist/plugin/wavesurfer.microphone.min.js' %}"></script>
+	<script src="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js' %}"></script>
+
+	<script src="{% static 'audio_recorder/videojs-record/dist/videojs.record.js' %}"></script>
+	<script src="{% static 'audio_recorder/videojs-record/examples/browser-workarounds.js' %}"></script>
+
+{% endblock scripts %}
+
+
+{% block content %}
+
+<section class="content-section bg-secondary text-white" id="about">
+    <div class="container px-4 px-lg-5 ">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-10">
+                <div class="content-section-heading mb-5">
+                    <h2 class='text-center'>Open Empathic Data Annotation Manual</h2>
+                </div>
+                <p class="lead mb-5">
+                    Welcome to our data annotation team! We are thrilled to have you on board.
+                </p>
+                <p class="lead mb-5">
+
+                    Your invaluable annotations will contribute to the creation of open-source 
+                    datasets that are aimed at enhancing the emotional intelligence of AI models. 
+                    By providing these annotations, you will play a crucial role in enabling 
+                    researchers worldwide to equip AI systems with empathy, compassion, and a 
+                    deep understanding of emotions.
+
+                </p>
+                <p class="lead mb-5">
+                    
+                    The resulting technologies, including conversational assistants, elderly care 
+                    and nursing robots, will greatly benefit from these advancements. To ensure 
+                    widespread collaboration, all generated datasets will be released as open source 
+                    under the MIT license. This transparency and accessibility will empower scientists, 
+                    hospitals, and the general public to contribute and utilize these technologies to 
+                    improve healthcare systems and societies as a whole.
+
+                </p>
+                <p class="lead mb-5">
+                    This manual will guide you through the annotation process of audio recordings, 
+                    helping you assign emotionally relevant labels to each clip.
+                </p>
+                <p class="lead mb-5">
+                    Our most important guideline is to trust your intuition and avoid overthinking 
+                    when performing annotations. Your unique insights and instincts are vital for 
+                    our research and analysis.
+                </p>
+                <p class="lead mb-5">
+                    Let's get started!
+                </p>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Data we collect-->
+<section class="content-section bg-secondary text-white" id="data_we_collect">
+    <div class="container px-4 px-lg-5 ">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-10">
+                <div class="content-section-heading">
+                    <h2 class="text-secondary mb-4">The Task</h2>
+                </div>
+                <div class="content-section-heading">
+                    <h4 class="text-secondary mb-4">Rating Arousal and Valence:</h4>
+                </div>
+
+                <p class="lead mb-3">
+                    <h5>Arousal:</h5> Arousal measures the level of intensity or activation of the speaker's 
+                    emotions. It indicates how energetic, stimulated, or excited the speaker appears. 
+                    Here are some guidelines to help you rate arousal:
+                </p>
+                <ul>
+                    <li><strong>Arousal:</strong> The speaker sounds calm, relaxed, or even bored.</li>
+                    <li><strong>Medium Arousal:</strong> The speaker appears moderately engaged, showing some level of interest or excitement.</li>
+                    <li><strong>High Arousal:</strong> The speaker displays intense emotions, enthusiasm, or excitement.</li>
+                  </ul>
+
+                <p class="lead mb-3">
+                    <h5>Valence:</h5> Valence measures the speaker's emotional state. It indicates whether 
+                    the speaker is experiencing positive or negative emotions. Here are some guidelines 
+                    to help you rate valence:
+                </p>
+
+                <ul>
+                    <li><strong>Valence:</strong> The speaker expresses joy, happiness, satisfaction, or other positive emotions.</li>
+                    <li><strong>Neutral Valence:</strong> The speaker appears emotionally neutral or displays a lack of strong positive or negative emotions.</li>
+                    <li><strong>Negative Valence:</strong> The speaker displays sadness, anger, frustration, or other negative emotions.</li>
+                </ul>
+
+
+                <div class="content-section-heading">
+                    <h4 class="text-secondary mb-4">Describing the Speaker's Feelings:</h4>
+                </div>
+
+                <p class="lead mb-3">
+                    In this step, you will describe the feelings the speaker seems to experience during the 
+                    audio clip. Use your own words to convey the emotions, aiming for a minimum of 10 words. 
+                    We encourage you to use rich vocabulary to capture the nuances of the speaker's emotions. 
+                    While we provide dropdown menus of emotional words for your convenience, feel free to 
+                    include other appropriate words that you believe suit the task.
+                </p>
+                <p class="lead mb-3">
+                    Choose words that accurately portray the speaker's emotional state within the given 
+                    audio clip. Feel free to use multiple words if necessary to capture the complexity of 
+                    emotions. Your annotations should reflect your honest interpretation of the speaker's 
+                    emotions. Remember, there are no right or wrong answers here – we value your unique 
+                    perspective and insights.
+                </p>
+
+                <p class="lead mb-3">
+                    By providing your annotations, you are actively advancing the field of emotional 
+                    AI and contributing to the creation of AI models that are more empathic and compassionate. 
+                    Your dedication and efforts are instrumental in shaping a future where technology understands 
+                    and responds to human emotions. We genuinely appreciate your commitment to improving the 
+                    impact of AI on society.
+
+                </p>
+                <p class="lead mb-3">
+                    If you have any questions or require assistance, please don't hesitate to reach out to us. 
+                    We wish you an enjoyable and insightful annotation experience. Happy annotating!
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock content %}
+
+{% block js %}
+{% endblock js %}

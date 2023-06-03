@@ -106,6 +106,8 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			self.object.valence = self.request.POST.get("valence_slider")
 			self.object.description = self.request.POST.get("description_textarea")
 			self.object.emotion = json.dumps(emotions)
+			self.object.bg_sounds = self.request.POST.get('background_sounds')
+			self.object.accent = self.request.POST.get('accent')
 			self.object.status = 'Awaiting Review'
 			self.object.save()
 		elif self.request.user.profile.status == 'Actor':
@@ -137,7 +139,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 
 class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Utterances
-	fields = ['utterance', 'prosody', 'status']
+	fields = ['utterance', 'emotion', 'status']
 
 	def form_valid(self, form) -> HttpResponse:
 		form.instance.author = self.request.user
@@ -172,7 +174,7 @@ class UserUtteranceListView(LoginRequiredMixin, FilterView):
 
 class UtteranceCreateView(LoginRequiredMixin, CreateView):
 	model = Utterances
-	fields = ['utterance', 'prosody']
+	fields = ['utterance', 'emotion']
 	template_name = 'audio_recorder/create_new_utterance.html'
 
 	def form_valid(self, form) -> HttpResponse:

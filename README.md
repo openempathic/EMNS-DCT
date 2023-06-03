@@ -96,7 +96,7 @@ def main(csv_dir, sep="\t", emotions=None, header=None):
    create_utterance(user, row[0], random.choice(emotions))
    print("Found nan: ", i)
 
-main("/app/src/data/train.tsv")
+main("sample.tsv")
 ```
 
 ### Start container
@@ -116,7 +116,7 @@ docker exec -it dataset_collection_tool_proxy_1 sh
 ```
 
 ``` bash
-certbot --nginx --noninteractive --agree-tos -m name@email.com -d emns.com -d www.emns.com --redirect --test-cert
+certbot --nginx --noninteractive --agree-tos -m name@email.com -d preview.openempathic.com -d www.preview.openempathic.com --redirect --test-cert
 ```
 
 Remove `--test-cert` after confirming that everything loaded as expected.

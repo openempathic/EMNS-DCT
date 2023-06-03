@@ -11,7 +11,8 @@ import uuid
 class Utterances(models.Model):
     utterance       = models.TextField()
     description     = models.TextField(null=True)
-    prosody         = models.CharField(max_length=70)
+    bg_sounds       = models.CharField(max_length=70, default='')
+    accent          = models.CharField(max_length=70, default='')
     emotion         = models.CharField(max_length=70, default='')
     author          = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     date_created    = models.DateTimeField(default=timezone.now)
@@ -21,10 +22,10 @@ class Utterances(models.Model):
     arousal         = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
     valence         = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
 
-    audio_recording = models.FileField(upload_to='media/wavs')
+    audio_recording = models.FileField(upload_to='media/')
 
     def __str__(self) -> str:
-        return f"{self.utterance}, emotion: {self.emotion}"
+        return f"{self.utterance}"
 
     def get_absolute_url(self):
         return reverse('utterance-detail', kwargs={'pk':self.pk})

@@ -47,9 +47,9 @@ If you want to reset the migrations, you can use the following commands:
 find . -path "*/*/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/*/migrations/*.pyc"  -delete
 find . -path "*/db.sqlite3"  -delete
-python manage.py makemigrations
-python manage.py migrate
-python manage.py createsuperuser
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py createsuperuser
 ```
 
 ### Collect static file
@@ -57,7 +57,7 @@ python manage.py createsuperuser
 If there are changes to static files, run the following command to collect them:
 
 ``` bash
-python manage.py collectstatic
+python3 manage.py collectstatic
 ```
 
 ### Create Utterances
@@ -66,7 +66,7 @@ To create utterances for recording, validation, etc., use the following commands
 
 ``` bash
 cd dataset_collection_tool/django_dataset_collection_tool
-python manage.py shell
+python3 manage.py shell
 ```
 
 ``` python

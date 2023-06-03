@@ -99,7 +99,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 		if self.request.user.profile.status == 'NLD':
 			self.object.author = self.request.user
 			self.object.gender = self.request.user.profile.gender
-			self.object.age = self.request.user.profile.age
+			self.object.age =  self.request.POST.get("age")
 			self.object.date_created = timezone.now()
 			self.object.level = self.request.POST.get("level_slider")
 			self.object.arousal = self.request.POST.get("arousal_slider")

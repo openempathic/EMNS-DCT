@@ -26,6 +26,9 @@ bash:
 run:
 	@docker-compose -f docker-compose-deploy.yml up -d
 
+run_debug:
+	@docker-compose -f docker-compose.yml up
+
 down:
 	@docker-compose -f docker-compose-deploy.yml down
 

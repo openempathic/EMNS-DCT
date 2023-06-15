@@ -132,13 +132,29 @@
 									<div class="col-4">
 										<div class="container">
 											<div class="col">
-												<label for="background_sounds">Background sounds:</label>
-												<select name="background_sounds" class="selectpicker" multiple id="id_background_sounds"> 
-													<option value="music">Music</option> 
-													<option value="people_talking">People talking</option> 
-													<option value="animals">Animals</option> 
-													<option value="city_traffic">City traffic</option> 
-													<option value="other_noise">Other noise</option> 
+												<label for="age">Age:&#8193;</label>
+												<select name="age" class="selectpicker" id="id_age"> 
+													<option value="0-3">0-3</option> 
+													<option value="4-7">4-7</option> 
+													<option value="8-12">8-12</option> 
+													<option value="13-19">13-19</option> 
+													<option value="20-39">20-39</option> 
+													<option value="40-59">40-59</option> 
+													<option value="60-79">60-79</option> 
+													<option value="80-100">80-100</option> 
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="container">
+											<div class="col">
+												<label for="gender">Gender:</label>
+												<select name="gender" class="selectpicker" id="id_gender"> 
+													<option value=""></option> 
+													<option value="Male">Male</option> 
+													<option value="Female">Female</option> 
+													<option value="Other">Other</option> 
 												</select>
 											</div>
 										</div>
@@ -161,23 +177,41 @@
 											</div>
 										</div>
 									</div>
+								</div>
+
+								<div class="row mt-3 mb-5">
+									<div class="col-2"></div>
 									<div class="col-4">
 										<div class="container">
 											<div class="col">
-												<label for="age">Age:&#8193;</label>
-												<select name="age" class="selectpicker" id="id_age"> 
-													<option value="0-3">0-3</option> 
-													<option value="4-7">4-7</option> 
-													<option value="8-12">8-12</option> 
-													<option value="13-19">13-19</option> 
-													<option value="20-39">20-39</option> 
-													<option value="40-59">40-59</option> 
-													<option value="60-79">60-79</option> 
-													<option value="80-100">80-100</option> 
+												<label for="audio_quality">Audio Quality:</label>
+												<select name="audio_quality" class="selectpicker" id="id_audio_quality"> 
+													<option value=""></option> 
+													<option value="Unusable">Unusable</option> 
+													<option value="Poor">Poor</option> 
+													<option value="Average">Average</option> 
+													<option value="Good">Good</option> 
+													<option value="Excellent">Excellent</option> 
 												</select>
 											</div>
 										</div>
 									</div>
+									<div class="col-4">
+										<div class="container">
+											<div class="col">
+												<label for="background_sounds">Background sounds:</label>
+												<select name="background_sounds" class="selectpicker" multiple id="id_background_sounds"> 
+													<option value="music">Music</option> 
+													<option value="people_talking">People talking</option> 
+													<option value="animals">Animals</option> 
+													<option value="city_traffic">City traffic</option> 
+													<option value="other_noise">Other noise</option> 
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-2"></div>
+
 								</div>
 								
 								<div class="row mt-3">
@@ -646,7 +680,13 @@
 							</div>
 
 						{% endif %}
-						<button class="btn btn-primary mt-2" id="submit">Submit</button>
+						<div class="row mt-3">
+							<div class="container">
+								<button class="btn btn-primary mt-2" name="Previous" id="Previous">Previous</button>
+								<button class="btn btn-primary mt-2" id="submit">Submit</button>
+								<button class="btn btn-primary mt-2" name="Next" id="Next">Next</button>
+							</div>
+						</div>
 					</Fieldset>
 				</div>
 			</form>

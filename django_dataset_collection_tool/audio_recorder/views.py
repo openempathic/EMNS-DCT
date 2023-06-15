@@ -70,13 +70,17 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 	def post(self, request, *args, **kwargs):
 		if not request.user.is_authenticated:
 			return HttpResponseForbidden()
+		
+		if "Next" in self.request.POST:
+			return redirect(reverse('utterance-detail', kwargs={'pk': self.object.pk+1}))
+		if "Previous" in self.request.POST:
+			return redirect(reverse('utterance-detail', kwargs={'pk': self.object.pk-1}))
+		
 		form = RecordingUpdateForm(request.POST)
 
 		if form.is_valid():
-			print('form valid','#'*100)
 			return self.form_valid(form)
 		else:
-			print('form invalid','#'*100)
 			return self.form_invalid(form)
 
 	def form_valid(self, form) -> HttpResponse:
@@ -99,6 +103,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 		if self.request.user.profile.status == 'NLD':
 			self.object.author = self.request.user
 			self.object.gender = self.request.user.profile.gender
+			self.object.audio_quality = self.request.POST.get("audio_quality")
 			self.object.age =  self.request.POST.get("age")
 			self.object.date_created = timezone.now()
 			self.object.level = self.request.POST.get("level_slider")
@@ -123,7 +128,6 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			self.object.status = self.request.POST.get("status")
 			self.object.description = self.request.POST.get("description_textarea")
 			self.object.save()
-		
 		return super().form_valid(form)
 
 

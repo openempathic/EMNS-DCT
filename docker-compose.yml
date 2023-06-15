@@ -6,13 +6,7 @@ services:
     build:
       context: .
     ports:
-<<<<<<< Updated upstream
       - "8000:8000"
-=======
-      # - "80:80"
-      # - "443:443"
-      - "80:8000"
->>>>>>> Stashed changes
 
     volumes:
       - ./django_dataset_collection_tool:/app

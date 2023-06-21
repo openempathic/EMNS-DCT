@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.views.generic import detail
 from django.core.validators import MaxValueValidator, MinValueValidator
-import uuid
+from auditlog.models import AuditlogHistoryField
+from auditlog.registry import auditlog
 
 # from django_dataset_collection_tool.audio_recorder.views import utterances
 
@@ -27,6 +28,8 @@ class Utterances(models.Model):
 
     locked_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='locked_utterances')
     is_locked = models.BooleanField(default=False)
+
+    history = AuditlogHistoryField()
 
     def __str__(self) -> str:
         return f"{self.utterance}"
@@ -52,3 +55,5 @@ class Utterances(models.Model):
         if self.author == user:
             self.author = None
             self.save()
+
+auditlog.register(Utterances, exclude_fields=['locked_by', 'is_locked'])

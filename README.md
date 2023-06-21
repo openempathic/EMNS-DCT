@@ -34,7 +34,7 @@ Docker is used for deploying the tool. Once you have Docker and docker-compose i
 To make debugging and modifying the tool easier, we have created a separate compose file. You can access this mode by executing the following command:
 
 ```sh
-docker-compose -f docker-compose.yml up
+make run_debug
 ```
 
 This command will enable the debug mode and start the tool. With this mode, you can easily modify the tool's code and see the changes in real-time. It is important to note that this mode is intended for development purposes only and should not be used in a production environment.

@@ -24,6 +24,23 @@
 
 	<script src="{% static 'audio_recorder/videojs-record/dist/videojs.record.js' %}"></script>
 	<script src="{% static 'audio_recorder/videojs-record/examples/browser-workarounds.js' %}"></script>
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script>
+        function releaseLock() {
+            $.ajax({
+                url: "{% url 'release_lock' %}",
+                method: "POST",
+                data: {
+                    utterance_id: "{{ object.id }}",
+                    csrfmiddlewaretoken: "{{ csrf_token }}"
+                }
+            });
+        }
+
+        $(window).on('beforeunload', function() {
+            releaseLock();
+        });
+    </script>
 
 {% endblock scripts %}
 

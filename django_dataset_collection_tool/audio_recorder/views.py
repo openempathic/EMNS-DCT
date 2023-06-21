@@ -55,6 +55,28 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 	model = Utterances
 	form_class = RecordingUpdateForm
 
+	def acquire_lock(self):
+		if not self.object.locked_by:
+			self.object.locked_by = self.request.user
+			self.object.save()
+
+	def release_lock(self):
+		if self.object.locked_by == self.request.user:
+			self.object.locked_by = None
+			self.object.save()
+
+	def get(self, request, *args, **kwargs):
+		self.object = self.get_object()
+		if self.object.locked_by and self.object.locked_by != self.request.user:
+			if self.get_queryset().filter(pk=self.object.pk+1).exists():
+				return redirect(reverse('utterance-detail', kwargs={'pk': self.object.pk+1}))  # Replace 'home' with the name of your home view
+			else:
+				messages.success(self.request, 'Nothing else left, please go back to any you have skipped, otherwise let the reseachers know you have finished :)')
+				return redirect(reverse('utterance-detail', kwargs={'pk': self.object.pk-1}))
+		self.acquire_lock()
+		context = self.get_context_data(object=self.object)
+		return self.render_to_response(context)
+
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['form'] = self.get_form()
@@ -70,13 +92,17 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 	def post(self, request, *args, **kwargs):
 		if not request.user.is_authenticated:
 			return HttpResponseForbidden()
+
+		utterance = self.get_object()
+		self.release_lock()
+
+		if "Next" in self.request.POST and not utterance.acquire_lock(request.user) and self.get_queryset().filter(pk=self.object.pk+1).exists():
+			return redirect(reverse('utterance-detail', kwargs={'pk': utterance.pk+1}))
 		
-		if "Next" in self.request.POST:
-			return redirect(reverse('utterance-detail', kwargs={'pk': self.object.pk+1}))
-		if "Previous" in self.request.POST:
-			return redirect(reverse('utterance-detail', kwargs={'pk': self.object.pk-1}))
-		
-		form = RecordingUpdateForm(request.POST)
+		if "Previous" in self.request.POST and not utterance.acquire_lock(request.user) and self.get_queryset().filter(pk=self.object.pk-1).exists():
+			return redirect(reverse('utterance-detail', kwargs={'pk': utterance.pk-1}))
+
+		form = self.get_form()
 
 		if form.is_valid():
 			return self.form_valid(form)
@@ -129,9 +155,10 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			self.object.description = self.request.POST.get("description_textarea")
 			self.object.save()
 		return super().form_valid(form)
-
-
-
+	
+	# def test_func(self):
+	# 	utterance = self.get_object()
+	# 	return utterance.author == self.request.user
 	def test_func(self):
 		self.object = self.get_object()
 
@@ -140,6 +167,16 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 				self.request.user.is_superuser: # Checking if the user has permissions to modify the post
 			return True
 		return False
+	
+class ReleaseLockView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        utterance_id = request.POST.get('utterance_id')
+        utterance = get_object_or_404(Utterances, id=utterance_id)
+        if utterance.locked_by == request.user:
+            utterance.locked_by = None
+            utterance.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False})
 
 class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Utterances
@@ -165,7 +202,6 @@ class UtteranceListView(LoginRequiredMixin, FilterView):
 			return 
 		else:
 			return Utterances.objects.filter(author=self.request.user)
-
 
 class UserUtteranceListView(LoginRequiredMixin, FilterView):
 	model = Utterances

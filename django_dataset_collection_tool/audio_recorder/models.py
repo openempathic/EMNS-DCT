@@ -13,7 +13,7 @@ class Utterances(models.Model):
     description     = models.TextField(null=True)
     bg_sounds       = models.CharField(max_length=70, default='', null=True)
     accent          = models.CharField(max_length=70, default='')
-    emotion         = models.CharField(max_length=70, default='')
+    emotion         = models.TextField(default='')
     author          = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     date_created    = models.DateTimeField(default=timezone.now)
     status          = models.CharField(max_length=70, null=True, choices=(('Pending', 'Pending'), ('Awaiting Review', 'Awaiting Review'), ('Complete', 'Complete'), ('Needs Updating', 'Needs Updating' )), default='Pending' )
@@ -24,6 +24,9 @@ class Utterances(models.Model):
     valence         = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
 
     audio_recording = models.FileField(upload_to='media/')
+
+    locked_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='locked_utterances')
+    is_locked = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.utterance}"
@@ -37,3 +40,15 @@ class Utterances(models.Model):
             if recording.audio_recording != self.audio_recording:
                 recording.audio_recording.delete(save=False)
         super().save(*args, **kwargs)
+
+    def acquire_lock(self, user):
+        if self.author is None:
+            self.author = user
+            self.save()
+            return True
+        return False
+
+    def release_lock(self, user):
+        if self.author == user:
+            self.author = None
+            self.save()

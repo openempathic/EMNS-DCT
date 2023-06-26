@@ -125,23 +125,24 @@
 												</datalist>
 											</div>
 										</div>
+										<p class="text-secondary">0 = low, 5 = medium,<br>10 = high</p>
 									</div>
 									<div class="col">
 										<div class="container">
 											<div class="col text-primary">
 												<label for="id_valence_slider">Valence level: <span id="valenceSliderVal">{{object.valence}}</span></label><br/>
-												<input name="valence_slider" type="range" class="form-range" id="id_valence_slider" list="valence_slider_markers" min="0" max="10" value="{{object.valence}}"><br />
+												<input name="valence_slider" type="range" class="form-range" id="id_valence_slider" list="valence_slider_markers" min="-5" max="5" value="{{object.valence}}"><br />
 												<datalist id="valence_slider_markers">
+													<option value="-5"></option>
 													<option value="0"></option>
 													<option value="5"></option>
-													<option value="10"></option>
 												</datalist>
 											</div>
 										</div>
+										<p class="text-secondary">-5 = negative, 0 = neutral,<br>5 = positive</p>
 									</div>
 									<div class="col"></div>
 								</div>
-								<p class="text-secondary">0 = Neutral, 5 = moderate, 10 = extreme</p>
 							</div>
 							
 							<div class="container text-primary mt-5 mb-5">

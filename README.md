@@ -112,7 +112,7 @@ make run
 To create an SSL certificate, you can use the following commands:
 
 ``` bash
-docker exec -it dataset_collection_tool_proxy_1 sh
+docker exec -it emns-dct_proxy_1 sh
 ```
 
 ``` bash

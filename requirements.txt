@@ -2,7 +2,7 @@ django
 django-crispy-forms
 django-filter
 django-import-export
-crispy-bootstrap5
+crispy-bootstrap4
 pandas
 pathlib
 pillow

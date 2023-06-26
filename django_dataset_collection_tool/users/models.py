@@ -11,8 +11,8 @@ class Profile(models.Model):
     status      = models.CharField(max_length=70, null=True, choices=(('Admin', 'Admin'), ('Actor', 'Actor'), ('Viewer', 'Viewer'), ('NLD', 'NLD')), default='Viewer' )
     gender      = models.CharField(max_length=70, null=True, choices=(('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')), default='Other')
     age         = models.IntegerField(default=0)
-    healthcare  = models.CharField(max_length=70, null=True, choices=(('Psychologist', 'Psychologist'), ('Psychatrist', 'Psychatrist'), ('Other physician', 'Other physician')), default='I am not a healthcare professional')
-    institute   = models.CharField(max_length=70, null=True, default='Other')
+    healthcare  = models.CharField(max_length=70, null=True, choices=(('Psychologist', 'Psychologist'), ('Psychatrist', 'Psychatrist'), ('Other physician', 'Other physician')))
+    institute   = models.CharField(max_length=70, null=True, default='Not Specified')
     experience  = models.IntegerField(default=0)
 
     def __str__(self) -> str:

@@ -34,17 +34,17 @@
                     {{ u_form.username    |as_crispy_field }}
                     {{ u_form.email    |as_crispy_field }}
 
-                    {{ p_form|crispy }}
+                    {{ p_form.image  |as_crispy_field }}
 
                     <div class="form-row">
                         <div class="form-group col">
-                            {{ u_form.healthcare  |as_crispy_field }}
+                            {{ p_form.healthcare  |as_crispy_field }}
                         </div>
                         <div class="form-group col">
-                            {{ u_form.institute  |as_crispy_field }}
+                            {{ p_form.institute  |as_crispy_field }}
                         </div>
                         <div class="form-group col">
-                            {{ u_form.experience  |as_crispy_field }}
+                            {{ p_form.experience  |as_crispy_field }}
                         </div>
                     </div>
                 </Fieldset>

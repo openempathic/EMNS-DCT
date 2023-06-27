@@ -24,11 +24,12 @@ class Utterances(models.Model):
     arousal         = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
     valence         = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
 
-    audio_recording = models.FileField(upload_to='media/')
-
+    # metrics
+    time_spent      = models.FloatField(default=0.0)
     locked_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='locked_utterances')
     is_locked = models.BooleanField(default=False)
 
+    audio_recording = models.FileField(upload_to='media/')
     history = AuditlogHistoryField()
 
     def __str__(self) -> str:

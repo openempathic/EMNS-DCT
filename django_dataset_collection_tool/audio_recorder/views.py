@@ -83,6 +83,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 		return context
 
 	def get_success_url(self):
+		messages.success(self.request, 'Submission saved successfully!')
 		if self.get_queryset().filter(pk=self.object.pk+1).exists():
 			return reverse('utterance-detail', kwargs={'pk': self.object.pk+1})
 		else:
@@ -105,9 +106,12 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 		form = self.get_form()
 
 		if form.is_valid():
-			return self.form_valid(form)
+			self.form_valid(form)
+			return JsonResponse({'messages': [str(message) for message in messages.get_messages(request)], 'redirect_url': self.get_success_url()})
 		else:
-			return self.form_invalid(form)
+			messages.success(self.request, 'Submission Failed!')
+			self.form_invalid(form)
+			return JsonResponse({'messages': [str(message) for message in messages.get_messages(request)], 'redirect_url': self.get_success_url()})
 
 	def form_valid(self, form) -> HttpResponse:
 		emotions = {

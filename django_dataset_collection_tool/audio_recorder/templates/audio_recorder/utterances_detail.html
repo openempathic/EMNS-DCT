@@ -809,8 +809,12 @@
 					type: 'POST',
 					headers: { "X-CSRFToken": "{{ csrf_token }}" },
 					data: formData + "&time_spent=" + timeSpentOnPage,
-					success: function(){
+					success: function(data){
 						$("#id_utterance_detail_form").submit();
+						$.each(data.messages, function(i, message){
+							console.log(message);
+						});
+						window.location.href = data.redirect_url;
 					},
 					error: function(xhr, status, error) {
 						console.log("AJAX error: " + error);

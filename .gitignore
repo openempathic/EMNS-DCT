@@ -132,6 +132,7 @@ dmypy.json
 .vscode-server
 .gnupg
 
+django_dataset_collection_tool/audio_recorder/static
 django_dataset_collection_tool/media
 
 static/

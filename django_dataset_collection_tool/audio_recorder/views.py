@@ -84,9 +84,14 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 
 	def get_success_url(self):
 		messages.success(self.request, 'Submission saved successfully!')
-		if self.get_queryset().filter(pk=self.object.pk+1).exists():
-			return reverse('utterance-detail', kwargs={'pk': self.object.pk+1})
+		# Try to get the next object where status is 'Pending'
+		next_object = self.get_queryset().filter(pk__gt=self.object.pk, status='Pending').order_by('pk').first()
+		
+		if next_object:
+			# If such an object exists, redirect to its detail view
+			return reverse('utterance-detail', kwargs={'pk': next_object.pk})
 		else:
+			# If no such object exists, display a message and redirect to the current object's detail view
 			messages.success(self.request, 'Nothing else left, please go back to any you have skipped, otherwise let the reseachers know you have finished :)')
 			return reverse('utterance-detail', kwargs={'pk': self.object.pk})
 

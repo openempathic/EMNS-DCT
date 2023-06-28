@@ -10,7 +10,7 @@
 {% block scripts %}
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" rel="stylesheet"/>
 	<!-- videojd-record -->
-	<link href="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
+	<!-- <link href="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
 	<link href="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css' %}" rel="stylesheet">
 	<link href="{% static 'audio_recorder/videojs-record/dist/css/videojs.record.css' %}" rel="stylesheet">
 	<link href="{% static 'audio_recorder/videojs-record/examples/assets/css/examples.css' %}" rel="stylesheet">
@@ -23,8 +23,11 @@
 	<script src="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js' %}"></script>
 
 	<script src="{% static 'audio_recorder/videojs-record/dist/videojs.record.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/examples/browser-workarounds.js' %}"></script>
-	<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+	<script src="{% static 'audio_recorder/videojs-record/examples/browser-workarounds.js' %}"></script> -->
+	<!-- <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="{% static 'audio_recorder/js/timeme.min.js' %}"></script>
+	<!-- Page Locking -->
     <script>
         function releaseLock() {
             $.ajax({
@@ -41,6 +44,13 @@
             releaseLock();
         });
     </script>
+	<!-- track user page time -->
+	<script>
+		TimeMe.initialize({
+			currentPageName: "{% url 'utterance-detail' pk=object.pk %}", // replace 'your_view_name' with your Django view name and 'object' with your context object
+			idleTimeoutInSeconds: 30 // time before user considered idle
+		});
+	</script>
 
 {% endblock scripts %}
 
@@ -152,6 +162,7 @@
 											<div class="col">
 												<label for="age">👶➡️🧓 Age:&#8193;</label>
 												<select name="age" class="selectpicker" id="id_age"> 
+													<option value=""></option> 
 													<option value="0-3">0-3</option> 
 													<option value="4-7">4-7</option> 
 													<option value="8-12">8-12</option> 
@@ -182,6 +193,7 @@
 											<div class="col">
 												<label for="accent">🌍 Accent:</label>
 												<select name="accent" class="selectpicker" id="id_accent"> 
+													<option value=""></option> 
 													<option value="us_english">US English</option> 
 													<option value="british_english">British English</option> 
 													<option value="irish">Irish</option> 
@@ -191,6 +203,7 @@
 													<option value="russian">Russian</option> 
 													<option value="german">German</option> 
 													<option value="other">Other</option> 
+													<option value="unsure">Unsure</option> 
 												</select>
 											</div>
 										</div>
@@ -780,6 +793,31 @@
 		document.getElementById("id_valence_slider").addEventListener("input", function() {
 			updateSliderValue("id_valence_slider", "valenceSliderVal");
 		});
-		</script>
+	</script>
+
+	<!-- track user page time -->
+	<script>
+		$(document).ready(function(){
+			console.log("Document is ready");
+			$("#submit").click(function(event){
+				event.preventDefault();  // prevent the default form submission
+				var timeSpentOnPage = TimeMe.getTimeOnCurrentPageInSeconds();
+				var formData = $("#id_utterance_detail_form").serialize(); // get form data
+				console.log("Time spent on page: " + timeSpentOnPage);
+				$.ajax({
+					url: "{% url 'utterance-detail' pk=object.pk %}",
+					type: 'POST',
+					headers: { "X-CSRFToken": "{{ csrf_token }}" },
+					data: formData + "&time_spent=" + timeSpentOnPage,
+					success: function(){
+						$("#id_utterance_detail_form").submit();
+					},
+					error: function(xhr, status, error) {
+						console.log("AJAX error: " + error);
+					}
+				});
+			});
+		});
+	</script>
 		
 {% endblock js %}

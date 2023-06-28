@@ -126,6 +126,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			'discomposed_and_unsettled':self.request.POST.get('discomposed_and_unsettled'),
 			'grumpy_and_cranky':self.request.POST.get('grumpy_and_cranky'),
 		}
+		emotions = {key: value for key, value in emotions.items() if value is not None}
 		if self.request.user.profile.status == 'NLD':
 			self.object.author = self.request.user
 			self.object.gender = self.request.user.profile.gender
@@ -140,6 +141,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			self.object.bg_sounds = self.request.POST.get('background_sounds')
 			self.object.accent = self.request.POST.get('accent')
 			self.object.status = 'Awaiting Review'
+			self.object.time_spent = self.request.POST.get('time_spent')
 			self.object.save()
 		elif self.request.user.profile.status == 'Actor':
 			self.object.author = self.request.user

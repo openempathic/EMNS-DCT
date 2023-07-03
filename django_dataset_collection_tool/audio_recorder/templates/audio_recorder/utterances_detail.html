@@ -126,7 +126,7 @@
 									<label for="id_utterance">Description: </label>
 								</div>
 								<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" 
-								placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
+								placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit."></textarea>
 							</div>
 
 							<div class="container">
@@ -195,7 +195,7 @@
 													<option value="other">Other</option> 
 												</select>
 											</div>
-											<input type="text" name="other_gender" class="otherInput" style="display: none;" />
+											<input type="text" name="other_gender" class="otherInput" placeholder="Please type here" style="display: none;" />
 										</div>
 									</div>
 									<div class="col-4">
@@ -216,7 +216,7 @@
 													<option value="other">Other</option> 
 												</select>
 											</div>
-											<input type="text" name="other_accent" class="otherInput" style="display: none;" />
+											<input type="text" name="other_accent" class="otherInput" placeholder="Please type here" style="display: none;" />
 										</div>
 									</div>
 								</div>
@@ -250,7 +250,7 @@
 													<option value="other">Other</option> 
 												</select>
 											</div>
-											<input type="text" name="other_background_sounds" class="otherInput" style="display: none;" />
+											<input type="text" name="other_background_sounds" class="otherInput" placeholder="Please type here" style="display: none;" />
 										</div>
 									</div>
 									<div class="col-2"></div>

@@ -158,9 +158,6 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 				if other_values[i]:
 					form_data[i].extend(other_values[i])
 
-		print(form_data)
-		print(accent, gender, bg_sounds)
-		
 
 		if self.request.user.profile.status == 'NLD':
 			self.object.author = self.request.user

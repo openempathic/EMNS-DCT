@@ -93,7 +93,6 @@
 					<p class="text-info">There is no corresponding audio.</p>
 				{% endif %}
 			</div>
-
 			<form id="id_utterance_detail_form" method="POST">
 				{% csrf_token %}
 				<div class="field">
@@ -115,7 +114,17 @@
 						{% elif request.user.profile.status == 'NLD' %}
 						
 						<div class="container">
+							<div class="col">
+								<div class="text-primary">
+									<label for="id_utterance">Please correct or add a transcription: </label>
+								</div>
+								<textarea class="form-control" style="font-size: 16pt" name="utterance" id="id_utterance" rows="2">{{ object.utterance }}</textarea>
+
+							</div>
 							<div class="col mb-5">
+								<div class="text-primary">
+									<label for="id_utterance">Description: </label>
+								</div>
 								<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" 
 								placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
 							</div>
@@ -179,20 +188,21 @@
 										<div class="container">
 											<div class="col">
 												<label for="gender">⚧️ Gender:</label>
-												<select name="gender" class="selectpicker" id="id_gender"> 
+												<select name="gender" class="selectpicker dynamic-select" id="id_gender"> 
 													<option value=""></option> 
 													<option value="Male">Male</option> 
 													<option value="Female">Female</option> 
-													<option value="Other">Other</option> 
+													<option value="other">Other</option> 
 												</select>
 											</div>
+											<input type="text" name="other_gender" class="otherInput" style="display: none;" />
 										</div>
 									</div>
 									<div class="col-4">
 										<div class="container">
 											<div class="col">
 												<label for="accent">🌍 Accent:</label>
-												<select name="accent" class="selectpicker" id="id_accent"> 
+												<select name="accent" class="selectpicker dynamic-select" id="id_accent"> 
 													<option value=""></option> 
 													<option value="us_english">US English</option> 
 													<option value="british_english">British English</option> 
@@ -202,10 +212,11 @@
 													<option value="asian">Asian</option> 
 													<option value="russian">Russian</option> 
 													<option value="german">German</option> 
-													<option value="other">Other</option> 
 													<option value="unsure">Unsure</option> 
+													<option value="other">Other</option> 
 												</select>
 											</div>
+											<input type="text" name="other_accent" class="otherInput" style="display: none;" />
 										</div>
 									</div>
 								</div>
@@ -231,14 +242,15 @@
 										<div class="container">
 											<div class="col">
 												<label for="background_sounds">🔊 Background sounds:</label>
-												<select name="background_sounds" class="selectpicker" multiple id="id_background_sounds"> 
+												<select name="background_sounds" class="selectpicker dynamic-select" multiple id="id_background_sounds"> 
 													<option value="music">Music</option> 
 													<option value="people_talking">People talking</option> 
 													<option value="animals">Animals</option> 
 													<option value="city_traffic">City traffic</option> 
-													<option value="other_noise">Other noise</option> 
+													<option value="other">Other</option> 
 												</select>
 											</div>
+											<input type="text" name="other_background_sounds" class="otherInput" style="display: none;" />
 										</div>
 									</div>
 									<div class="col-2"></div>
@@ -820,6 +832,22 @@
 						console.log("AJAX error: " + error);
 					}
 				});
+			});
+		});
+	</script>
+
+	<script>
+		const selectElements = document.querySelectorAll('.dynamic-select');
+		const inputFields = document.querySelectorAll('.otherInput');
+		
+		selectElements.forEach((select, index) => {
+			select.addEventListener('change', function () {
+				const selectedOptions = Array.from(select.selectedOptions).map(option => option.value);
+				if (selectedOptions.includes('other')) {
+					inputFields[index].style.display = 'block';
+				} else {
+					inputFields[index].style.display = 'none';
+				}
 			});
 		});
 	</script>

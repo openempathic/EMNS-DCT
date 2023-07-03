@@ -120,25 +120,51 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 
 	def form_valid(self, form) -> HttpResponse:
 		emotions = {
-			'curious_and_fascinated':self.request.POST.get('curious_and_fascinated'),
-			'pensive_and_reflective':self.request.POST.get('pensive_and_reflective'),
-			'fearful_and_anxious':self.request.POST.get('fearful_and_anxious'),
-			'happy_and_energetic':self.request.POST.get('happy_and_energetic'),
-			'calm_and_composed':self.request.POST.get('calm_and_composed'),
-			'focused_and_attentive':self.request.POST.get('focused_and_attentive'),
-			'surprised_and_confused':self.request.POST.get('surprised_and_confused'),
-			'sad_and_despondent':self.request.POST.get('sad_and_despondent'),
-			'romantic_and_passionate':self.request.POST.get('romantic_and_passionate'),
-			'seductive_and_enticing':self.request.POST.get('seductive_and_enticing'),
-			'angry_and_irritated':self.request.POST.get('angry_and_irritated'),
-			'persistent_and_determined':self.request.POST.get('persistent_and_determined'),
-			'discomposed_and_unsettled':self.request.POST.get('discomposed_and_unsettled'),
-			'grumpy_and_cranky':self.request.POST.get('grumpy_and_cranky'),
+			'curious_and_fascinated':self.request.POST.getlist('curious_and_fascinated'),
+			'pensive_and_reflective':self.request.POST.getlist('pensive_and_reflective'),
+			'fearful_and_anxious':self.request.POST.getlist('fearful_and_anxious'),
+			'happy_and_energetic':self.request.POST.getlist('happy_and_energetic'),
+			'calm_and_composed':self.request.POST.getlist('calm_and_composed'),
+			'focused_and_attentive':self.request.POST.getlist('focused_and_attentive'),
+			'surprised_and_confused':self.request.POST.getlist('surprised_and_confused'),
+			'sad_and_despondent':self.request.POST.getlist('sad_and_despondent'),
+			'romantic_and_passionate':self.request.POST.getlist('romantic_and_passionate'),
+			'seductive_and_enticing':self.request.POST.getlist('seductive_and_enticing'),
+			'angry_and_irritated':self.request.POST.getlist('angry_and_irritated'),
+			'persistent_and_determined':self.request.POST.getlist('persistent_and_determined'),
+			'discomposed_and_unsettled':self.request.POST.getlist('discomposed_and_unsettled'),
+			'grumpy_and_cranky':self.request.POST.getlist('grumpy_and_cranky'),
 		}
-		emotions = {key: value for key, value in emotions.items() if value is not None}
+		emotions = {key: value for key, value in emotions.items() if value != []}
+
+		accent = self.request.POST.getlist('accent')
+		gender = self.request.POST.getlist('gender')
+		bg_sounds = self.request.POST.getlist('background_sounds')
+
+		other_accent = self.request.POST.getlist('other_accent')
+		other_gender = self.request.POST.getlist('other_gender')
+		other_bg_sounds = self.request.POST.getlist('other_background_sounds')
+
+		# Create a list containing all the 'other' inputs
+		other_values = [other_accent, other_gender, other_bg_sounds]
+
+		# Create a list containing all the form data
+		form_data = [accent, gender, bg_sounds]
+
+		# Iterate over the form data
+		for i in range(len(form_data)):
+			if 'other' in form_data[i]:
+				form_data[i].remove('other')
+				if other_values[i]:
+					form_data[i].extend(other_values[i])
+
+		print(form_data)
+		print(accent, gender, bg_sounds)
+		
+
 		if self.request.user.profile.status == 'NLD':
 			self.object.author = self.request.user
-			self.object.gender = self.request.user.profile.gender
+			self.object.gender = self.request.POST.get('gender')
 			self.object.audio_quality = self.request.POST.get("audio_quality")
 			self.object.age =  self.request.POST.get("age")
 			self.object.date_created = timezone.now()
@@ -147,10 +173,12 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			self.object.valence = self.request.POST.get("valence_slider")
 			self.object.description = self.request.POST.get("description_textarea")
 			self.object.emotion = json.dumps(emotions)
-			self.object.bg_sounds = self.request.POST.get('background_sounds')
-			self.object.accent = self.request.POST.get('accent')
 			self.object.status = 'Awaiting Review'
 			self.object.time_spent = self.request.POST.get('time_spent')
+
+			self.object.accent = accent[0]
+			self.object.bg_sounds = bg_sounds
+
 			self.object.save()
 		elif self.request.user.profile.status == 'Actor':
 			self.object.author = self.request.user

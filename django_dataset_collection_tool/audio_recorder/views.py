@@ -84,10 +84,12 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 
 	def get_success_url(self):
 		messages.success(self.request, 'Submission saved successfully!')
-		# Try to get the next object where status is 'Pending'
-		next_object = self.get_queryset().filter(pk__gt=self.object.pk, status='Pending').order_by('pk').first()
+		# Try to get a random object where status is 'Pending'
+		count = self.get_queryset().filter(status='Pending').count()
 		
-		if next_object:
+		if count > 0:
+			random_index = random.randint(0, count - 1)
+			next_object = self.get_queryset().filter(status='Pending')[random_index]
 			# If such an object exists, redirect to its detail view
 			return reverse('utterance-detail', kwargs={'pk': next_object.pk})
 		else:

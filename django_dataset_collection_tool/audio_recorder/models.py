@@ -33,7 +33,7 @@ class Utterances(models.Model):
     history = AuditlogHistoryField()
 
     def __str__(self) -> str:
-        return f"{self.utterance}"
+        return f"{self.pk}"
 
     def get_absolute_url(self):
         return reverse('utterance-detail', kwargs={'pk':self.pk})

@@ -10,7 +10,7 @@
 {% block scripts %}
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" rel="stylesheet"/>
 	<!-- videojd-record -->
-	<!-- <link href="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
+	<link href="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
 	<link href="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css' %}" rel="stylesheet">
 	<link href="{% static 'audio_recorder/videojs-record/dist/css/videojs.record.css' %}" rel="stylesheet">
 	<link href="{% static 'audio_recorder/videojs-record/examples/assets/css/examples.css' %}" rel="stylesheet">
@@ -23,11 +23,8 @@
 	<script src="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js' %}"></script>
 
 	<script src="{% static 'audio_recorder/videojs-record/dist/videojs.record.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/examples/browser-workarounds.js' %}"></script> -->
-	<!-- <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script> -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="{% static 'audio_recorder/js/timeme.min.js' %}"></script>
-	<!-- Page Locking -->
+	<script src="{% static 'audio_recorder/videojs-record/examples/browser-workarounds.js' %}"></script>
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script>
         function releaseLock() {
             $.ajax({
@@ -44,13 +41,6 @@
             releaseLock();
         });
     </script>
-	<!-- track user page time -->
-	<script>
-		TimeMe.initialize({
-			currentPageName: "{% url 'utterance-detail' pk=object.pk %}", // replace 'your_view_name' with your Django view name and 'object' with your context object
-			idleTimeoutInSeconds: 30 // time before user considered idle
-		});
-	</script>
 
 {% endblock scripts %}
 
@@ -93,6 +83,7 @@
 					<p class="text-info">There is no corresponding audio.</p>
 				{% endif %}
 			</div>
+
 			<form id="id_utterance_detail_form" method="POST">
 				{% csrf_token %}
 				<div class="field">
@@ -114,19 +105,9 @@
 						{% elif request.user.profile.status == 'NLD' %}
 						
 						<div class="container">
-							<div class="col">
-								<div class="text-primary">
-									<label for="id_utterance">Please correct or add a transcription: </label>
-								</div>
-								<textarea class="form-control" style="font-size: 16pt" name="utterance" id="id_utterance" rows="2">{{ object.utterance }}</textarea>
-
-							</div>
 							<div class="col mb-5">
-								<div class="text-primary">
-									<label for="id_utterance">Description: </label>
-								</div>
 								<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" 
-								placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit."></textarea>
+								placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
 							</div>
 
 							<div class="container">
@@ -171,7 +152,6 @@
 											<div class="col">
 												<label for="age">👶➡️🧓 Age:&#8193;</label>
 												<select name="age" class="selectpicker" id="id_age"> 
-													<option value=""></option> 
 													<option value="0-3">0-3</option> 
 													<option value="4-7">4-7</option> 
 													<option value="8-12">8-12</option> 
@@ -188,22 +168,20 @@
 										<div class="container">
 											<div class="col">
 												<label for="gender">⚧️ Gender:</label>
-												<select name="gender" class="selectpicker dynamic-select" id="id_gender"> 
+												<select name="gender" class="selectpicker" id="id_gender"> 
 													<option value=""></option> 
 													<option value="Male">Male</option> 
 													<option value="Female">Female</option> 
-													<option value="other">Other</option> 
+													<option value="Other">Other</option> 
 												</select>
 											</div>
-											<input type="text" name="other_gender" class="otherInput" placeholder="Please type here" style="display: none;" />
 										</div>
 									</div>
 									<div class="col-4">
 										<div class="container">
 											<div class="col">
 												<label for="accent">🌍 Accent:</label>
-												<select name="accent" class="selectpicker dynamic-select" id="id_accent"> 
-													<option value=""></option> 
+												<select name="accent" class="selectpicker" id="id_accent"> 
 													<option value="us_english">US English</option> 
 													<option value="british_english">British English</option> 
 													<option value="irish">Irish</option> 
@@ -212,11 +190,9 @@
 													<option value="asian">Asian</option> 
 													<option value="russian">Russian</option> 
 													<option value="german">German</option> 
-													<option value="unsure">Unsure</option> 
 													<option value="other">Other</option> 
 												</select>
 											</div>
-											<input type="text" name="other_accent" class="otherInput" placeholder="Please type here" style="display: none;" />
 										</div>
 									</div>
 								</div>
@@ -242,15 +218,14 @@
 										<div class="container">
 											<div class="col">
 												<label for="background_sounds">🔊 Background sounds:</label>
-												<select name="background_sounds" class="selectpicker dynamic-select" multiple id="id_background_sounds"> 
+												<select name="background_sounds" class="selectpicker" multiple id="id_background_sounds"> 
 													<option value="music">Music</option> 
 													<option value="people_talking">People talking</option> 
 													<option value="animals">Animals</option> 
 													<option value="city_traffic">City traffic</option> 
-													<option value="other">Other</option> 
+													<option value="other_noise">Other noise</option> 
 												</select>
 											</div>
-											<input type="text" name="other_background_sounds" class="otherInput" placeholder="Please type here" style="display: none;" />
 										</div>
 									</div>
 									<div class="col-2"></div>
@@ -263,26 +238,26 @@
 											<div class="col">
 												<label for="curious_and_fascinated">🤩 Curious and Fascinated:</label>
 												<select name="curious_and_fascinated" class="selectpicker" multiple id="id_curious_and_fascinated"> 
-													<option value="wondering">wondering</option> 
-													<option value="intrigued">intrigued</option> 
-													<option value="spellbinding">spellbinding</option> 
-													<option value="fascinated">fascinated</option> 
-													<option value="mesmerized">mesmerized</option> 
-													<option value="captivated">captivated</option> 
-													<option value="bewitching">bewitching</option> 
-													<option value="beguiling">beguiling</option> 
-													<option value="agog">agog</option> 
-													<option value="marveling">marveling</option> 
-													<option value="gazing">gazing</option> 
-													<option value="mystified">mystified</option> 
-													<option value="curious">curious</option> 
-													<option value="riveted">riveted</option> 
-													<option value="enrapturing">enrapturing</option> 
-													<option value="entrancing">entrancing</option> 
-													<option value="hypnotic">hypnotic</option> 
-													<option value="mesmerizing">mesmerizing</option> 
-													<option value="alluring">alluring</option> 
-													<option value="enthralled">enthralled</option> 
+													<option value="agog">agog</option>
+													<option value="alluring">alluring</option>
+													<option value="beguiling">beguiling</option>
+													<option value="bewitching">bewitching</option>
+													<option value="captivated">captivated</option>
+													<option value="curious">curious</option>
+													<option value="enrapturing">enrapturing</option>
+													<option value="enthralled">enthralled</option>
+													<option value="entrancing">entrancing</option>
+													<option value="fascinated">fascinated</option>
+													<option value="gazing">gazing</option>
+													<option value="hypnotic">hypnotic</option>
+													<option value="intrigued">intrigued</option>
+													<option value="marveling">marveling</option>
+													<option value="mesmerized">mesmerized</option>
+													<option value="mesmerizing">mesmerizing</option>
+													<option value="mystified">mystified</option>
+													<option value="riveted">riveted</option>
+													<option value="spellbinding">spellbinding</option>
+													<option value="wondering">wondering</option>
 												</select>
 											</div>
 										</div>
@@ -292,15 +267,15 @@
 											<div class="col">
 												<label for="pensive_and_reflective">🤔 Pensive and Reflective:</label>
 												<select name="pensive_and_reflective" class="selectpicker" multiple id="id_pensive_and_reflective"> 
-													<option value="pensive">pensive</option> 
-													<option value="ruminative">ruminative</option> 
-													<option value="brooding">brooding</option> 
-													<option value="contemplating">contemplating</option> 
-													<option value="meditative">meditative</option> 
-													<option value="reflective">reflective</option> 
-													<option value="pondering">pondering</option> 
-													<option value="cogitating">cogitating</option> 
-													<option value="speculative">speculative</option> 
+													<option value="brooding">brooding</option>
+													<option value="cogitating">cogitating</option>
+													<option value="contemplating">contemplating</option>
+													<option value="meditative">meditative</option>
+													<option value="pensive">pensive</option>
+													<option value="pondering">pondering</option>
+													<option value="reflective">reflective</option>
+													<option value="ruminative">ruminative</option>
+													<option value="speculative">speculative</option>
 												</select>
 											</div>
 										</div>
@@ -310,42 +285,42 @@
 											<div class="col">
 												<label for="fearful_and_anxious">😰 Fearful and Anxious:</label>
 												<select name="fearful_and_anxious" class="selectpicker" multiple id="id_fearful_and_anxious"> 
-													<option value="trembling">trembling</option> 
-													<option value="shuddery">shuddery</option> 
-													<option value="afraid">afraid</option> 
-													<option value="spooked">spooked</option> 
-													<option value="apprehensive">apprehensive</option> 
-													<option value="fearful">fearful</option> 
-													<option value="terrorized">terrorized</option> 
-													<option value="petrified">petrified</option> 
-													<option value="scared">scared</option> 
-													<option value="horror-struck">horror-struck</option> 
-													<option value="quavering">quavering</option> 
-													<option value="shuddering">shuddering</option> 
-													<option value="frightened">frightened</option> 
-													<option value="trepid">trepid</option> 
-													<option value="distraught">distraught</option> 
-													<option value="alarmed">alarmed</option> 
-													<option value="fear-stricken">fear-stricken</option> 
-													<option value="quaking">quaking</option> 
-													<option value="anxious">anxious</option> 
-													<option value="nervous">nervous</option> 
-													<option value="uneasy">uneasy</option> 
-													<option value="worried">worried</option> 
-													<option value="tense">tense</option> 
-													<option value="jittery">jittery</option> 
-													<option value="jumpy">jumpy</option> 
-													<option value="startled">startled</option> 
-													<option value="edgy">edgy</option> 
-													<option value="antsy">antsy</option> 
-													<option value="rattled">rattled</option> 
-													<option value="distracted">distracted</option> 
-													<option value="disquieted">disquieted</option> 
-													<option value="skittish">skittish</option> 
-													<option value="restless">restless</option> 
-													<option value="restive">restive</option> 
-													<option value="panic-stricken">panic-stricken</option> 
-													<option value="panicked">panicked</option> 
+													<option value="afraid">afraid</option>
+													<option value="alarmed">alarmed</option>
+													<option value="antsy">antsy</option>
+													<option value="anxious">anxious</option>
+													<option value="apprehensive">apprehensive</option>
+													<option value="disquieted">disquieted</option>
+													<option value="distracted">distracted</option>
+													<option value="distraught">distraught</option>
+													<option value="edgy">edgy</option>
+													<option value="fear-stricken">fear-stricken</option>
+													<option value="fearful">fearful</option>
+													<option value="frightened">frightened</option>
+													<option value="horror-struck">horror-struck</option>
+													<option value="jittery">jittery</option>
+													<option value="jumpy">jumpy</option>
+													<option value="nervous">nervous</option>
+													<option value="panic-stricken">panic-stricken</option>
+													<option value="panicked">panicked</option>
+													<option value="petrified">petrified</option>
+													<option value="quaking">quaking</option>
+													<option value="quavering">quavering</option>
+													<option value="rattled">rattled</option>
+													<option value="restive">restive</option>
+													<option value="restless">restless</option>
+													<option value="scared">scared</option>
+													<option value="shuddering">shuddering</option>
+													<option value="shuddery">shuddery</option>
+													<option value="skittish">skittish</option>
+													<option value="spooked">spooked</option>
+													<option value="startled">startled</option>
+													<option value="tense">tense</option>
+													<option value="terrorized">terrorized</option>
+													<option value="trembling">trembling</option>
+													<option value="trepid">trepid</option>
+													<option value="uneasy">uneasy</option>
+													<option value="worried">worried</option>
 												</select>
 											</div>
 										</div>
@@ -358,45 +333,45 @@
 											<div class="col">
 												<label for="happy_and_energetic">😄 Happy and Energetic:</label>
 												<select name="happy_and_energetic" class="selectpicker" multiple id="id_happy_and_energetic"> 
-													<option value="hopeful">hopeful</option> 
-													<option value="optimistic">optimistic</option> 
-													<option value="thankful">thankful</option> 
-													<option value="grateful">grateful</option> 
-													<option value="ebullient">ebullient</option> 
-													<option value="merry">merry</option> 
-													<option value="jovial">jovial</option> 
-													<option value="cheerful">cheerful</option> 
-													<option value="lighthearted">lighthearted</option> 
-													<option value="joyful">joyful</option> 
-													<option value="beaming">beaming</option> 
-													<option value="grinning">grinning</option> 
-													<option value="elated">elated</option> 
-													<option value="gleeful">gleeful</option> 
-													<option value="happy">happy</option> 
-													<option value="buoyant">buoyant</option> 
-													<option value="upbeat">upbeat</option> 
-													<option value="vibrant">vibrant</option> 
-													<option value="radiant">radiant</option> 
-													<option value="exuberant">exuberant</option> 
-													<option value="zestful">zestful</option> 
-													<option value="chirpy">chirpy</option> 
-													<option value="peppy">peppy</option> 
-													<option value="jaunty">jaunty</option> 
-													<option value="sprightly">sprightly</option> 
-													<option value="brisk">brisk</option> 
-													<option value="lively">lively</option> 
-													<option value="animated">animated</option> 
-													<option value="energized">energized</option> 
-													<option value="revitalized">revitalized</option> 
-													<option value="invigorated">invigorated</option> 
-													<option value="activated">activated</option> 
-													<option value="energetic">energetic</option> 
-													<option value="dynamic">dynamic</option> 
-													<option value="electrified">electrified</option> 
-													<option value="bouncy">bouncy</option> 
-													<option value="effervescent">effervescent</option> 
-													<option value="chipper">chipper</option> 
+													<option value="activated">activated</option>
+													<option value="animated">animated</option>
+													<option value="beaming">beaming</option>
+													<option value="bouncy">bouncy</option>
+													<option value="brisk">brisk</option>
+													<option value="buoyant">buoyant</option>
+													<option value="cheerful">cheerful</option>
+													<option value="chipper">chipper</option>
+													<option value="chirpy">chirpy</option>
+													<option value="dynamic">dynamic</option>
+													<option value="ebullient">ebullient</option>
+													<option value="effervescent">effervescent</option>
+													<option value="elated">elated</option>
+													<option value="electrified">electrified</option>
+													<option value="energetic">energetic</option>
+													<option value="energized">energized</option>
+													<option value="exuberant">exuberant</option>
+													<option value="gleeful">gleeful</option>
+													<option value="grateful">grateful</option>
+													<option value="grinning">grinning</option>
+													<option value="happy">happy</option>
+													<option value="hopeful">hopeful</option>
+													<option value="invigorated">invigorated</option>
+													<option value="jaunty">jaunty</option>
+													<option value="jovial">jovial</option>
+													<option value="joyful">joyful</option>
 													<option value="jubilant">jubilant</option>
+													<option value="lighthearted">lighthearted</option>
+													<option value="lively">lively</option>
+													<option value="merry">merry</option>
+													<option value="optimistic">optimistic</option>
+													<option value="peppy">peppy</option>
+													<option value="radiant">radiant</option>
+													<option value="revitalized">revitalized</option>
+													<option value="sprightly">sprightly</option>
+													<option value="thankful">thankful</option>
+													<option value="upbeat">upbeat</option>
+													<option value="vibrant">vibrant</option>
+													<option value="zestful">zestful</option>
 												</select>
 											</div>
 										</div>
@@ -406,31 +381,31 @@
 											<div class="col">
 												<label for="calm_and_composed">😌 Calm and Composed:</label>
 												<select name="calm_and_composed" class="selectpicker" multiple id="id_calm_and_composed"> 
-													<option value="mindful">mindful</option> 
-													<option value="unruffled">unruffled</option> 
-													<option value="coolheaded">coolheaded</option> 
-													<option value="levelheaded">levelheaded</option> 
-													<option value="poised">poised</option> 
-													<option value="self-possessed">self-possessed</option> 
-													<option value="unflappable">unflappable</option> 
-													<option value="collected">collected</option> 
-													<option value="unperturbed">unperturbed</option> 
-													<option value="untroubled">untroubled</option> 
-													<option value="unrattled">unrattled</option> 
-													<option value="unshaken">unshaken</option> 
-													<option value="unflustered">unflustered</option> 
-													<option value="composed">composed</option> 
-													<option value="relaxed">relaxed</option> 
-													<option value="tranquil">tranquil</option> 
-													<option value="serene">serene</option> 
-													<option value="calm">calm</option> 
-													<option value="centered">centered</option> 
-													<option value="peaceful">peaceful</option> 
-													<option value="imperturbable">imperturbable</option> 
-													<option value="reposeful">reposeful</option> 
-													<option value="grounded">grounded</option> 
-													<option value="equanimous">equanimous</option> 
-													<option value="harmonious">harmonious</option> 
+													<option value="calm">calm</option>
+													<option value="centered">centered</option>
+													<option value="collected">collected</option>
+													<option value="composed">composed</option>
+													<option value="coolheaded">coolheaded</option>
+													<option value="equanimous">equanimous</option>
+													<option value="grounded">grounded</option>
+													<option value="harmonious">harmonious</option>
+													<option value="imperturbable">imperturbable</option>
+													<option value="levelheaded">levelheaded</option>
+													<option value="mindful">mindful</option>
+													<option value="peaceful">peaceful</option>
+													<option value="poised">poised</option>
+													<option value="relaxed">relaxed</option>
+													<option value="reposeful">reposeful</option>
+													<option value="self-possessed">self-possessed</option>
+													<option value="serene">serene</option>
+													<option value="tranquil">tranquil</option>
+													<option value="unflappable">unflappable</option>
+													<option value="unflustered">unflustered</option>
+													<option value="unperturbed">unperturbed</option>
+													<option value="unrattled">unrattled</option>
+													<option value="unruffled">unruffled</option>
+													<option value="unshaken">unshaken</option>
+													<option value="untroubled">untroubled</option>
 												</select>
 											</div>
 										</div>
@@ -440,24 +415,24 @@
 											<div class="col">
 												<label for="focused_and_attentive">🤓 Focused and Attentive:</label>
 												<select name="focused_and_attentive" class="selectpicker" multiple id="id_focused_and_attentive"> 
-													<option value="engaging">engaging</option> 
-													<option value="focused">focused</option> 
-													<option value="watchful">watchful</option> 
-													<option value="attentive">attentive</option> 
-													<option value="heedful">heedful</option> 
-													<option value="scrutinizing">scrutinizing</option> 
-													<option value="investigating">investigating</option> 
-													<option value="alert">alert</option> 
-													<option value="studious">studious</option> 
-													<option value="analyzing">analyzing</option> 
-													<option value="examining">examining</option> 
-													<option value="cognizant">cognizant</option> 
-													<option value="inquiring">inquiring</option> 
-													<option value="questioning">questioning</option> 
-													<option value="probing">probing</option> 
-													<option value="introspecting">introspecting</option> 
-													<option value="introspective">introspective</option> 
-													<option value="observant">observant</option> 
+													<option value="alert">alert</option>
+													<option value="analyzing">analyzing</option>
+													<option value="attentive">attentive</option>
+													<option value="cognizant">cognizant</option>
+													<option value="engaging">engaging</option>
+													<option value="examining">examining</option>
+													<option value="focused">focused</option>
+													<option value="heedful">heedful</option>
+													<option value="inquiring">inquiring</option>
+													<option value="introspecting">introspecting</option>
+													<option value="introspective">introspective</option>
+													<option value="investigating">investigating</option>
+													<option value="observant">observant</option>
+													<option value="probing">probing</option>
+													<option value="questioning">questioning</option>
+													<option value="scrutinizing">scrutinizing</option>
+													<option value="studious">studious</option>
+													<option value="watchful">watchful</option>
 												</select>
 											</div>
 										</div>
@@ -469,26 +444,26 @@
 											<div class="col">
 												<label for="surprised_and_confused">😲 Surprised and Confused:</label>
 												<select name="surprised_and_confused" class="selectpicker" multiple id="id_surprised_and_confused"> 
-													<option value="dumbstruck">dumbstruck</option> 
-													<option value="bewildered">bewildered</option> 
-													<option value="dumbfounded">dumbfounded</option> 
-													<option value="stunned">stunned</option> 
-													<option value="stupefied">stupefied</option> 
-													<option value="thunderstruck">thunderstruck</option> 
-													<option value="staggered">staggered</option> 
-													<option value="amazed">amazed</option> 
-													<option value="astonished">astonished</option> 
-													<option value="astounded">astounded</option> 
-													<option value="surprised">surprised</option> 
-													<option value="shocked">shocked</option> 
-													<option value="flabbergasted">flabbergasted</option> 
-													<option value="befuddled">befuddled</option> 
-													<option value="perplexed">perplexed</option> 
-													<option value="puzzled">puzzled</option> 
-													<option value="confounded">confounded</option> 
-													<option value="baffled">baffled</option> 
-													<option value="discombobulated">discombobulated</option> 
-													<option value="flummoxed">flummoxed</option> 
+													<option value="amazed">amazed</option>
+													<option value="astonished">astonished</option>
+													<option value="astounded">astounded</option>
+													<option value="baffled">baffled</option>
+													<option value="befuddled">befuddled</option>
+													<option value="bewildered">bewildered</option>
+													<option value="confounded">confounded</option>
+													<option value="discombobulated">discombobulated</option>
+													<option value="dumbfounded">dumbfounded</option>
+													<option value="dumbstruck">dumbstruck</option>
+													<option value="flabbergasted">flabbergasted</option>
+													<option value="flummoxed">flummoxed</option>
+													<option value="perplexed">perplexed</option>
+													<option value="puzzled">puzzled</option>
+													<option value="shocked">shocked</option>
+													<option value="staggered">staggered</option>
+													<option value="stunned">stunned</option>
+													<option value="stupefied">stupefied</option>
+													<option value="surprised">surprised</option>
+													<option value="thunderstruck">thunderstruck</option>
 												</select>
 											</div>
 										</div>
@@ -499,27 +474,27 @@
 											<div class="col">
 												<label for="sad_and_despondent">😢 Sad and Despondent:</label>
 												<select name="sad_and_despondent" class="selectpicker" multiple id="id_sad_and_despondent"> 
-													<option value="sad">sad</option> 
-													<option value="dismal">dismal</option> 
-													<option value="forlorn">forlorn</option> 
-													<option value="depressed">depressed</option> 
-													<option value="woebegone">woebegone</option> 
-													<option value="plaintive">plaintive</option> 
-													<option value="sorrowful">sorrowful</option> 
-													<option value="gloomy">gloomy</option> 
-													<option value="lugubrious">lugubrious</option> 
-													<option value="melancholic">melancholic</option> 
-													<option value="blue">blue</option> 
-													<option value="desolate">desolate</option> 
-													<option value="miserable">miserable</option> 
-													<option value="downhearted">downhearted</option> 
-													<option value="morose">morose</option> 
-													<option value="somber">somber</option> 
-													<option value="despairing">despairing</option> 
-													<option value="woeful">woeful</option> 
-													<option value="heartbroken">heartbroken</option> 
-													<option value="crestfallen">crestfallen</option> 
-													<option value="dispirited">dispirited</option> 
+													<option value="blue">blue</option>
+													<option value="crestfallen">crestfallen</option>
+													<option value="depressed">depressed</option>
+													<option value="desolate">desolate</option>
+													<option value="despairing">despairing</option>
+													<option value="dismal">dismal</option>
+													<option value="dispirited">dispirited</option>
+													<option value="downhearted">downhearted</option>
+													<option value="forlorn">forlorn</option>
+													<option value="gloomy">gloomy</option>
+													<option value="heartbroken">heartbroken</option>
+													<option value="lugubrious">lugubrious</option>
+													<option value="melancholic">melancholic</option>
+													<option value="miserable">miserable</option>
+													<option value="morose">morose</option>
+													<option value="plaintive">plaintive</option>
+													<option value="sad">sad</option>
+													<option value="somber">somber</option>
+													<option value="sorrowful">sorrowful</option>
+													<option value="woebegone">woebegone</option>
+													<option value="woeful">woeful</option>
 												</select>
 											</div>
 										</div>
@@ -530,27 +505,27 @@
 											<div class="col">
 												<label for="romantic_and_passionate">😍 Romantic and Passionate:</label>
 												<select name="romantic_and_passionate" class="selectpicker" multiple id="id_romantic_and_passionate"> 
-													<option value="romantic">romantic</option> 
-													<option value="amorous">amorous</option> 
-													<option value="passionate">passionate</option> 
-													<option value="sensual">sensual</option> 
-													<option value="erotic">erotic</option> 
-													<option value="sultry">sultry</option> 
-													<option value="salacious">salacious</option> 
-													<option value="libidinous">libidinous</option> 
-													<option value="sensuous">sensuous</option> 
-													<option value="carnal">carnal</option> 
-													<option value="lustful">lustful</option> 
-													<option value="infatuated">infatuated</option> 
-													<option value="desirous">desirous</option> 
-													<option value="lecherous">lecherous</option> 
-													<option value="lust-driven">lust-driven</option> 
-													<option value="prurient">prurient</option> 
-													<option value="enflamed">enflamed</option> 
-													<option value="voluptuous">voluptuous</option> 
-													<option value="sizzling">sizzling</option> 
-													<option value="torrid">torrid</option> 
-													<option value="steaminess">steaminess</option> 
+													<option value="amorous">amorous</option>
+													<option value="carnal">carnal</option>
+													<option value="desirous">desirous</option>
+													<option value="enflamed">enflamed</option>
+													<option value="erotic">erotic</option>
+													<option value="infatuated">infatuated</option>
+													<option value="lecherous">lecherous</option>
+													<option value="libidinous">libidinous</option>
+													<option value="lust-driven">lust-driven</option>
+													<option value="lustful">lustful</option>
+													<option value="passionate">passionate</option>
+													<option value="prurient">prurient</option>
+													<option value="romantic">romantic</option>
+													<option value="salacious">salacious</option>
+													<option value="sensual">sensual</option>
+													<option value="sensuous">sensuous</option>
+													<option value="sizzling">sizzling</option>
+													<option value="steaminess">steaminess</option>
+													<option value="sultry">sultry</option>
+													<option value="torrid">torrid</option>
+													<option value="voluptuous">voluptuous</option>
 												</select>
 											</div>
 										</div>
@@ -563,21 +538,21 @@
 											<div class="col">
 												<label for="seductive_and_enticing">😘 Seductive and Enticing:</label>
 												<select name="seductive_and_enticing" class="selectpicker" multiple id="id_seductive_and_enticing"> 
-													<option value="seductive">seductive</option> 
-													<option value="titillating">titillating</option> 
-													<option value="awakened">awakened</option> 
-													<option value="ravishing">ravishing</option> 
-													<option value="enticing">enticing</option> 
-													<option value="charming">charming</option> 
-													<option value="irresistible">irresistible</option> 
-													<option value="provoked">provoked</option> 
-													<option value="craving">craving</option> 
-													<option value="stimulated">stimulated</option> 
-													<option value="aroused">aroused</option> 
-													<option value="magnetic">magnetic</option> 
-													<option value="compelling">compelling</option> 
-													<option value="flirty">flirty</option> 
-													<option value="bellicose">bellicose</option> 
+													<option value="aroused">aroused</option>
+													<option value="awakened">awakened</option>
+													<option value="bellicose">bellicose</option>
+													<option value="charming">charming</option>
+													<option value="compelling">compelling</option>
+													<option value="craving">craving</option>
+													<option value="enticing">enticing</option>
+													<option value="flirty">flirty</option>
+													<option value="irresistible">irresistible</option>
+													<option value="magnetic">magnetic</option>
+													<option value="provoked">provoked</option>
+													<option value="ravishing">ravishing</option>
+													<option value="seductive">seductive</option>
+													<option value="stimulated">stimulated</option>
+													<option value="titillating">titillating</option>
 												</select>
 											</div>
 										</div>										
@@ -587,38 +562,38 @@
 											<div class="col">
 												<label for="angry_and_irritated">😠 Angry and Irritated:</label>
 												<select name="angry_and_irritated" class="selectpicker" multiple id="id_angry_and_irritated"> 
-													<option value="aggravated">aggravated</option> 
-													<option value="perturbed">perturbed</option> 
-													<option value="enraged">enraged</option> 
-													<option value="furious">furious</option> 
-													<option value="irate">irate</option> 
-													<option value="incensed">incensed</option> 
-													<option value="infuriated">infuriated</option> 
-													<option value="wrathful">wrathful</option> 
-													<option value="livid">livid</option> 
-													<option value="cross">cross</option> 
-													<option value="galled">galled</option> 
-													<option value="resentful">resentful</option> 
-													<option value="bitter">bitter</option> 
-													<option value="indignant">indignant</option> 
-													<option value="outraged">outraged</option> 
-													<option value="exasperated">exasperated</option> 
-													<option value="maddened">maddened</option> 
-													<option value="angry">angry</option> 
-													<option value="annoyed">annoyed</option> 
-													<option value="vexed">vexed</option> 
-													<option value="truculent">truculent</option> 
-													<option value="spiky">spiky</option> 
-													<option value="prickly">prickly</option> 
-													<option value="snarly">snarly</option> 
-													<option value="huffy">huffy</option> 
-													<option value="nettled">nettled</option> 
-													<option value="irritable">irritable</option> 
-													<option value="piqued">piqued</option> 
-													<option value="snappish">snappish</option> 
-													<option value="irascible">irascible</option> 
-													<option value="testy">testy</option> 
-													<option value="nerved">nerved</option> 
+													<option value="aggravated">aggravated</option>
+													<option value="angry">angry</option>
+													<option value="annoyed">annoyed</option>
+													<option value="bitter">bitter</option>
+													<option value="cross">cross</option>
+													<option value="enraged">enraged</option>
+													<option value="exasperated">exasperated</option>
+													<option value="furious">furious</option>
+													<option value="galled">galled</option>
+													<option value="huffy">huffy</option>
+													<option value="incensed">incensed</option>
+													<option value="indignant">indignant</option>
+													<option value="infuriated">infuriated</option>
+													<option value="irascible">irascible</option>
+													<option value="irate">irate</option>
+													<option value="irritable">irritable</option>
+													<option value="livid">livid</option>
+													<option value="maddened">maddened</option>
+													<option value="nerved">nerved</option>
+													<option value="nettled">nettled</option>
+													<option value="outraged">outraged</option>
+													<option value="perturbed">perturbed</option>
+													<option value="piqued">piqued</option>
+													<option value="prickly">prickly</option>
+													<option value="resentful">resentful</option>
+													<option value="snappish">snappish</option>
+													<option value="snarly">snarly</option>
+													<option value="spiky">spiky</option>
+													<option value="testy">testy</option>
+													<option value="truculent">truculent</option>
+													<option value="vexed">vexed</option>
+													<option value="wrathful">wrathful</option>
 												</select>
 											</div>
 										</div>
@@ -628,24 +603,24 @@
 											<div class="col">
 												<label for="persistent_and_determined">💪 Persistent and Determined:</label>
 												<select name="persistent_and_determined" class="selectpicker" multiple id="id_persistent_and_determined"> 
-													<option value="persistent">persistent</option> 
-													<option value="resilient">resilient</option> 
-													<option value="determined">determined</option> 
-													<option value="unfailing">unfailing</option> 
-													<option value="unyielding">unyielding</option> 
-													<option value="tenacious">tenacious</option> 
-													<option value="steadfast">steadfast</option> 
-													<option value="adamant">adamant</option> 
-													<option value="resolute">resolute</option> 
-													<option value="undaunted">undaunted</option> 
-													<option value="unwavering">unwavering</option> 
-													<option value="unswerving">unswerving</option> 
-													<option value="unflinching">unflinching</option> 
-													<option value="unrelenting">unrelenting</option> 
-													<option value="enduring">enduring</option> 
-													<option value="indefatigable">indefatigable</option> 
-													<option value="motivated">motivated</option> 
-													<option value="driven">driven</option> 
+													<option value="adamant">adamant</option>
+													<option value="determined">determined</option>
+													<option value="driven">driven</option>
+													<option value="enduring">enduring</option>
+													<option value="indefatigable">indefatigable</option>
+													<option value="motivated">motivated</option>
+													<option value="persistent">persistent</option>
+													<option value="resilient">resilient</option>
+													<option value="resolute">resolute</option>
+													<option value="steadfast">steadfast</option>
+													<option value="tenacious">tenacious</option>
+													<option value="undaunted">undaunted</option>
+													<option value="unfailing">unfailing</option>
+													<option value="unflinching">unflinching</option>
+													<option value="unrelenting">unrelenting</option>
+													<option value="unswerving">unswerving</option>
+													<option value="unwavering">unwavering</option>
+													<option value="unyielding">unyielding</option>
 												</select>
 											</div>
 										</div>
@@ -660,25 +635,25 @@
 											<div class="col">
 												<label for="discomposed_and_unsettled">😓 Discomposed and Unsettled:</label>
 												<select name="discomposed_and_unsettled" class="selectpicker" multiple id="id_discomposed_and_unsettled"> 
-													<option value="discomposed">discomposed</option> 
-													<option value="nonplussed">nonplussed</option> 
-													<option value="disconcerted">disconcerted</option> 
-													<option value="disturbed">disturbed</option> 
-													<option value="ruffled">ruffled</option> 
-													<option value="troubled">troubled</option> 
-													<option value="stressed">stressed</option> 
-													<option value="fractious">fractious</option> 
-													<option value="cringing">cringing</option> 
-													<option value="quailing">quailing</option> 
-													<option value="cowering">cowering</option> 
-													<option value="daunted">daunted</option> 
-													<option value="dread-filled">dread-filled</option> 
-													<option value="intimidated">intimidated</option> 
-													<option value="unnerved">unnerved</option> 
-													<option value="unsettled">unsettled</option> 
-													<option value="fretful">fretful</option> 
-													<option value="ticked-off">ticked-off</option> 
-													<option value="flustered">flustered</option> 
+													<option value="cowering">cowering</option>
+													<option value="cringing">cringing</option>
+													<option value="daunted">daunted</option>
+													<option value="discomposed">discomposed</option>
+													<option value="disconcerted">disconcerted</option>
+													<option value="disturbed">disturbed</option>
+													<option value="dread-filled">dread-filled</option>
+													<option value="flustered">flustered</option>
+													<option value="fractious">fractious</option>
+													<option value="fretful">fretful</option>
+													<option value="intimidated">intimidated</option>
+													<option value="nonplussed">nonplussed</option>
+													<option value="quailing">quailing</option>
+													<option value="ruffled">ruffled</option>
+													<option value="stressed">stressed</option>
+													<option value="ticked-off">ticked-off</option>
+													<option value="troubled">troubled</option>
+													<option value="unnerved">unnerved</option>
+													<option value="unsettled">unsettled</option>
 												</select>
 											</div>
 										</div>
@@ -689,21 +664,21 @@
 											<div class="col">
 												<label for="grumpy_and_cranky">😡 Grumpy and Cranky:</label>
 												<select name="grumpy_and_cranky" class="selectpicker" multiple id="id_grumpy_and_cranky"> 
-													<option value="belligerent">belligerent</option> 
-													<option value="pugnacious">pugnacious</option> 
-													<option value="contentious">contentious</option> 
-													<option value="quarrelsome">quarrelsome</option> 
-													<option value="grumpy">grumpy</option> 
-													<option value="grouchy">grouchy</option> 
-													<option value="sulky">sulky</option> 
-													<option value="cranky">cranky</option> 
-													<option value="crabby">crabby</option> 
-													<option value="cantankerous">cantankerous</option> 
-													<option value="curmudgeonly">curmudgeonly</option> 
-													<option value="waspy">waspy</option> 
-													<option value="combative">combative</option> 
-													<option value="argumentative">argumentative</option> 
+													<option value="argumentative">argumentative</option>
+													<option value="belligerent">belligerent</option>
+													<option value="cantankerous">cantankerous</option>
+													<option value="combative">combative</option>
+													<option value="contentious">contentious</option>
+													<option value="crabby">crabby</option>
+													<option value="cranky">cranky</option>
+													<option value="curmudgeonly">curmudgeonly</option>
+													<option value="grouchy">grouchy</option>
+													<option value="grumpy">grumpy</option>
+													<option value="pugnacious">pugnacious</option>
+													<option value="quarrelsome">quarrelsome</option>
 													<option value="scrappy">scrappy</option>
+													<option value="sulky">sulky</option>
+													<option value="waspy">waspy</option>
 												</select>
 											</div>
 										</div>
@@ -805,51 +780,6 @@
 		document.getElementById("id_valence_slider").addEventListener("input", function() {
 			updateSliderValue("id_valence_slider", "valenceSliderVal");
 		});
-	</script>
-
-	<!-- track user page time -->
-	<script>
-		$(document).ready(function(){
-			console.log("Document is ready");
-			$("#submit").click(function(event){
-				event.preventDefault();  // prevent the default form submission
-				var timeSpentOnPage = TimeMe.getTimeOnCurrentPageInSeconds();
-				var formData = $("#id_utterance_detail_form").serialize(); // get form data
-				console.log("Time spent on page: " + timeSpentOnPage);
-				$.ajax({
-					url: "{% url 'utterance-detail' pk=object.pk %}",
-					type: 'POST',
-					headers: { "X-CSRFToken": "{{ csrf_token }}" },
-					data: formData + "&time_spent=" + timeSpentOnPage,
-					success: function(data){
-						$("#id_utterance_detail_form").submit();
-						$.each(data.messages, function(i, message){
-							console.log(message);
-						});
-						window.location.href = data.redirect_url;
-					},
-					error: function(xhr, status, error) {
-						console.log("AJAX error: " + error);
-					}
-				});
-			});
-		});
-	</script>
-
-	<script>
-		const selectElements = document.querySelectorAll('.dynamic-select');
-		const inputFields = document.querySelectorAll('.otherInput');
-		
-		selectElements.forEach((select, index) => {
-			select.addEventListener('change', function () {
-				const selectedOptions = Array.from(select.selectedOptions).map(option => option.value);
-				if (selectedOptions.includes('other')) {
-					inputFields[index].style.display = 'block';
-				} else {
-					inputFields[index].style.display = 'none';
-				}
-			});
-		});
-	</script>
+		</script>
 		
 {% endblock js %}

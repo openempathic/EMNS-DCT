@@ -57,17 +57,17 @@
 
 {% block content %}
 
-<section class="content-section bg-secondary ">
-	<div class="container text-center">
-		<div class="container text-center text-white pb-5">
+<section class="content-section bg-primary">
+	<div class="container text-center text-primary">
+		<div class="container text-center pb-5">
 			<h1>Record</h1>
 		</div>
 
-		<!-- <div class=" mb-5 bg-secondary text-white"> -->
+		<!-- <div class=" mb-5 bg-secondary"> -->
 			{% if object.author == user %}
 				<div class="container text-right my-auto">
 					<div class="dropdown">
-						<button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+						<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 							<a class="dropdown-item" href="{% url 'utterance-update' object.id %}">Update</a>
 							<a class="dropdown-item" href="{% url 'utterance-delete' object.id %}">Delete</a>
@@ -85,7 +85,7 @@
 						<audio id="audio_source" controls loop> <source src="{{ BASIC_DIR }}/{{ object.audio_recording }}"> Your browser does not support the audio element. </audio>
 					</div>
 					<div class="container centered">
-						<button class="btn btn-primary mb-2 centered" id="toggle_button">Toggle Loop</button>
+						<button class="btn btn-secondary mb-2 centered" id="toggle_button">Toggle Loop</button>
 					</div>
 				{% elif request.user.profile.status == 'Actor' %}
 					<p class="text-warning">Please record an utterance.</p>
@@ -729,9 +729,9 @@
 						{% endif %}
 						<div class="row mt-3">
 							<div class="container">
-								<button class="btn btn-primary mt-2" name="Previous" id="Previous">Previous</button>
-								<button class="btn btn-primary mt-2" id="submit">Submit</button>
-								<button class="btn btn-primary mt-2" name="Next" id="Next">Next</button>
+								<button class="btn btn-secondary mt-2" name="Previous" id="Previous">Previous</button>
+								<button class="btn btn-secondary mt-2" id="submit">Submit</button>
+								<button class="btn btn-secondary mt-2" name="Next" id="Next">Next</button>
 							</div>
 						</div>
 					</Fieldset>
@@ -764,9 +764,9 @@
 		
 			// Update the button class based on the loop state
 			if (isLoopEnabled) {
-				$("#toggle_button").removeClass('btn-dark').addClass('btn-primary');
+				$("#toggle_button").removeClass('btn-secondary').addClass('btn-primary');
 			} else {
-				$("#toggle_button").removeClass('btn-primary').addClass('btn-dark');
+				$("#toggle_button").removeClass('btn-primary').addClass('btn-secondary');
 			}
 		
 			// Toggle the loop property and update button class on click
@@ -776,10 +776,10 @@
 		
 				if (!isLoopEnabled) {
 					player.prop('loop', true);
-					$(this).removeClass('btn-dark').addClass('btn-primary');
+					$(this).removeClass('btn-primary').addClass('btn-secondary');
 				} else {
 					player.prop('loop', false);
-					$(this).removeClass('btn-primary').addClass('btn-dark');
+					$(this).removeClass('btn-secondary').addClass('btn-primary');
 				}
 		
 				// Store the updated loop state in local storage

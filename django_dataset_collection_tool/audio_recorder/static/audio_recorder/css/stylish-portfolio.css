@@ -160,7 +160,7 @@ h6 {
 .sidebar-nav li a:hover {
   text-decoration: none;
   color: #222222;
-  background: #ecb807;
+  background: #eeefef;
 }
 
 .sidebar-nav li a:active,
@@ -327,7 +327,7 @@ footer.footer .social-link {
   width: 4rem;
   line-height: 4.3rem;
   font-size: 1.5rem;
-  background-color: #ecb807;
+  background-color: #eeefef;
   transition: background-color 0.15s ease-in-out;
   box-shadow: 0 3px 3px 0 #222222;
   color: #222222;
@@ -336,7 +336,7 @@ footer.footer .social-link {
 footer.footer .social-link:hover {
   background-color: #222222;
   text-decoration: none;
-  color: #ecb807;
+  color: #eeefef;
 
 }
 
@@ -349,16 +349,16 @@ a:hover, a:focus, a:active {
 }
 
 .btn-primary {
-  background-color: #ecb807 !important;
-  border-color: #ecb807 !important;
-  color: #222222 !important;
+  background-color: #1c344c!important;
+  border-color: #eeefef!important;
+  color: #fff !important;
 }
 
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
   background-color: #222222 !important;
   border-color: #222222 !important;
-  color: #ecb807 !important;
+  color: #eeefef!important;
 
 }
 
@@ -369,9 +369,9 @@ a:hover, a:focus, a:active {
 }
 
 .btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
-  background-color: #ecb807 !important;
-  border-color: #ecb807!important;
-  color: #222222 !important;
+  background-color: #1c344c!important;
+  border-color: #eeefef!important;
+  color: #fff !important;
 }
 
 /* .btn-secondary.dropdown-toggle {
@@ -394,11 +394,11 @@ a:hover, a:focus, a:active {
 }
 
 .bg-primary {
-  background-color: #303030 !important;
+  background-color: #1c344c !important;
 }
 
 .bg-secondary {
-  background-color: #222222 !important;
+  background-color: #eeefef !important;
 }
 
 .text-primary {
@@ -406,7 +406,7 @@ a:hover, a:focus, a:active {
 }
 
 .text-secondary {
-  color: #ecb807 !important;
+  color: #1c344c!important;
 }
 
 .fillv {

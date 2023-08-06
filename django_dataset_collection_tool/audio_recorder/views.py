@@ -51,6 +51,23 @@ def HomeView(request, *args, **argv):
 def AnnotationGuideView(request, *args, **argv):
 	return render(request, 'audio_recorder/annotation_guide.html')
 
+class GetRandomSample(LoginRequiredMixin, DetailView):
+    model = Utterances  
+    form_class = RecordingUpdateForm
+
+    def get(self, request, *args, **kwargs):
+
+        # Get random utterance
+        count = self.get_queryset().count()
+        if count > 0:
+            random_index = random.randint(0, count-1)
+            random_object = self.get_queryset()[random_index]
+            return redirect(reverse('utterance-detail', kwargs={'pk': random_object.pk}))
+        
+        # If no utterances, redirect home
+        messages.warning(request, 'No utterances available')  
+        return redirect('audio-recorder-home')
+
 class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, DetailView):
 	model = Utterances
 	form_class = RecordingUpdateForm

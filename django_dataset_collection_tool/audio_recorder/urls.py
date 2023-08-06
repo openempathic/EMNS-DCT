@@ -10,6 +10,9 @@ urlpatterns = [
     path('utterances/import/', views.Import.as_view(), name="import-utterances"),
     path('release_lock/', views.ReleaseLockView.as_view(), name='release_lock'),
 
+    path('random_sample/', views.GetRandomSample.as_view(), name='random-sample'),
+
+
     
     path('utterances/<int:pk>/', views.UtteranceDetailView.as_view(), name="utterance-detail"),
 

@@ -26,7 +26,9 @@
         {% endif %}
 
         {% if user.is_authenticated %}
-
+        <li class="sidebar-nav-item">
+            <a class="js-scroll-trigger" href="{% url 'random-sample' %}">Annotate</a>
+        </li>
         <li class="sidebar-nav-item">
             <a class="js-scroll-trigger" href="{% url 'audio-recorder-utterances' %}">Utterances</a>
         </li>

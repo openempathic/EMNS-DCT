@@ -47,6 +47,7 @@ If you want to reset the migrations, you can use the following commands:
 find . -path "*/*/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/*/migrations/*.pyc"  -delete
 find . -path "*/db.sqlite3"  -delete
+docker exec -it emns-dct_app_1 bash
 python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py createsuperuser
@@ -116,7 +117,7 @@ docker exec -it emns-dct_proxy_1 sh
 ```
 
 ``` bash
-certbot --nginx --noninteractive --agree-tos -m name@email.com -d preview.openempathic.com -d www.preview.openempathic.com --redirect --test-cert
+certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d preview.openempathic.ai -d www.preview.openempathic.ai --redirect --test-cert
 ```
 
 Remove `--test-cert` after confirming that everything loaded as expected.

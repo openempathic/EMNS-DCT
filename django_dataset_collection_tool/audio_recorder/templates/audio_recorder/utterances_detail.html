@@ -85,7 +85,7 @@
 						<audio id="audio_source" controls loop> <source src="{{ BASIC_DIR }}/{{ object.audio_recording }}"> Your browser does not support the audio element. </audio>
 					</div>
 					<div class="container centered">
-						<button class="btn btn-secondary mb-2 centered" id="toggle_button">Toggle Loop</button>
+						<button class="btn btn-primary mb-2 centered" id="toggle_button">Toggle Loop</button>
 					</div>
 				{% elif request.user.profile.status == 'Actor' %}
 					<p class="text-warning">Please record an utterance.</p>
@@ -776,10 +776,10 @@
 		
 				if (!isLoopEnabled) {
 					player.prop('loop', true);
-					$(this).removeClass('btn-primary').addClass('btn-secondary');
+					$(this).removeClass('btn-secondary').addClass('btn-primary');
 				} else {
 					player.prop('loop', false);
-					$(this).removeClass('btn-secondary').addClass('btn-primary');
+					$(this).removeClass('btn-primary').addClass('btn-secondary');
 				}
 		
 				// Store the updated loop state in local storage

@@ -8,11 +8,16 @@
 
 {% block content %}
 
-<header class="masthead d-flex">
-    <div class="container text-center my-auto">
-        <h1 class="mb-1">EMNS /Imz/ Dataset</h1>
-        <h3> <em>An emotive speaker dataset for narrative storytelling.</em> </h3>
-	</div>
+<header class="masthead d-flex"> 
+    <div class="container text-center my-auto"> 
+        <h1 class="mb-1">Open Empathic Dataset</h1> 
+        <h3> <em>Help create an open dataset for natural, emotive speech.</em> </h3> 
+
+        <!-- <p class="lead">How would you like to help?</p> -->
+        <!-- <a class="btn btn-lg btn-secondary me-4 my-4" href="#">Record a Sample</a>  -->
+        <p class="lead">Help us by annotating samples!</p>
+            <a class="btn btn-lg btn-secondary me-4 my-4" href="{% url 'random-sample' %}">Annotate now!</a>
+    </div> 
 </header>
 
 <!-- About-->
@@ -55,15 +60,19 @@
     <div class="container px-4 px-lg-5 ">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-10">
-                <div class="content-section-heading">
-                    <h2 class="mb-4">What data we collect?</h2>
-                </div>
-                <ul class="lead list-unstyled">
-                    <li>We will not make your email public.</li>
-                    <li>Number of recording and the hours of recorded.</li> 
-                    <li>You can choose to make your name or contact details available.</li>
-                    <li>You can choose to include demographic data, such as age and gender.</li>
-                </ul>
+                <div class="content-section-heading"> 
+                    <h2 class="mb-4">What data do we collect?</h2> 
+                </div> 
+                <p class="lead">We collect only the minimal amount of personal data needed to provide our service. This includes:</p> 
+                
+                <ul class="lead"> 
+                    <li>Your email address, which is used for administrative purposes such as resetting your password or contacting you about your account. We will not share your email address with third parties without your consent.</li> 
+                    <li>The number of recordings you make and the total hours of recordings. This allows us to understand usage patterns and improve our service.</li> 
+                    <li>Optional demographic data such as your age and gender. Providing this is entirely voluntary and is not required to use our service.</li> 
+                    <li>We anonymize all data before using it for analytical purposes. Your personal information remains private.</li> 
+                </ul> 
+                
+                <p class="lead">We are committed to handling your data securely and protecting your privacy. Please contact us if you have any questions.</p>
             </div>
         </div>
     </div>

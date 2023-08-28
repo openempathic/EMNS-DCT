@@ -29,9 +29,21 @@ def main(sample:bool=False):
 		with open(path) as f:
 			meta = json.load(f)
 			audio_file_path = os.path.join('media', path.parent.name, path.stem+'.flac')
-			if sample:
-				create_sample_utterance(user, meta['text'], audio_file_path)
-			else:
-				create_utterance(user, meta['text'], audio_file_path)
+	if sample:
+		create_sample_utterance(user, meta['text'], audio_file_path)
+	else:
+		create_utterance(user, meta['text'], audio_file_path)
 
-main(True)
+def youtube(sample:bool=False):
+	user = User.objects.filter(username="knoriy").first()
+	paths = [
+		'https://www.youtube.com/embed/60VguVRiYmw?start=30&end=60&modestbranding=1&controls=0&disablekb=1&loop=1', 
+		'https://www.youtube.com/embed/60VguVRiYmw?start=60&end=120&modestbranding=1&controls=0&disablekb=1&loop=1',
+		]
+	random.shuffle(paths)
+	for i, path in enumerate(paths):
+		create_utterance(user, f"This is test for youtube links, {i}", path)
+
+
+if __name__ == '__main__':
+	main(True)

@@ -18,6 +18,9 @@ def register(request):
 
     return render(request, 'users/register.html', {'form':form})
 
+def terms(request):
+    return render(request, 'users/terms.html')
+
 @login_required
 def profile(request):
     if request.method == 'POST':

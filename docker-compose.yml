@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  app:
+  app_debug:
     image: knoriy/dataset_collection_tool
     build:
       context: .

@@ -187,7 +187,8 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			self.object.level = self.request.POST.get("level_slider")
 			self.object.arousal = self.request.POST.get("arousal_slider")
 			self.object.valence = self.request.POST.get("valence_slider")
-			self.object.description = self.request.POST.get("description_textarea")
+			self.object.audio_description = self.request.POST.get("audio_description_textarea")
+			self.object.video_description = self.request.POST.get("video_description_textarea")
 			self.object.emotion = json.dumps(emotions)
 			self.object.status = 'Awaiting Review'
 			self.object.time_spent = self.request.POST.get('time_spent')
@@ -207,7 +208,8 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			self.object.save()
 		elif self.request.user.profile.status == 'Admin':
 			self.object.status = self.request.POST.get("status")
-			self.object.description = self.request.POST.get("description_textarea")
+			self.object.audio_description = self.request.POST.get("audio_description_textarea")
+			self.object.video_description = self.request.POST.get("video_description_textarea")
 			self.object.save()
 		return super().form_valid(form)
 	

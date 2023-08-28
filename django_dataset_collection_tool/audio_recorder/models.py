@@ -6,30 +6,33 @@ from django.views.generic import detail
 from django.core.validators import MaxValueValidator, MinValueValidator
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
+from embed_video.fields import EmbedVideoField
 
 # from django_dataset_collection_tool.audio_recorder.views import utterances
 
 class Utterances(models.Model):
-    utterance       = models.TextField()
-    description     = models.TextField(null=True)
-    bg_sounds       = models.CharField(max_length=70, default='', null=True)
-    accent          = models.CharField(max_length=70, default='')
-    emotion         = models.TextField(default='')
-    author          = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    date_created    = models.DateTimeField(default=timezone.now)
-    status          = models.CharField(max_length=70, null=True, choices=(('Pending', 'Pending'), ('Awaiting Review', 'Awaiting Review'), ('Complete', 'Complete'), ('Needs Updating', 'Needs Updating' )), default='Pending' )
-    gender          = models.CharField(max_length=70, null=True, choices=(('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')), default='Female')
-    audio_quality   = models.CharField(max_length=70, null=True, choices=(('Unusable', 'Unusable'), ('Poor', 'Poor'), ('Average', 'Average'), ('Good', 'Good'), ('Excellent', 'Excellent')))
-    age             = models.CharField(max_length=70, null=True)
-    arousal         = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
-    valence         = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
+    utterance = models.TextField()
+    audio_description = models.TextField(null=True)
+    video_description = models.TextField(null=True)
+    bg_sounds = models.CharField(max_length=70, default='', null=True)
+    accent = models.CharField(max_length=70, default='')
+    emotion = models.TextField(default='')
+    author = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    date_created = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=70, null=True, choices=(('Pending', 'Pending'), ('Awaiting Review', 'Awaiting Review'), ('Complete', 'Complete'), ('Needs Updating', 'Needs Updating' )), default='Pending' )
+    gender = models.CharField(max_length=70, null=True, choices=(('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')), default='Female')
+    audio_quality = models.CharField(max_length=70, null=True, choices=(('Unusable', 'Unusable'), ('Poor', 'Poor'), ('Average', 'Average'), ('Good', 'Good'), ('Excellent', 'Excellent')))
+    age = models.CharField(max_length=70, null=True)
+    arousal = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
+    valence = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)])
 
     # metrics
-    time_spent      = models.FloatField(default=0.0)
+    time_spent = models.FloatField(default=0.0)
     locked_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='locked_utterances')
     is_locked = models.BooleanField(default=False)
 
-    audio_recording = models.FileField(upload_to='media/')
+    # audio_recording = models.FileField(upload_to='media/')
+    audio_recording = EmbedVideoField()
     history = AuditlogHistoryField()
 
     def __str__(self) -> str:

@@ -1,5 +1,6 @@
 {% extends "audio_recorder/base.html" %}
 {% load crispy_forms_tags %}
+{% load embed_video_tags %}
 {% load static %}
 
 
@@ -27,6 +28,7 @@
 	<!-- <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script> -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="{% static 'audio_recorder/js/timeme.min.js' %}"></script>
+	<script src="https://www.youtube.com/iframe_api"></script>
 	<!-- Page Locking -->
     <script>
         function releaseLock() {
@@ -81,9 +83,7 @@
 
 			<div class="mb-2 mt-2">
 				{% if object.audio_recording %}
-					<div class="container centered">
-						<audio id="audio_source" controls loop> <source src="{{ BASIC_DIR }}/{{ object.audio_recording }}"> Your browser does not support the audio element. </audio>
-					</div>
+					{% video object.audio_recording 'small' %}
 					<div class="container centered">
 						<button class="btn btn-primary mb-2 centered" id="toggle_button">Toggle Loop</button>
 					</div>
@@ -121,13 +121,25 @@
 								<textarea class="form-control" style="font-size: 16pt" name="utterance" id="id_utterance" rows="2">{{ object.utterance }}</textarea>
 
 							</div>
-							<div class="col mb-5">
-								<div class="text-primary">
-									<label for="id_utterance">Description: </label>
+							<div class="container">
+								<div class="row mb-5">
+									<div class="col-md-6">
+										<div class="text-primary">
+											<label for="id_audio_description_textarea">Audio Description:</label>
+										</div>
+										<textarea class="form-control" name="audio_description_textarea" id="id_audio_description_textarea" rows="4" 
+										placeholder="Please provide a detailed description of the sounds you hear in the recording. Include information about the speakers' emotions, background noises, and any other relevant details."></textarea>
+									</div>
+									<div class="col-md-6">
+										<div class="text-primary">
+											<label for="id_video_description_textarea">Video Description:</label>
+										</div>
+										<textarea class="form-control" name="video_description_textarea" id="id_video_description_textarea" rows="4" 
+										placeholder="Please provide a detailed description of the visuals you see in the recording. Include information about the content, posture, facial expressions, and any other relevant details."></textarea>
+									</div>
 								</div>
-								<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" 
-								placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit."></textarea>
 							</div>
+
 
 							<div class="container">
 								<div class="row mt-2 centered text-center">
@@ -851,5 +863,6 @@
 			});
 		});
 	</script>
+	
 		
 {% endblock js %}

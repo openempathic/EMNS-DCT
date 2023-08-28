@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "auditlog",
+    'embed_video',
 ]
 
 MIDDLEWARE = [

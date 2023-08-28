@@ -31,8 +31,7 @@ class Utterances(models.Model):
     locked_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='locked_utterances')
     is_locked = models.BooleanField(default=False)
 
-    # audio_recording = models.FileField(upload_to='media/')
-    audio_recording = EmbedVideoField()
+    audio_recording = models.URLField()
     history = AuditlogHistoryField()
 
     def __str__(self) -> str:

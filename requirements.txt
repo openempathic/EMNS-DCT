@@ -9,4 +9,3 @@ pillow
 uwsgi
 certbot
 django-auditlog
-django-embed-video

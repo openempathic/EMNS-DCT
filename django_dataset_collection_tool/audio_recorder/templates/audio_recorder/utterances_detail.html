@@ -83,7 +83,8 @@
 
 			<div class="mb-2 mt-2">
 				{% if object.audio_recording %}
-					{% video object.audio_recording '560x315' %}
+					<!-- {% video object.audio_recording '560x315' %} -->
+					<iframe width="560" height="315" src="{{ object.audio_recording }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 					<div class="container centered">
 						<button class="btn btn-primary mb-2 centered" id="toggle_button">Toggle Loop</button>
 					</div>

@@ -66,7 +66,7 @@ python3 manage.py collectstatic
 To create utterances for recording, validation, etc., use the following commands. The function expects a .tsv file containing the transcript and emotion.
 
 ``` bash
-cd dataset_collection_tool/django_dataset_collection_tool
+docker exec -it emns-dct_app_1 bash
 python3 manage.py shell
 ```
 

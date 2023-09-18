@@ -117,7 +117,7 @@ docker exec -it emns-dct_proxy_1 sh
 ```
 
 ``` bash
-certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d preview.openempathic.ai -d www.preview.openempathic.ai --redirect --test-cert
+certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.openempathic.ai -d www.dct.openempathic.ai --redirect --test-cert
 ```
 
 Remove `--test-cert` after confirming that everything loaded as expected.

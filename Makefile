@@ -15,7 +15,7 @@ dataset_dir 			= /media/$(shell whoami)/DATA/Datasets/:/Datasets
 
 
 build:
-	@docker build . -t $(Docker_name)
+	@docker-compose -f docker-compose-deploy.yml build
 
 no_cache:
 	@docker build . -t $(Docker_name) --no-cache

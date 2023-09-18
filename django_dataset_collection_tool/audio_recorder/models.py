@@ -11,6 +11,7 @@ from embed_video.fields import EmbedVideoField
 # from django_dataset_collection_tool.audio_recorder.views import utterances
 
 class Utterances(models.Model):
+    language = models.TextField()
     utterance = models.TextField()
     audio_description = models.TextField(null=True)
     video_description = models.TextField(null=True)

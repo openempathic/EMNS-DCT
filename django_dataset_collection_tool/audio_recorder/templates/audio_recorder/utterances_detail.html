@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% load embed_video_tags %}
 {% load static %}
+{% load youtube_filters %}
 
 
 {% block title %}
@@ -29,6 +30,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="{% static 'audio_recorder/js/timeme.min.js' %}"></script>
 	<script src="https://www.youtube.com/iframe_api"></script>
+	<script async src="https://www.youtube.com/iframe_api"></script>
 	<!-- Page Locking -->
     <script>
         function releaseLock() {
@@ -84,10 +86,54 @@
 			<div class="mb-2 mt-2">
 				{% if object.audio_recording %}
 					<!-- {% video object.audio_recording '560x315' %} -->
-					<iframe width="560" height="315" src="{{ object.audio_recording }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-					<div class="container centered">
-						<button class="btn btn-primary mb-2 centered" id="toggle_button">Toggle Loop</button>
-					</div>
+					<div id="embeded_video"></div>
+					<script>
+						var player;
+						var videoId = "{{ object.audio_recording|youtube_id }}";
+						var startSeconds = "{{ object.audio_recording|youtube_start }}"
+						var endSeconds = "{{ object.audio_recording|youtube_end }}";
+						console.log("Hello")
+						console.log(videoId)
+						console.log(startSeconds)
+						console.log(endSeconds)
+						var playerConfig = {
+						width: "560", 
+						height: "315",
+						videoId: videoId,
+						playerVars: {
+				
+							autoplay: 1,            // Auto-play the video on load
+							controls: 0,            // Show pause/play buttons in player
+							showinfo: 0,            // Hide the video title
+							modestbranding: 1,      // Hide the Youtube Logo
+							fs: 1,                  // Hide the full screen button
+							cc_load_policy: 0,      // Hide closed captions
+							iv_load_policy: 3,      // Hide the Video Annotations
+							start: startSeconds,
+							end: endSeconds,
+							autohide: 1, // Hide video controls when playing
+						},
+						events: {'onStateChange': onStateChange}
+						};
+						//excute the video in div
+						function onYouTubePlayerAPIReady() {
+				
+						player = new YT.Player('embeded_video', playerConfig);
+				
+						}
+						//repload the video when onStateChange=YT.PlayerState.ENDED)
+						function onStateChange(state) {
+						if (state.data === YT.PlayerState.ENDED) {
+							player.loadVideoById({
+							videoId: videoId,
+							startSeconds: startSeconds,
+							endSeconds: endSeconds
+				
+							});
+						}
+						}
+				
+					</script>
 				{% elif request.user.profile.status == 'Actor' %}
 					<p class="text-warning">Please record an utterance.</p>
 				{% else %}

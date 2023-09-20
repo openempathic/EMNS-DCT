@@ -33,14 +33,14 @@ def profile(request):
             request.user.email = request.user.profile.email = u_form['email'].value()
             request.user.first_name = request.user.profile.first_name = u_form['first_name'].value()
             request.user.last_name = request.user.profile.last_name = u_form['last_name'].value()
+            request.user.groups.add(Group.objects.get(name='NLD'))
             request.user.groups.add(Group.objects.get(name='viewer'))
-            request.user.groups.add(Group.objects.get(name='nld'))
 
             u_form.save()
             p_form.save()
 
             messages.success(request, f"Profile has been updated.")
-            return redirect('random-sample')
+            return redirect('profile')
 
     else:
         u_form = UserUpdateForm(instance=request.user)

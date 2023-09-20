@@ -1,4 +1,4 @@
-from audio_recorder.models import Utterances, SampleUtterances
+from audio_recorder.models import Utterances
 from django.contrib.auth.models import User
 from datasets import load_dataset
 import glob
@@ -39,7 +39,8 @@ def main(sample:bool=False):
 
 def youtube():
 	user = User.objects.filter(username="knoriy").first()
-	dataset = load_dataset('knoriy/OE-DCT-Movie-clips')
+	# dataset = load_dataset('knoriy/OE-DCT-Movie-clips')
+	dataset = load_dataset('parquet', data_files='data.parquet')
 	for split in dataset.keys():
 		for sample in dataset[split].shuffle(seed=42):
 			create_utterance(user, sample['text'], sample['url'], sample['language'])

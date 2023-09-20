@@ -2,7 +2,7 @@ from django.http import request
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.models import Group
 from .forms import UserResisterForm, UserUpdateForm, ProfileUpdateForm
 
 def register(request):
@@ -11,7 +11,7 @@ def register(request):
         if form.is_valid():
             form.save()
 
-            messages.success(request, f"{form.cleaned_data.get('username')} Account created.")
+            messages.success(request, f"{form.cleaned_data.get('username')} Account created. Please contact your administrator to assign you a role.")
             return redirect('profile')
     else:
         form = UserResisterForm()
@@ -33,12 +33,14 @@ def profile(request):
             request.user.email = request.user.profile.email = u_form['email'].value()
             request.user.first_name = request.user.profile.first_name = u_form['first_name'].value()
             request.user.last_name = request.user.profile.last_name = u_form['last_name'].value()
+            request.user.groups.add(Group.objects.get(name='viewer'))
+            request.user.groups.add(Group.objects.get(name='nld'))
 
             u_form.save()
             p_form.save()
 
             messages.success(request, f"Profile has been updated.")
-            return redirect('profile')
+            return redirect('random-sample')
 
     else:
         u_form = UserUpdateForm(instance=request.user)

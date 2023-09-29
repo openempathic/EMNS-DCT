@@ -184,7 +184,15 @@ class Profile(models.Model):
     status      = models.CharField(max_length=70, null=True, choices=(('Admin', 'Admin'), ('Actor', 'Actor'), ('Viewer', 'Viewer'), ('NLD', 'NLD')), default='NLD' )
     gender      = models.CharField(max_length=70, null=True, choices=(('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')), default='Other')
     age         = models.IntegerField(default=0)
-    healthcare  = models.CharField(max_length=70, null=True, choices=(('Psychologist', 'Psychologist'), ('Psychatrist', 'Psychatrist'), ('Other physician', 'Other physician'), ('Actor', 'Actor'), ('Other', 'Other')))
+    profession  = models.CharField(max_length=70, null=True, choices=(
+        ('Mental Health & Therapy', 'Mental Health & Therapy'), 
+        ('Medical & Healthcare', 'Medical & Healthcare'), 
+        ('Education & Learning', 'Education & Learning'), 
+        ('Creative & Expressive Arts', 'Creative & Expressive Arts'), 
+        ('Human & Social Services', 'Human & Social Services'),
+        ('Customer Relations', 'Customer Relations'),
+        ('Coaching & Development', 'Coaching & Development'),
+        ('Other', 'Other')))
     institute   = models.CharField(max_length=70, null=True, default='Not Specified')
     experience  = models.IntegerField(default=0)
     # languages_spoken = models.CharField(choices=LANGUAGES, blank=True)

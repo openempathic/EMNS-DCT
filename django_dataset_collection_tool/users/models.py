@@ -195,6 +195,7 @@ class Profile(models.Model):
         ('Other', 'Other')))
     institute   = models.CharField(max_length=70, null=True, default='Not Specified')
     experience  = models.IntegerField(default=0)
+    paid        = models.BooleanField(default=False)
     # languages_spoken = models.CharField(choices=LANGUAGES, blank=True)
 
     def __str__(self) -> str:

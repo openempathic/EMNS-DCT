@@ -10,20 +10,44 @@
 
     <div class="container my-auto">
 
-        <div class="p-5 bg-secondary text-white">
+        <!-- <div class="p-5 bg-secondary text-white"> -->
             <div class="content-section">
                 <form method="POST">
                     {% csrf_token %}
                     <Fieldset class="form-group">
                         <legend class="border-bottom mb-4">Create New Utterance</legend>
-                        {{ form|crispy }}
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="md-form mb-0">
+                                    <label for="youtube_url" class="">YouTube URL</label>
+                                    <input type="text" name="{{ form.audio_recording.name }}" id="{{ form.audio_recording.auto_id }}" class="form-control" value="{{ form.audio_recording.value|default:'' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="md-form mb-0">
+                                    <label for="start_time" class="">Start Time</label>
+                                    <input type="text" id="start_time" name="start_time" class="form-control" placeholder="e.g., 00:00:00">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="md-form mb-0">
+                                    <label for="end_time" class="">End Time</label>
+                                    <input type="text" id="end_time" name="end_time" class="form-control" placeholder="e.g., 00:00:00">
+                                </div>
+                            </div>
+                        </div>
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger m">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
                     </Fieldset>
                     <div class="form-group">
                         <button class="btn btn-primary" type="submit">Submit</button>
                     </div>
                 </form>
             </div>
-        </div>
+        <!-- </div> -->
     </div>
 </header>
 

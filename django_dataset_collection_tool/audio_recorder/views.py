@@ -2,6 +2,7 @@ from email import header
 import tablib
 import random
 import json
+import re
 
 from urllib import response
 from django.http import HttpResponse, HttpResponseForbidden
@@ -16,23 +17,26 @@ from django.contrib.auth.models import User
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.views.generic.edit import FormMixin, FormView
-
 from django.urls import reverse
+from django import forms
 
 # used to update date created
 from django.utils import timezone
 
-
-
 from django_filters.views import FilterView
 from django.core.mail import send_mail
 from django.conf import settings
+
+from urllib.parse import urlparse
 
 
 from .models import Utterances
 from .forms import RecordingUpdateForm, ImportForm
 from .filters import OrderFilter
 from .admin import UtterancesResource
+
+import logging
+logger = logging.getLogger(__name__)
 
 def HomeView(request, *args, **argv):
 	if request.method == 'POST':
@@ -271,12 +275,70 @@ class UserUtteranceListView(LoginRequiredMixin, FilterView):
 
 class UtteranceCreateView(LoginRequiredMixin, CreateView):
 	model = Utterances
-	fields = ['utterance', 'emotion']
 	template_name = 'audio_recorder/create_new_utterance.html'
+	fields = ['audio_recording']
 
+	def get_form(self, form_class=None):
+		logger.info("Entered get_form method")
+		form = super().get_form(form_class)
+		form.fields['audio_recording'].widget = forms.URLInput(attrs={'class': 'form-control'})
+
+		return form
+	
+	def is_valid_youtube_url(self, url):
+		parsed_url = urlparse(url)
+		return parsed_url.netloc in ('youtube.com', 'www.youtube.com', 'youtu.be') and \
+			parsed_url.path.startswith('/watch')
+
+	def convert_time_to_seconds(self, timestr):
+		try: 
+			time_components = list(map(int, timestr.split(':')))
+		except ValueError:
+			raise ValueError("Please check the time format.")
+		
+		if len(time_components) == 3:  # HH:MM:SS format
+			hours, minutes, seconds = time_components
+		elif len(time_components) == 2:  # MM:SS format
+			hours = 0
+			minutes, seconds = time_components
+		elif len(time_components) == 1:  # SS format
+			hours = minutes = 0
+			seconds, = time_components
+		else:
+			raise ValueError("Please check the time format.")			
+		return hours * 3600 + minutes * 60 + seconds
+
+	def create_youtube_embed_url(self, youtube_url, start_time_str, end_time_str):
+		video_id_pattern = re.compile(r"watch\?v=(.*?)(?:&|$)")
+		match = video_id_pattern.search(youtube_url)
+
+		if not self.is_valid_youtube_url(youtube_url):
+			raise ValueError(f"Invalid YouTube URL: {youtube_url}")		
+		
+		video_id = match.group(1)
+		base_url = "https://www.youtube.com/embed/"
+		
+		start = self.convert_time_to_seconds(start_time_str)
+		end = self.convert_time_to_seconds(end_time_str)
+		
+		return f"{base_url}{video_id}?modestbranding=1&loop=1&start={start}&end={end}"
+	
 	def form_valid(self, form) -> HttpResponse:
-		form.instance.author = self.request.user
-		return super().form_valid(form)
+		youtube_url = str(self.request.POST.get('audio_recording'))
+		start_time = self.request.POST.get('start_time')
+		end_time = self.request.POST.get('end_time')
+		
+		try:
+			embed_url = self.create_youtube_embed_url(youtube_url, start_time, end_time)
+			obj = form.save(commit=False)
+			obj.audio_recording = embed_url  # This is the correction. Directly set the attribute of model instance.
+			obj.author = self.request.user
+			obj.save()
+			return super().form_valid(form)
+		except ValueError as e:
+			logger.error(f"Unexpected error in form_valid: {e}")
+			form.add_error(None, str(e))
+			return self.form_invalid(form)
 
 class UtteranceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 	model = Utterances

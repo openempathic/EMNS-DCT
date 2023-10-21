@@ -157,6 +157,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 			'persistent_and_determined':self.request.POST.getlist('persistent_and_determined'),
 			'discomposed_and_unsettled':self.request.POST.getlist('discomposed_and_unsettled'),
 			'grumpy_and_cranky':self.request.POST.getlist('grumpy_and_cranky'),
+			'disgusted':self.request.POST.getlist('disgusted'),
 		}
 		emotions = {key: value for key, value in emotions.items() if value != []}
 

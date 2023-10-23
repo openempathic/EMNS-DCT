@@ -45,7 +45,7 @@ def HomeView(request, *args, **argv):
 		subject = request.POST['subject']
 		message = request.POST['message']
 
-		message = f"MY DJANGO APP \n\n\nFrom: {name}\n\nemail: {email}\n\nmessage:\n\n{message}"
+		message = f"DCT OpenEmpathic \n\n\nFrom: {name}\n\nemail: {email}\n\nmessage:\n\n{message}"
 
 		send_mail(subject=subject, message=message, from_email=email, recipient_list=[settings.EMAIL_HOST_USER], fail_silently=False)
 		messages.success(request, "Thank you for contacting us, we will be in touch soon.")

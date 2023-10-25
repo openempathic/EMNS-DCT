@@ -11,22 +11,6 @@
 
 {% block scripts %}
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" rel="stylesheet"/>
-	<!-- videojd-record -->
-	<!-- <link href="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
-	<link href="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css' %}" rel="stylesheet">
-	<link href="{% static 'audio_recorder/videojs-record/dist/css/videojs.record.css' %}" rel="stylesheet">
-	<link href="{% static 'audio_recorder/videojs-record/examples/assets/css/examples.css' %}" rel="stylesheet">
-
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video.min.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/recordrtc/RecordRTC.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/webrtc-adapter/out/adapter.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/wavesurfer.js/dist/wavesurfer.min.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/wavesurfer.js/dist/plugin/wavesurfer.microphone.min.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js' %}"></script>
-
-	<script src="{% static 'audio_recorder/videojs-record/dist/videojs.record.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/examples/browser-workarounds.js' %}"></script> -->
-	<!-- <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script> -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="{% static 'audio_recorder/js/timeme.min.js' %}"></script>
 	<script src="https://www.youtube.com/iframe_api"></script>
@@ -229,7 +213,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="age">👶➡️🧓 Age:&#8193;</label>
-												<select name="age" class="selectpicker" id="id_age"> 
+												<select name="age" class="selectpicker" id="id_age" data-live-search="true" data-live-search="true"> 
 													<option value=""></option> 
 													<option value="0-3">0-3</option> 
 													<option value="4-7">4-7</option> 
@@ -247,7 +231,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="gender">⚧️ Gender:</label>
-												<select name="gender" class="selectpicker dynamic-select" id="id_gender"> 
+												<select name="gender" class="selectpicker dynamic-select" id="id_gender" data-live-search="true"> 
 													<option value=""></option> 
 													<option value="Male">Male</option> 
 													<option value="Female">Female</option> 
@@ -261,7 +245,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="accent">🌍 Accent:</label>
-												<select name="accent" class="selectpicker dynamic-select" id="id_accent"> 
+												<select name="accent" class="selectpicker dynamic-select" id="id_accent" data-live-search="true"> 
 													<option value=""></option> 
 													<option value="us_english">US English</option> 
 													<option value="british_english">British English</option> 
@@ -286,7 +270,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="audio_quality">🎧 Audio Quality:</label>
-												<select name="audio_quality" class="selectpicker" id="id_audio_quality"> 
+												<select name="audio_quality" class="selectpicker" id="id_audio_quality" data-live-search="true"> 
 													<option value=""></option> 
 													<option value="Unusable">Unusable</option> 
 													<option value="Poor">Poor</option> 
@@ -301,7 +285,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="background_sounds">🔊 Background sounds:</label>
-												<select name="background_sounds" class="selectpicker dynamic-select" multiple id="id_background_sounds"> 
+												<select name="background_sounds" class="selectpicker dynamic-select" multiple id="id_background_sounds" data-live-search="true"> 
 													<option value="music">Music</option> 
 													<option value="people_talking">People talking</option> 
 													<option value="animals">Animals</option> 
@@ -321,7 +305,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="curious_and_fascinated">🤩 Curious and Fascinated:</label>
-												<select name="curious_and_fascinated" class="selectpicker" multiple id="id_curious_and_fascinated"> 
+												<select name="curious_and_fascinated" class="selectpicker" multiple id="id_curious_and_fascinated" data-live-search="true"> 
 													<option value="agog">agog</option>
 													<option value="alluring">alluring</option>
 													<option value="beguiling">beguiling</option>
@@ -350,7 +334,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="pensive_and_reflective">🤔 Pensive and Reflective:</label>
-												<select name="pensive_and_reflective" class="selectpicker" multiple id="id_pensive_and_reflective"> 
+												<select name="pensive_and_reflective" class="selectpicker" multiple id="id_pensive_and_reflective" data-live-search="true"> 
 													<option value="brooding">brooding</option>
 													<option value="cogitating">cogitating</option>
 													<option value="contemplating">contemplating</option>
@@ -368,7 +352,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="fearful_and_anxious">😰 Fearful and Anxious:</label>
-												<select name="fearful_and_anxious" class="selectpicker" multiple id="id_fearful_and_anxious"> 
+												<select name="fearful_and_anxious" class="selectpicker" multiple id="id_fearful_and_anxious" data-live-search="true"> 
 													<option value="afraid">afraid</option>
 													<option value="alarmed">alarmed</option>
 													<option value="antsy">antsy</option>
@@ -416,7 +400,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="happy_and_energetic">😄 Happy and Energetic:</label>
-												<select name="happy_and_energetic" class="selectpicker" multiple id="id_happy_and_energetic"> 
+												<select name="happy_and_energetic" class="selectpicker" multiple id="id_happy_and_energetic" data-live-search="true"> 
 													<option value="activated">activated</option>
 													<option value="animated">animated</option>
 													<option value="beaming">beaming</option>
@@ -467,7 +451,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="calm_and_composed">😌 Calm and Composed:</label>
-												<select name="calm_and_composed" class="selectpicker" multiple id="id_calm_and_composed"> 
+												<select name="calm_and_composed" class="selectpicker" multiple id="id_calm_and_composed" data-live-search="true"> 
 													<option value="calm">calm</option>
 													<option value="centered">centered</option>
 													<option value="collected">collected</option>
@@ -501,7 +485,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="focused_and_attentive">🤓 Focused and Attentive:</label>
-												<select name="focused_and_attentive" class="selectpicker" multiple id="id_focused_and_attentive"> 
+												<select name="focused_and_attentive" class="selectpicker" multiple id="id_focused_and_attentive" data-live-search="true"> 
 													<option value="alert">alert</option>
 													<option value="analyzing">analyzing</option>
 													<option value="attentive">attentive</option>
@@ -530,7 +514,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="surprised_and_confused">😲 Surprised and Confused:</label>
-												<select name="surprised_and_confused" class="selectpicker" multiple id="id_surprised_and_confused"> 
+												<select name="surprised_and_confused" class="selectpicker" multiple id="id_surprised_and_confused" data-live-search="true"> 
 													<option value="amazed">amazed</option>
 													<option value="astonished">astonished</option>
 													<option value="astounded">astounded</option>
@@ -560,7 +544,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="sad_and_despondent">😢 Sad and Despondent:</label>
-												<select name="sad_and_despondent" class="selectpicker" multiple id="id_sad_and_despondent"> 
+												<select name="sad_and_despondent" class="selectpicker" multiple id="id_sad_and_despondent" data-live-search="true"> 
 													<option value="blue">blue</option>
 													<option value="crestfallen">crestfallen</option>
 													<option value="depressed">depressed</option>
@@ -591,7 +575,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="romantic_and_passionate">😍 Romantic and Passionate:</label>
-												<select name="romantic_and_passionate" class="selectpicker" multiple id="id_romantic_and_passionate"> 
+												<select name="romantic_and_passionate" class="selectpicker" multiple id="id_romantic_and_passionate" data-live-search="true"> 
 													<option value="amorous">amorous</option>
 													<option value="carnal">carnal</option>
 													<option value="desirous">desirous</option>
@@ -624,7 +608,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="seductive_and_enticing">😘 Seductive and Enticing:</label>
-												<select name="seductive_and_enticing" class="selectpicker" multiple id="id_seductive_and_enticing"> 
+												<select name="seductive_and_enticing" class="selectpicker" multiple id="id_seductive_and_enticing" data-live-search="true"> 
 													<option value="aroused">aroused</option>
 													<option value="awakened">awakened</option>
 													<option value="bellicose">bellicose</option>
@@ -648,7 +632,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="angry_and_irritated">😠 Angry and Irritated:</label>
-												<select name="angry_and_irritated" class="selectpicker" multiple id="id_angry_and_irritated">
+												<select name="angry_and_irritated" class="selectpicker" multiple id="id_angry_and_irritated" data-live-search="true">
 													<option value="aggravated">aggravated</option>
 													<option value="angry">angry</option>
 													<option value="annoyed">annoyed</option>
@@ -689,7 +673,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="persistent_and_determined">💪 Persistent and Determined:</label>
-												<select name="persistent_and_determined" class="selectpicker" multiple id="id_persistent_and_determined"> 
+												<select name="persistent_and_determined" class="selectpicker" multiple id="id_persistent_and_determined" data-live-search="true"> 
 													<option value="adamant">adamant</option>
 													<option value="determined">determined</option>
 													<option value="driven">driven</option>
@@ -719,7 +703,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="discomposed_and_unsettled">😓 Discomposed and Unsettled:</label>
-												<select name="discomposed_and_unsettled" class="selectpicker" multiple id="id_discomposed_and_unsettled"> 
+												<select name="discomposed_and_unsettled" class="selectpicker" multiple id="id_discomposed_and_unsettled" data-live-search="true"> 
 													<option value="cowering">cowering</option>
 													<option value="cringing">cringing</option>
 													<option value="daunted">daunted</option>
@@ -748,7 +732,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="grumpy_and_cranky">😡 Grumpy and Cranky:</label>
-												<select name="grumpy_and_cranky" class="selectpicker" multiple id="id_grumpy_and_cranky"> 
+												<select name="grumpy_and_cranky" class="selectpicker" multiple id="id_grumpy_and_cranky" data-live-search="true"> 
 													<option value="argumentative">argumentative</option>
 													<option value="belligerent">belligerent</option>
 													<option value="cantankerous">cantankerous</option>
@@ -772,7 +756,7 @@
 										<div class="container">
 											<div class="col">
 												<label for="disgusted">🤢 Disgusted:</label>
-												<select name="disgusted" class="selectpicker" multiple id="id_disgusted"> 
+												<select name="disgusted" class="selectpicker" multiple id="id_disgusted" data-live-search="true"> 
 													<option value="disgusted">disgusted</option>
 													<option value="revolted">revolted</option>
 													<option value="repulsed">repulsed</option>

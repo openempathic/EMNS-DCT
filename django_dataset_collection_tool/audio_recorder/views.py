@@ -1,10 +1,8 @@
 from email import header
-import tablib
 import random
 import json
 import re
 
-from urllib import response
 from django.http import HttpResponse, HttpResponseForbidden
 from django.http.response import JsonResponse
 
@@ -14,18 +12,24 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 
+from rest_framework.views import APIView
+from rest_framework.response import Response as RestResponse
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from .auth import TokenAuthGet
+
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 from django.views.generic.edit import FormMixin, FormView
 from django.urls import reverse
 from django import forms
-
 # used to update date created
 from django.utils import timezone
 
 from django_filters.views import FilterView
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db.models import Count, Avg
 
 from urllib.parse import urlparse
 
@@ -394,3 +398,47 @@ class Import(FormView):
 			return self.form_valid(form)
 		else:
 			return self.form_invalid(form)
+		
+class StaffUserRateThrottle(UserRateThrottle):
+	rate = '5/min'
+	def allow_request(self, request, view):
+		# Replace "your_username" with the specific username you want to give unlimited access to
+		if request.user.is_staff:
+			return True
+		return super().allow_request(request, view)
+
+class GetStatsView(APIView):    
+	authentication_classes = [TokenAuthGet]
+	permission_classes = [IsAuthenticated]
+	throttle_classes = [StaffUserRateThrottle, AnonRateThrottle]
+
+	def get(self, request, *args, **kwargs):
+		samples = Utterances.objects.filter(status='Awaiting Review')
+
+		total_samples = samples.count()
+		status_distribution = samples.values('status').annotate(count=Count('status'))
+		top_users_query = samples.exclude(author__profile__paid=True).values('author__username').annotate(submission_count=Count('author')).order_by('-submission_count')[:10]
+		avg_time_spent = samples.aggregate(average_time=Avg('time_spent'))
+		gender_distribution = samples.values('gender').annotate(count=Count('gender'))
+		audio_quality_distribution = samples.values('audio_quality').annotate(count=Count('audio_quality'))
+		age_distribution = samples.values('age').annotate(count=Count('age'))
+
+		top_users = []
+		for user in top_users_query:
+			username = user['author__username']
+			if "@" in username:
+				username = username.split("@")[0]
+			top_users.append({
+				'author__username': username,
+				'submission_count': user['submission_count']
+			})
+
+		return RestResponse({
+			'total_samples': total_samples,
+			'status_distribution': status_distribution,
+			'top_users': top_users,
+			'avg_time_spent': avg_time_spent,
+			'gender_distribution': gender_distribution,
+			'audio_quality_distribution': audio_quality_distribution,
+			'age_distribution': age_distribution
+		})

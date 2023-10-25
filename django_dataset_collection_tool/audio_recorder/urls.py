@@ -21,6 +21,7 @@ urlpatterns = [
     path('utterances/<int:pk>/delete/', views.UtteranceDeleteView.as_view(), name="utterance-delete"),
     path('utterances/new/', views.UtteranceCreateView.as_view(), name="utterance-create"),
     path('guide/', views.AnnotationGuideView, name="annotation-guide"),
+    path('stats/', views.GetStatsView.as_view(), name="get-stats"),
 ]
 
 handler404 = 'audio_recorder.views.handler404'

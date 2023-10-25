@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
-# DEBUG = True
+DEBUG = True
 
 
 ALLOWED_HOSTS = []
@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "auditlog",
     'embed_video',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -193,5 +195,20 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+    }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'audio_recorder.auth.TokenAuthGet',
+    ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '1/min',   # rate limit for authenticated users
+        'anon': '1/min',   # rate limit for anonymous users
+        # 'custom':'1/min',   # rate limit for anonymous users
     }
 }

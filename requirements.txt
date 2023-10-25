@@ -11,3 +11,5 @@ uwsgi
 certbot
 django-auditlog
 datasets
+djangorestframework
+django_ratelimit

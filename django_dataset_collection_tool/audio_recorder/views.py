@@ -306,10 +306,19 @@ class UtteranceCreateView(LoginRequiredMixin, CreateView):
 			hours = minutes = 0
 			seconds, = time_components
 		else:
-			raise ValueError("Please check the time format.")			
+			raise ValueError("Please check the time format.")
 		return hours * 3600 + minutes * 60 + seconds
 
 	def create_youtube_embed_url(self, youtube_url, start_time_str, end_time_str):
+		start = self.convert_time_to_seconds(start_time_str)
+		end = self.convert_time_to_seconds(end_time_str)
+		if start >= end:
+			raise ValueError("Start time should be less than end time.")
+		elif end - start > 30:
+			raise ValueError("Maximum duration of an clip is 30 seconds.")
+		elif start < 0 or end < 0:
+			raise ValueError("Time cannot be negative.")
+
 		video_id_pattern = re.compile(r"watch\?v=(.*?)(?:&|$)")
 		match = video_id_pattern.search(youtube_url)
 
@@ -319,8 +328,6 @@ class UtteranceCreateView(LoginRequiredMixin, CreateView):
 		video_id = match.group(1)
 		base_url = "https://www.youtube.com/embed/"
 		
-		start = self.convert_time_to_seconds(start_time_str)
-		end = self.convert_time_to_seconds(end_time_str)
 		
 		return f"{base_url}{video_id}?modestbranding=1&loop=1&start={start}&end={end}"
 	

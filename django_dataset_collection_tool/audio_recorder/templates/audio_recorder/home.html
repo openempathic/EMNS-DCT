@@ -16,9 +16,16 @@
         <!-- <p class="lead">How would you like to help?</p> -->
         <!-- <a class="btn btn-lg btn-secondary me-4 my-4" href="#">Record a Sample</a>  -->
         <p class="lead">Help us by annotating samples or contributing a URL!</p>
-            <a class="btn btn-lg btn-secondary me-4 my-4" href="{% url 'random-sample' %}">Annotate Now!</a>
-            <a class="btn btn-lg btn-secondary me-4 my-4" href="{% url 'utterance-create' %}">Submit URL!</a>
-    </div> 
+        <div class="row mt-3">
+            <div class="col-4"></div>
+            <div class="col-2">
+                <a class="btn btn-secondary w-100" href="{% url 'random-sample' %}">Annotate Now!</a>
+            </div>
+            <div class="col-2">
+                <a class="btn btn-secondary w-100" href="{% url 'utterance-create' %}">Submit URL!</a>
+            </div>
+            <div class="col-4"></div>
+        </div>
 </header>
 
 <!-- About-->
@@ -121,7 +128,7 @@
                 </div>
             </Fieldset>
             <div class="form-group">
-                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-secondary" type="submit">Submit</button>
             </div>
         </form>
     </div>

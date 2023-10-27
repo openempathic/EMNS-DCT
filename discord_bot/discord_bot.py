@@ -62,7 +62,7 @@ async def on_ready():
     auto_update_leaderboard.start()
     auto_update_emotions.start()
 
-@tasks.loop(seconds=5)
+@tasks.loop(minutes=5)
 async def auto_update_leaderboard():
     global LEADERBOARD_MESSAGE_ID
 
@@ -78,7 +78,7 @@ async def auto_update_leaderboard():
     msg = await channel.fetch_message(LEADERBOARD_MESSAGE_ID)
     await msg.edit(content=f"{format_leaderboard(stats)}")
 
-@tasks.loop(seconds=5)
+@tasks.loop(minutes=5)
 async def auto_update_emotions():
     global EMOTION_MESSAGE_ID
 

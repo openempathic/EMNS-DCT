@@ -55,16 +55,12 @@ def format_emotions(myjson):
     return message
 
 if __name__ == '__main__':
-    import pprint
-    # stats = requests.get(f"https://dct.openempathic.ai/stats/?key={os.environ.get('DCT_API_KEY', 0)}").json()
-    stats = requests.get(f"http://127.0.0.1:8001/stats/?key=62ade45b4d5e2d2a8963d2a9910003ed7d3bef4b").json()
+    stats = requests.get(f"https://dct.openempathic.ai/stats/?key={os.environ.get('DCT_API_KEY', 0)}").json()
 
     top_users = format_leaderboard(stats)
     emotion_stats = format_emotions(stats)
 
     combined_message = top_users + "\n\n" + emotion_stats
 
-    pprint.pprint(combined_message)
-
-    # post_to_discord(f"https://discord.com/api/webhooks/{os.environ.get('DISCORD_WEBHOOK', 'changeme')}", stats)
-    # post_to_discord(f"https://discord.com/api/webhooks/{os.environ.get('TEST_DISCORD_WEBHOOK', 'changeme')}", combined_message)
+    # post_to_discord(f"https://discord.com/api/webhooks/{os.environ.get('DISCORD_WEBHOOK', 'changeme')}", combined_message)
+    post_to_discord(f"https://discord.com/api/webhooks/{os.environ.get('TEST_DISCORD_WEBHOOK', 'changeme')}", combined_message)

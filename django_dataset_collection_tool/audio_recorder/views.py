@@ -29,7 +29,7 @@ from django.utils import timezone
 from django_filters.views import FilterView
 from django.core.mail import send_mail
 from django.conf import settings
-from django.db.models import Count, Avg
+from django.db.models import Count, Avg, F, Q
 
 from urllib.parse import urlparse
 
@@ -417,21 +417,36 @@ class GetStatsView(APIView):
 
 		total_samples = samples.count()
 		status_distribution = samples.values('status').annotate(count=Count('status'))
-		top_users_query = samples.exclude(author__profile__paid=True).values('author__username').annotate(submission_count=Count('author')).order_by('-submission_count')[:10]
-		avg_time_spent = samples.aggregate(average_time=Avg('time_spent'))
+		top_users_query = (samples.exclude(author__profile__paid=True)
+							.values('author__username')
+							.annotate(submission_count=Count('author'))
+							.order_by('-submission_count')[:10])
+		
+		avg_time_spent = samples.aggregate(average_time=Avg('time_spent'))['average_time']
 		gender_distribution = samples.values('gender').annotate(count=Count('gender'))
 		audio_quality_distribution = samples.values('audio_quality').annotate(count=Count('audio_quality'))
 		age_distribution = samples.values('age').annotate(count=Count('age'))
 
-		top_users = []
-		for user in top_users_query:
-			username = user['author__username']
-			if "@" in username:
-				username = username.split("@")[0]
-			top_users.append({
-				'author__username': username,
+		top_users = [
+			{
+				'author__username': user['author__username'].split("@")[0] if "@" in user['author__username'] else user['author__username'],
 				'submission_count': user['submission_count']
-			})
+			} 
+			for user in top_users_query
+		]
+
+		emotion_keys = [
+			'curious_and_fascinated', 'pensive_and_reflective', 'fearful_and_anxious', 
+			'happy_and_energetic', 'calm_and_composed', 'focused_and_attentive', 
+			'surprised_and_confused', 'sad_and_despondent', 'romantic_and_passionate',
+			'seductive_and_enticing', 'angry_and_irritated', 'persistent_and_determined',
+			'discomposed_and_unsettled', 'grumpy_and_cranky', 'disgusted'
+		]
+		emotion_conditions = [Q(emotion__contains=emotion_key) for emotion_key in emotion_keys]
+		emotion_counts = {
+			emotion_key: samples.filter(condition).count()
+			for emotion_key, condition in zip(emotion_keys, emotion_conditions)
+		}
 
 		return RestResponse({
 			'total_samples': total_samples,
@@ -440,5 +455,6 @@ class GetStatsView(APIView):
 			'avg_time_spent': avg_time_spent,
 			'gender_distribution': gender_distribution,
 			'audio_quality_distribution': audio_quality_distribution,
-			'age_distribution': age_distribution
+			'age_distribution': age_distribution,
+			'emotion_counts': emotion_counts,
 		})

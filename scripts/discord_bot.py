@@ -1,16 +1,18 @@
-import requests
-import json
 import os
+import requests
+import discord
+from discord.ext import commands, tasks
 
-def post_to_discord(webhook_url, content):
-    headers = {
-        "Content-Type": "application/json",
-    }
-    data = {
-        "content": content,
-    }
-    response = requests.post(webhook_url, headers=headers, data=json.dumps(data))
-    return response.status_code
+intents = discord.Intents.default()
+intents.members = False
+intents.message_content = True
+bot = commands.Bot(command_prefix="!", intents=intents)
+
+# Store the ID of the messages (starts as None)
+LEADERBOARD_MESSAGE_ID = EMOTION_MESSAGE_ID = None
+
+BOT_TOKEN = os.environ.get("BOT_TOKEN", 0)
+CHANNEL_ID = int(os.environ.get("LEADERBOARD_CHANNEL_ID", 0))
 
 def format_leaderboard(myjson):
     # Define emojis for the ranks - extend the list as needed
@@ -54,13 +56,47 @@ def format_emotions(myjson):
         message += f"{emoji} **{formatted_emotion}**: {count} samples\n"
     return message
 
-if __name__ == '__main__':
+
+@bot.event
+async def on_ready():
+    auto_update_leaderboard.start()
+    auto_update_emotions.start()
+
+@tasks.loop(seconds=5)
+async def auto_update_leaderboard():
+    global LEADERBOARD_MESSAGE_ID
+
+    # Initialize leaderboard if not already
+    if not LEADERBOARD_MESSAGE_ID:
+        channel = bot.get_channel(CHANNEL_ID)
+        msg = await channel.send("# 🏆 **Top 10 Users** 🏆")
+        LEADERBOARD_MESSAGE_ID = msg.id
+
+    # Update the leaderboard
     stats = requests.get(f"https://dct.openempathic.ai/stats/?key={os.environ.get('DCT_API_KEY', 0)}").json()
+    channel = bot.get_channel(CHANNEL_ID)
+    msg = await channel.fetch_message(LEADERBOARD_MESSAGE_ID)
+    await msg.edit(content=f"{format_leaderboard(stats)}")
 
-    top_users = format_leaderboard(stats)
-    emotion_stats = format_emotions(stats)
+@tasks.loop(seconds=5)
+async def auto_update_emotions():
+    global EMOTION_MESSAGE_ID
 
-    combined_message = top_users + "\n\n" + emotion_stats
+    # Initialize emotion if not already
+    if not EMOTION_MESSAGE_ID:
+        channel = bot.get_channel(CHANNEL_ID)
+        msg = await channel.send("# 🎭 **Emotion Counts** 🎭")
+        EMOTION_MESSAGE_ID = msg.id
 
-    # post_to_discord(f"https://discord.com/api/webhooks/{os.environ.get('DISCORD_WEBHOOK', 'changeme')}", combined_message)
-    post_to_discord(f"https://discord.com/api/webhooks/{os.environ.get('TEST_DISCORD_WEBHOOK', 'changeme')}", combined_message)
+    # Update the emotion
+    stats = requests.get(f"https://dct.openempathic.ai/stats/?key={os.environ.get('DCT_API_KEY', 0)}").json()
+    channel = bot.get_channel(CHANNEL_ID)
+    msg = await channel.fetch_message(EMOTION_MESSAGE_ID)
+    await msg.edit(content=f"{format_emotions(stats)}")
+
+@bot.event
+async def on_command_error(ctx, error):
+    await ctx.send(f"An error occurred: {error}")
+
+# Run the bot
+bot.run(BOT_TOKEN)

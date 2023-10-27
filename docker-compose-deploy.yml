@@ -26,3 +26,15 @@ services:
     depends_on:
       - app
     restart: always
+  
+  discord_bot:
+    image: knoriy/discord_bot
+    volumes:
+      - ./discord_bot:/app
+    build:
+      context: ./discord_bot
+    env_file:
+      - ./env_variables.conf
+    depends_on:
+      - app
+    restart: always

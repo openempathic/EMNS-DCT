@@ -9,7 +9,8 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # Store the ID of the messages (starts as None)
-LEADERBOARD_MESSAGE_ID = EMOTION_MESSAGE_ID = None
+LEADERBOARD_MESSAGE_ID = 1167540899325161504
+EMOTION_MESSAGE_ID = 1167540902173085736
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN", 0)
 CHANNEL_ID = int(os.environ.get("LEADERBOARD_CHANNEL_ID", 0))

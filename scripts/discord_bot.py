@@ -28,8 +28,43 @@ def format_leaderboard(myjson):
     
     return message
 
+def format_emotions(myjson):
+    emojis = {  "Curious And Fascinated":"🤩",
+                "Pensive And Reflective":"🤔",
+                "Fearful And Anxious":"😰",
+                "Happy And Energetic":"😄",
+                "Calm And Composed":"😌",
+                "Focused And Attentive":"🤓",
+                "Surprised And Confused":"😲",
+                "Sad And Despondent":"😢",
+                "Romantic And Passionate":"😍",
+                "Seductive And Enticing":"😘",
+                "Angry And Irritated":"😠",
+                "Persistent And Determined":"💪",
+                "Discomposed And Unsettled":"😓",
+                "Grumpy And Cranky":"😡",
+                "Disgusted":"🤢"}
+
+    sorted_emotions = sorted(myjson["emotion_counts"].items(), key=lambda x: x[1], reverse=True)
+
+    message = "# 🎭 **Emotion Counts** 🎭\n\n"
+    for emotion, count in sorted_emotions:
+        formatted_emotion = emotion.replace('_', ' ').title()
+        emoji = emojis.get(formatted_emotion, "")  # Get the emoji, default to an empty string if not found
+        message += f"{emoji} **{formatted_emotion}**: {count} samples\n"
+    return message
+
 if __name__ == '__main__':
-    message = requests.get(f"https://dct.openempathic.ai/stats/?key={os.environ.get('DCT_API_KEY', 0)}").json()
-    message = format_leaderboard(message)
-    post_to_discord(f"https://discord.com/api/webhooks/{os.environ.get('DISCORD_WEBHOOK', 'changeme')}", message)
-    # post_to_discord(f"https://discord.com/api/webhooks/{os.environ.get('TEST_DISCORD_WEBHOOK', 'changeme')}", message)
+    import pprint
+    # stats = requests.get(f"https://dct.openempathic.ai/stats/?key={os.environ.get('DCT_API_KEY', 0)}").json()
+    stats = requests.get(f"http://127.0.0.1:8001/stats/?key=62ade45b4d5e2d2a8963d2a9910003ed7d3bef4b").json()
+
+    top_users = format_leaderboard(stats)
+    emotion_stats = format_emotions(stats)
+
+    combined_message = top_users + "\n\n" + emotion_stats
+
+    pprint.pprint(combined_message)
+
+    # post_to_discord(f"https://discord.com/api/webhooks/{os.environ.get('DISCORD_WEBHOOK', 'changeme')}", stats)
+    # post_to_discord(f"https://discord.com/api/webhooks/{os.environ.get('TEST_DISCORD_WEBHOOK', 'changeme')}", combined_message)

@@ -418,16 +418,8 @@ class CanUsePaidParameter(permissions.BasePermission):
 	def has_permission(self, request, view):
 		paid_param = request.GET.get('paid', None)
 		if paid_param:
-			return request.user.groups.filter(name='CanViewPaidUsersGroup').exists()
+			return request.user.groups.filter(name='CanViewPaidUsersGroup').exists() or request.user.is_superuser
 		return True
-
-class IsMemberOfCanViewPaidUsersGroup(permissions.BasePermission):
-    """
-    DRF custom permission to check if a user belongs to 'CanViewPaidUsersGroup'.
-    """
-    
-    def has_permission(self, request, view):
-        return request.user.groups.filter(name='CanViewPaidUsersGroup').exists()
 
 class GetStatsView(APIView):
 	authentication_classes = [TokenAuthGet]

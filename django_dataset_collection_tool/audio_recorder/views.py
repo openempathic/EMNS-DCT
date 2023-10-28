@@ -14,8 +14,10 @@ from django.contrib.auth.models import User
 
 from rest_framework.views import APIView
 from rest_framework.response import Response as RestResponse
+from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from rest_framework.exceptions import PermissionDenied
 from .auth import TokenAuthGet
 
 from django.views import View
@@ -406,9 +408,6 @@ class StaffUserRateThrottle(UserRateThrottle):
 		if request.user.is_staff:
 			return True
 		return super().allow_request(request, view)
-	
-from rest_framework import permissions
-from rest_framework.exceptions import PermissionDenied
 
 class CanUsePaidParameter(permissions.BasePermission):
 	"""
@@ -442,7 +441,7 @@ class GetStatsView(APIView):
 		samples = Utterances.objects.filter(status='Awaiting Review')
 
 		# Use the paid parameter to conditionally filter the samples query
-		if paid_param.lower() == 'true':
+		if paid_param and paid_param.lower() == 'true':
 			samples = (samples.filter(author__profile__paid=True)
 			.exclude(author__profile__paid=False)
 			.values('author__username')

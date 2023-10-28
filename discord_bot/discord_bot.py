@@ -78,7 +78,7 @@ async def auto_update_leaderboard():
     stats = requests.get(f"https://dct.openempathic.ai/stats/?key={os.environ.get('DCT_API_KEY', 0)}").json()
     channel = bot.get_channel(CHANNEL_ID)
     msg = await channel.fetch_message(LEADERBOARD_MESSAGE_ID)
-    await msg.edit(content=f"{format_leaderboard(stats)}\n\n Last updated: {time.strftime('%H:%M:%S')}")
+    await msg.edit(content=f"{format_leaderboard(stats)}\nLast updated: {time.strftime('%H:%M:%S')}")
 
 @tasks.loop(minutes=5)
 async def auto_update_emotions():
@@ -94,7 +94,7 @@ async def auto_update_emotions():
     stats = requests.get(f"https://dct.openempathic.ai/stats/?key={os.environ.get('DCT_API_KEY', 0)}").json()
     channel = bot.get_channel(CHANNEL_ID)
     msg = await channel.fetch_message(EMOTION_MESSAGE_ID)
-    await msg.edit(content=f"{format_emotions(stats)}")
+    await msg.edit(content=f"{format_emotions(stats)}\nLast updated: {time.strftime('%H:%M:%S')}")
 
 @bot.event
 async def on_command_error(ctx, error):

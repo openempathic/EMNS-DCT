@@ -406,14 +406,57 @@ class StaffUserRateThrottle(UserRateThrottle):
 		if request.user.is_staff:
 			return True
 		return super().allow_request(request, view)
+	
+from rest_framework import permissions
+from rest_framework.exceptions import PermissionDenied
 
-class GetStatsView(APIView):    
+class CanUsePaidParameter(permissions.BasePermission):
+	"""
+	Custom permission to check if a user belongs to the 'CanViewPaidUsersGroup' and can use the 'paid' parameter.
+	"""
+
+	def has_permission(self, request, view):
+		paid_param = request.GET.get('paid', None)
+		if paid_param:
+			return request.user.groups.filter(name='CanViewPaidUsersGroup').exists()
+		return True
+
+class IsMemberOfCanViewPaidUsersGroup(permissions.BasePermission):
+    """
+    DRF custom permission to check if a user belongs to 'CanViewPaidUsersGroup'.
+    """
+    
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name='CanViewPaidUsersGroup').exists()
+
+class GetStatsView(APIView):
 	authentication_classes = [TokenAuthGet]
-	permission_classes = [IsAuthenticated]
+	permission_classes = [IsAuthenticated, CanUsePaidParameter]
 	throttle_classes = [StaffUserRateThrottle, AnonRateThrottle]
 
+	def check_permissions(self, request):
+		"""
+		Override the default method to check for 'paid' parameter specifically.
+		"""
+		paid_param = request.GET.get('paid', None)
+		if paid_param and paid_param.lower() not in ['true', 'false']:
+			raise PermissionDenied(detail="Invalid 'paid' parameter value.")
+		return super().check_permissions(request)
+	
 	def get(self, request, *args, **kwargs):
+		# Extract the 'paid' parameter from the URL
+		paid_param = request.GET.get('paid', None)
+		
 		samples = Utterances.objects.filter(status='Awaiting Review')
+
+		# Use the paid parameter to conditionally filter the samples query
+		if paid_param.lower() == 'true':
+			samples = (samples.filter(author__profile__paid=True)
+			.exclude(author__profile__paid=False)
+			.values('author__username')
+			.annotate(submission_count=Count('author'))
+			)
+			return RestResponse({'users': samples})
 
 		total_samples = samples.count()
 		status_distribution = samples.values('status').annotate(count=Count('status'))

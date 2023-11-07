@@ -427,3 +427,10 @@ a:hover, a:focus, a:active {
   height: 0;                    /* Reset height to default */
   background: none;             /* Remove any background */
 }
+
+.vcenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -58,6 +58,19 @@ def HomeView(request, *args, **argv):
 
 	return render(request, 'audio_recorder/home.html')
 
+def handler400(request, *args, **argv):
+	return render(request, 'audio_recorder/400.html')
+
+def handler403(request, *args, **argv):
+	return render(request, 'audio_recorder/403.html')
+
+def handler404(request, *args, **argv):
+	return render(request, 'audio_recorder/404.html')
+
+def handler500(request, *args, **argv):
+	return render(request, 'audio_recorder/500.html')
+
+
 def AnnotationGuideView(request, *args, **argv):
 	return render(request, 'audio_recorder/annotation_guide.html')
 

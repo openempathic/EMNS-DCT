@@ -36,5 +36,10 @@ urlpatterns = [
 
 ]
 
+# handler400 = "audio_recorder.views.handler400"
+handler403 = "audio_recorder.views.handler403"
+handler404 = "audio_recorder.views.handler404"
+# handler500 = "audio_recorder.views.handler500"
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

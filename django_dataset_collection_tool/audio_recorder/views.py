@@ -516,12 +516,6 @@ class DownloadView(APIView):
 	authentication_classes = [TokenAuthGet]
 	permission_classes = [IsAuthenticated, CanUsePaidParameter]
 	throttle_classes = [StaffUserRateThrottle, AnonRateThrottle]
-	
-	def get(self, request, *args, **kwargs):
-		# Add a download parameter check
-		download_param = request.GET.get('download', None)
-		if download_param not in [None, 'csv', 'parquet']:
-			raise PermissionDenied(detail="Invalid 'download' parameter value.")
 		
 	def get(self, request, *args, **kwargs):
 		# Add a download parameter check
@@ -533,23 +527,26 @@ class DownloadView(APIView):
 		utterances = Utterances.objects.filter(status='Awaiting Review').values()
 		if download_param == 'csv':
 			return self.create_csv_response(utterances)
+		
 		return self.create_parquet_response(utterances)
 
 	def create_csv_response(self, data):
 		response = HttpResponse(content_type='text/csv')
 		response['Content-Disposition'] = 'attachment; filename="utterances.csv"'
 		
-		writer = csv.writer(response)
-		writer.writerow(data[0].keys())  # column headers
-		for item in data:
-			writer.writerow(item.values())
-		
+		if data:
+			writer = csv.writer(response)
+			writer.writerow(data[0].keys())  # column headers
+			for item in data:
+				writer.writerow(item.values())
+
 		return response
 
 	def create_parquet_response(self, data):
 		df = pd.DataFrame(data)
 		response = HttpResponse(content_type='application/octet-stream')
 		response['Content-Disposition'] = 'attachment; filename="utterances.parquet"'
-		df.to_parquet(response, index=False)
+		if not df.empty:
+			df.to_parquet(response, index=False)
 		
 		return response

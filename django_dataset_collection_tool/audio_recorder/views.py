@@ -2,6 +2,8 @@ from email import header
 import random
 import json
 import re
+import csv
+import pandas as pd
 
 from django.http import HttpResponse, HttpResponseForbidden
 from django.http.response import JsonResponse
@@ -433,6 +435,10 @@ class CanUsePaidParameter(permissions.BasePermission):
 			return request.user.groups.filter(name='CanViewPaidUsersGroup').exists() or request.user.is_superuser
 		return True
 
+
+
+################## REST API VIEWS ##################
+
 class GetStatsView(APIView):
 	authentication_classes = [TokenAuthGet]
 	permission_classes = [IsAuthenticated, CanUsePaidParameter]
@@ -505,3 +511,45 @@ class GetStatsView(APIView):
 			'age_distribution': age_distribution,
 			'emotion_counts': emotion_counts,
 		})
+	
+class DownloadView(APIView):
+	authentication_classes = [TokenAuthGet]
+	permission_classes = [IsAuthenticated, CanUsePaidParameter]
+	throttle_classes = [StaffUserRateThrottle, AnonRateThrottle]
+	
+	def get(self, request, *args, **kwargs):
+		# Add a download parameter check
+		download_param = request.GET.get('download', None)
+		if download_param not in [None, 'csv', 'parquet']:
+			raise PermissionDenied(detail="Invalid 'download' parameter value.")
+		
+	def get(self, request, *args, **kwargs):
+		# Add a download parameter check
+		download_param = request.GET.get('download', None)
+		if download_param not in [None, 'csv', 'parquet']:
+			raise PermissionDenied(detail="Invalid 'download' parameter value.")
+		
+		# Query the database for all utterances
+		utterances = Utterances.objects.filter(status='Awaiting Review').values()
+		if download_param == 'csv':
+			return self.create_csv_response(utterances)
+		return self.create_parquet_response(utterances)
+
+	def create_csv_response(self, data):
+		response = HttpResponse(content_type='text/csv')
+		response['Content-Disposition'] = 'attachment; filename="utterances.csv"'
+		
+		writer = csv.writer(response)
+		writer.writerow(data[0].keys())  # column headers
+		for item in data:
+			writer.writerow(item.values())
+		
+		return response
+
+	def create_parquet_response(self, data):
+		df = pd.DataFrame(data)
+		response = HttpResponse(content_type='application/octet-stream')
+		response['Content-Disposition'] = 'attachment; filename="utterances.parquet"'
+		df.to_parquet(response, index=False)
+		
+		return response

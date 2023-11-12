@@ -1,6 +1,8 @@
 {% extends "audio_recorder/base.html" %}
 {% load crispy_forms_tags %}
+{% load embed_video_tags %}
 {% load static %}
+{% load youtube_filters %}
 
 
 {% block title %}
@@ -8,39 +10,52 @@
 {% endblock title %}
 
 {% block scripts %}
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" rel="stylesheet"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="{% static 'audio_recorder/js/timeme.min.js' %}"></script>
+	<script src="https://www.youtube.com/iframe_api"></script>
+	<script async src="https://www.youtube.com/iframe_api"></script>
+	<!-- Page Locking -->
+    <script>
+        function releaseLock() {
+            $.ajax({
+                url: "{% url 'release_lock' %}",
+                method: "POST",
+                data: {
+                    utterance_id: "{{ object.id }}",
+                    csrfmiddlewaretoken: "{{ csrf_token }}"
+                }
+            });
+        }
 
-	<!-- videojd-record -->
-	<link href="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
-	<link href="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css' %}" rel="stylesheet">
-	<link href="{% static 'audio_recorder/videojs-record/dist/css/videojs.record.css' %}" rel="stylesheet">
-	<link href="{% static 'audio_recorder/videojs-record/examples/assets/css/examples.css' %}" rel="stylesheet">
-
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/video.js/dist/video.min.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/recordrtc/RecordRTC.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/webrtc-adapter/out/adapter.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/wavesurfer.js/dist/wavesurfer.min.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/wavesurfer.js/dist/plugin/wavesurfer.microphone.min.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js' %}"></script>
-
-	<script src="{% static 'audio_recorder/videojs-record/dist/videojs.record.js' %}"></script>
-	<script src="{% static 'audio_recorder/videojs-record/examples/browser-workarounds.js' %}"></script>
+        $(window).on('beforeunload', function() {
+            releaseLock();
+        });
+    </script>
+	<!-- track user page time -->
+	<script>
+		TimeMe.initialize({
+			currentPageName: "{% url 'utterance-detail' pk=object.pk %}", // replace 'your_view_name' with your Django view name and 'object' with your context object
+			idleTimeoutInSeconds: 30 // time before user considered idle
+		});
+	</script>
 
 {% endblock scripts %}
 
 
 {% block content %}
 
-<section class="content-section bg-secondary ">
-	<div class="container text-center">
-		<div class="container text-center text-white pb-5">
+<section class="content-section bg-primary">
+	<div class="container text-center text-primary">
+		<div class="container text-center pb-5">
 			<h1>Record</h1>
 		</div>
 
-		<!-- <div class=" mb-5 bg-secondary text-white"> -->
+		<!-- <div class=" mb-5 bg-secondary"> -->
 			{% if object.author == user %}
 				<div class="container text-right my-auto">
 					<div class="dropdown">
-						<button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+						<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 							<a class="dropdown-item" href="{% url 'utterance-update' object.id %}">Update</a>
 							<a class="dropdown-item" href="{% url 'utterance-delete' object.id %}">Delete</a>
@@ -48,31 +63,67 @@
 					</div>
 				</div>
 			{% endif %}
-			<div class="p-5 mb-5 mt-2 bg-light">
+			<!-- <div class="p-5 mb-3 mt-2 bg-light">
 				<h4 class="text-justify mb-5 mt-5"> {{ object.utterance }} </h4>
+			</div> -->
+
+			<div class="mb-2 mt-2">
+				{% if object.audio_recording %}
+					<!-- {% video object.audio_recording '560x315' %} -->
+					<div id="embeded_video"></div>
+					<script>
+						var player;
+						var videoId = "{{ object.audio_recording|youtube_id }}";
+						var startSeconds = "{{ object.audio_recording|youtube_start }}"
+						var endSeconds = "{{ object.audio_recording|youtube_end }}";
+						console.log("Hello")
+						console.log(videoId)
+						console.log(startSeconds)
+						console.log(endSeconds)
+						var playerConfig = {
+						width: "560", 
+						height: "315",
+						videoId: videoId,
+						playerVars: {
+				
+							autoplay: 1,            // Auto-play the video on load
+							controls: 0,            // Show pause/play buttons in player
+							showinfo: 0,            // Hide the video title
+							modestbranding: 1,      // Hide the Youtube Logo
+							fs: 1,                  // Hide the full screen button
+							cc_load_policy: 0,      // Hide closed captions
+							iv_load_policy: 3,      // Hide the Video Annotations
+							start: startSeconds,
+							end: endSeconds,
+							autohide: 1, // Hide video controls when playing
+						},
+						events: {'onStateChange': onStateChange}
+						};
+						//excute the video in div
+						function onYouTubePlayerAPIReady() {
+				
+						player = new YT.Player('embeded_video', playerConfig);
+				
+						}
+						//repload the video when onStateChange=YT.PlayerState.ENDED)
+						function onStateChange(state) {
+						if (state.data === YT.PlayerState.ENDED) {
+							player.loadVideoById({
+							videoId: videoId,
+							startSeconds: startSeconds,
+							endSeconds: endSeconds
+				
+							});
+						}
+						}
+				
+					</script>
+				{% elif request.user.profile.status == 'Actor' %}
+					<p class="text-warning">Please record an utterance.</p>
+				{% else %}
+					<p class="text-info">There is no corresponding audio.</p>
+				{% endif %}
 			</div>
-
-
-			{% if object.audio_recording %}
-				<audio controls> <source src="{{ BASIC_DIR }}/{{ object.audio_recording }}"> Your browser does not support the audio element. </audio>
-			{% elif request.user.profile.status == 'Actor' %}
-				<p class="text-warning">Please record an utterance.</p>
-			{% else %}
-				<p class="text-info">There is no corresponding audio.</p>
-			{% endif %}
-			
-			<div class="row mb-2 mt-5">
-				<!-- <div class="col-md-4">
-					<p class="text-primary mb-5"> Prosody: {{object.prosody}} </p>
-				</div>
-				<div class="col-md-4">
-					<p class="text-info mb-5"> Status: {{object.status}} </p>
-				</div>
-				<div class="col-md-4">
-					<p class="text-info mb-5"> Expressiveness level: {{object.level}} </p>
-				</div> -->
-			</div>
-
 			<form id="id_utterance_detail_form" method="POST">
 				{% csrf_token %}
 				<div class="field">
@@ -90,11 +141,636 @@
 								<div class="col mt-2">
 									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
 								</div>
-								<div class="mt-5">
-									<button class="btn btn-outline-info" id="submit">Submit</button>
+							</div>
+						{% elif request.user.profile.status == 'NLD' %}
+						
+						<div class="container">
+							<div class="col">
+								<div class="text-primary">
+									<label for="id_utterance">Please correct or add a transcription: </label>
+								</div>
+								<textarea class="form-control" style="font-size: 16pt" name="utterance" id="id_utterance" rows="2">{{ object.utterance }}</textarea>
+
+							</div>
+							<div class="container">
+								<div class="row mb-5">
+									<div class="col-md-6">
+										<div class="text-primary">
+											<label for="id_audio_description_textarea">Audio Description:</label>
+										</div>
+										<textarea class="form-control" name="audio_description_textarea" id="id_audio_description_textarea" rows="4" 
+										placeholder="Please provide a detailed description of the sounds you hear in the recording. Include information about the speakers' emotions, background noises, and any other relevant details."></textarea>
+									</div>
+									<div class="col-md-6">
+										<div class="text-primary">
+											<label for="id_video_description_textarea">Video Description:</label>
+										</div>
+										<textarea class="form-control" name="video_description_textarea" id="id_video_description_textarea" rows="4" 
+										placeholder="Please provide a detailed description of the visuals you see in the recording. Include information about the content, posture, facial expressions, and any other relevant details."></textarea>
+									</div>
 								</div>
 							</div>
-						{% elif request.user.profile.status == 'Actor' %}
+
+
+							<div class="container">
+								<div class="row mt-2 centered text-center">
+									<div class="col"></div>
+									<div class="col">
+										<div class="container">
+											<div class="col text-primary">
+												<label for="id_arousal_slider">🔥 Arousal level: <span id="arousalSliderVal">5</span></label><br/>
+												<input name="arousal_slider" type="range" class="form-range" id="id_arousal_slider" list="arousal_slider_markers" min="0" max="10"><br />
+												<datalist id="arousal_slider_markers">
+													<option value="0"></option>
+													<option value="5"></option>
+													<option value="10"></option>
+												</datalist>
+											</div>
+										</div>
+										<p class="text-secondary">0 = low, 5 = medium,<br>10 = high</p>
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col text-primary">
+												<label for="id_valence_slider">☯️ Valence level: <span id="valenceSliderVal">0</span></label><br/>
+												<input name="valence_slider" type="range" class="form-range" id="id_valence_slider" list="valence_slider_markers" min="-5" max="5"><br />
+												<datalist id="valence_slider_markers">
+													<option value="-5"></option>
+													<option value="0"></option>
+													<option value="5"></option>
+												</datalist>
+											</div>
+										</div>
+										<p class="text-secondary">-5 = negative, 0 = neutral,<br>5 = positive</p>
+									</div>
+									<div class="col"></div>
+								</div>
+							</div>
+							
+							<div class="container text-primary mt-5 mb-5">
+								<div class="row mt-3 mb-5">
+									<div class="col-4">
+										<div class="container">
+											<div class="col">
+												<label for="age">👶➡️🧓 Age:&#8193;</label>
+												<select name="age" class="selectpicker" id="id_age" data-live-search="true" data-live-search="true"> 
+													<option value=""></option> 
+													<option value="0-3">0-3</option> 
+													<option value="4-7">4-7</option> 
+													<option value="8-12">8-12</option> 
+													<option value="13-19">13-19</option> 
+													<option value="20-39">20-39</option> 
+													<option value="40-59">40-59</option> 
+													<option value="60-79">60-79</option> 
+													<option value="80-100">80-100</option> 
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="container">
+											<div class="col">
+												<label for="gender">⚧️ Gender:</label>
+												<select name="gender" class="selectpicker dynamic-select" id="id_gender" data-live-search="true"> 
+													<option value=""></option> 
+													<option value="Male">Male</option> 
+													<option value="Female">Female</option> 
+													<option value="other">Other</option> 
+												</select>
+											</div>
+											<input type="text" name="other_gender" class="otherInput" placeholder="Please type here" style="display: none;" />
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="container">
+											<div class="col">
+												<label for="accent">🌍 Accent:</label>
+												<select name="accent" class="selectpicker dynamic-select" id="id_accent" data-live-search="true"> 
+													<option value=""></option> 
+													<option value="us_english">US English</option> 
+													<option value="british_english">British English</option> 
+													<option value="irish">Irish</option> 
+													<option value="scottish">Scottish</option> 
+													<option value="indian">Indian</option> 
+													<option value="asian">Asian</option> 
+													<option value="russian">Russian</option> 
+													<option value="german">German</option> 
+													<option value="unsure">Unsure</option> 
+													<option value="other">Other</option> 
+												</select>
+											</div>
+											<input type="text" name="other_accent" class="otherInput" placeholder="Please type here" style="display: none;" />
+										</div>
+									</div>
+								</div>
+
+								<div class="row mt-3 mb-5">
+									<div class="col-2"></div>
+									<div class="col-4">
+										<div class="container">
+											<div class="col">
+												<label for="audio_quality">🎧 Audio Quality:</label>
+												<select name="audio_quality" class="selectpicker" id="id_audio_quality" data-live-search="true"> 
+													<option value=""></option> 
+													<option value="Unusable">Unusable</option> 
+													<option value="Poor">Poor</option> 
+													<option value="Average">Average</option> 
+													<option value="Good">Good</option> 
+													<option value="Excellent">Excellent</option> 
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="container">
+											<div class="col">
+												<label for="background_sounds">🔊 Background sounds:</label>
+												<select name="background_sounds" class="selectpicker dynamic-select" multiple id="id_background_sounds" data-live-search="true"> 
+													<option value="music">Music</option> 
+													<option value="people_talking">People talking</option> 
+													<option value="animals">Animals</option> 
+													<option value="city_traffic">City traffic</option> 
+													<option value="other">Other</option> 
+												</select>
+											</div>
+											<input type="text" name="other_background_sounds" class="otherInput" placeholder="Please type here" style="display: none;" />
+										</div>
+									</div>
+									<div class="col-2"></div>
+
+								</div>
+								
+								<div class="row mt-3">
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="curious_and_fascinated">🤩 Curious and Fascinated:</label>
+												<select name="curious_and_fascinated" class="selectpicker" multiple id="id_curious_and_fascinated" data-live-search="true"> 
+													<option value="agog">agog</option>
+													<option value="alluring">alluring</option>
+													<option value="beguiling">beguiling</option>
+													<option value="bewitching">bewitching</option>
+													<option value="captivated">captivated</option>
+													<option value="curious">curious</option>
+													<option value="enrapturing">enrapturing</option>
+													<option value="enthralled">enthralled</option>
+													<option value="entrancing">entrancing</option>
+													<option value="fascinated">fascinated</option>
+													<option value="gazing">gazing</option>
+													<option value="hypnotic">hypnotic</option>
+													<option value="intrigued">intrigued</option>
+													<option value="marveling">marveling</option>
+													<option value="mesmerized">mesmerized</option>
+													<option value="mesmerizing">mesmerizing</option>
+													<option value="mystified">mystified</option>
+													<option value="riveted">riveted</option>
+													<option value="spellbinding">spellbinding</option>
+													<option value="wondering">wondering</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="pensive_and_reflective">🤔 Pensive and Reflective:</label>
+												<select name="pensive_and_reflective" class="selectpicker" multiple id="id_pensive_and_reflective" data-live-search="true"> 
+													<option value="brooding">brooding</option>
+													<option value="cogitating">cogitating</option>
+													<option value="contemplating">contemplating</option>
+													<option value="meditative">meditative</option>
+													<option value="pensive">pensive</option>
+													<option value="pondering">pondering</option>
+													<option value="reflective">reflective</option>
+													<option value="ruminative">ruminative</option>
+													<option value="speculative">speculative</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="fearful_and_anxious">😰 Fearful and Anxious:</label>
+												<select name="fearful_and_anxious" class="selectpicker" multiple id="id_fearful_and_anxious" data-live-search="true"> 
+													<option value="afraid">afraid</option>
+													<option value="alarmed">alarmed</option>
+													<option value="antsy">antsy</option>
+													<option value="anxious">anxious</option>
+													<option value="apprehensive">apprehensive</option>
+													<option value="disquieted">disquieted</option>
+													<option value="distracted">distracted</option>
+													<option value="distraught">distraught</option>
+													<option value="edgy">edgy</option>
+													<option value="fear-stricken">fear-stricken</option>
+													<option value="fearful">fearful</option>
+													<option value="frightened">frightened</option>
+													<option value="horror-struck">horror-struck</option>
+													<option value="jittery">jittery</option>
+													<option value="jumpy">jumpy</option>
+													<option value="nervous">nervous</option>
+													<option value="panic-stricken">panic-stricken</option>
+													<option value="panicked">panicked</option>
+													<option value="petrified">petrified</option>
+													<option value="quaking">quaking</option>
+													<option value="quavering">quavering</option>
+													<option value="rattled">rattled</option>
+													<option value="restive">restive</option>
+													<option value="restless">restless</option>
+													<option value="scared">scared</option>
+													<option value="shuddering">shuddering</option>
+													<option value="shuddery">shuddery</option>
+													<option value="skittish">skittish</option>
+													<option value="spooked">spooked</option>
+													<option value="startled">startled</option>
+													<option value="tense">tense</option>
+													<option value="terrorized">terrorized</option>
+													<option value="trembling">trembling</option>
+													<option value="trepid">trepid</option>
+													<option value="uneasy">uneasy</option>
+													<option value="worried">worried</option>
+												</select>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="happy_and_energetic">😄 Happy and Energetic:</label>
+												<select name="happy_and_energetic" class="selectpicker" multiple id="id_happy_and_energetic" data-live-search="true"> 
+													<option value="activated">activated</option>
+													<option value="animated">animated</option>
+													<option value="beaming">beaming</option>
+													<option value="bouncy">bouncy</option>
+													<option value="brisk">brisk</option>
+													<option value="buoyant">buoyant</option>
+													<option value="cheerful">cheerful</option>
+													<option value="chipper">chipper</option>
+													<option value="chirpy">chirpy</option>
+													<option value="dynamic">dynamic</option>
+													<option value="ebullient">ebullient</option>
+													<option value="effervescent">effervescent</option>
+													<option value="elated">elated</option>
+													<option value="teasing">teasing</option>
+													<option value="playful">playful</option>
+													<option value="awe">awe</option>
+													<option value="electrified">electrified</option>
+													<option value="energetic">energetic</option>
+													<option value="energized">energized</option>
+													<option value="exuberant">exuberant</option>
+													<option value="gleeful">gleeful</option>
+													<option value="grateful">grateful</option>
+													<option value="grinning">grinning</option>
+													<option value="happy">happy</option>
+													<option value="hopeful">hopeful</option>
+													<option value="invigorated">invigorated</option>
+													<option value="jaunty">jaunty</option>
+													<option value="jovial">jovial</option>
+													<option value="joyful">joyful</option>
+													<option value="jubilant">jubilant</option>
+													<option value="lighthearted">lighthearted</option>
+													<option value="lively">lively</option>
+													<option value="merry">merry</option>
+													<option value="optimistic">optimistic</option>
+													<option value="peppy">peppy</option>
+													<option value="radiant">radiant</option>
+													<option value="revitalized">revitalized</option>
+													<option value="sprightly">sprightly</option>
+													<option value="thankful">thankful</option>
+													<option value="upbeat">upbeat</option>
+													<option value="vibrant">vibrant</option>
+													<option value="zestful">zestful</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="calm_and_composed">😌 Calm and Composed:</label>
+												<select name="calm_and_composed" class="selectpicker" multiple id="id_calm_and_composed" data-live-search="true"> 
+													<option value="calm">calm</option>
+													<option value="centered">centered</option>
+													<option value="collected">collected</option>
+													<option value="composed">composed</option>
+													<option value="coolheaded">coolheaded</option>
+													<option value="equanimous">equanimous</option>
+													<option value="grounded">grounded</option>
+													<option value="harmonious">harmonious</option>
+													<option value="imperturbable">imperturbable</option>
+													<option value="levelheaded">levelheaded</option>
+													<option value="mindful">mindful</option>
+													<option value="peaceful">peaceful</option>
+													<option value="poised">poised</option>
+													<option value="relaxed">relaxed</option>
+													<option value="reposeful">reposeful</option>
+													<option value="self-possessed">self-possessed</option>
+													<option value="serene">serene</option>
+													<option value="tranquil">tranquil</option>
+													<option value="unflappable">unflappable</option>
+													<option value="unflustered">unflustered</option>
+													<option value="unperturbed">unperturbed</option>
+													<option value="unrattled">unrattled</option>
+													<option value="unruffled">unruffled</option>
+													<option value="unshaken">unshaken</option>
+													<option value="untroubled">untroubled</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="focused_and_attentive">🤓 Focused and Attentive:</label>
+												<select name="focused_and_attentive" class="selectpicker" multiple id="id_focused_and_attentive" data-live-search="true"> 
+													<option value="alert">alert</option>
+													<option value="analyzing">analyzing</option>
+													<option value="attentive">attentive</option>
+													<option value="cognizant">cognizant</option>
+													<option value="engaging">engaging</option>
+													<option value="examining">examining</option>
+													<option value="focused">focused</option>
+													<option value="heedful">heedful</option>
+													<option value="inquiring">inquiring</option>
+													<option value="introspecting">introspecting</option>
+													<option value="introspective">introspective</option>
+													<option value="investigating">investigating</option>
+													<option value="observant">observant</option>
+													<option value="probing">probing</option>
+													<option value="questioning">questioning</option>
+													<option value="scrutinizing">scrutinizing</option>
+													<option value="studious">studious</option>
+													<option value="watchful">watchful</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="surprised_and_confused">😲 Surprised and Confused:</label>
+												<select name="surprised_and_confused" class="selectpicker" multiple id="id_surprised_and_confused" data-live-search="true"> 
+													<option value="amazed">amazed</option>
+													<option value="astonished">astonished</option>
+													<option value="astounded">astounded</option>
+													<option value="baffled">baffled</option>
+													<option value="befuddled">befuddled</option>
+													<option value="bewildered">bewildered</option>
+													<option value="confounded">confounded</option>
+													<option value="discombobulated">discombobulated</option>
+													<option value="dumbfounded">dumbfounded</option>
+													<option value="dumbstruck">dumbstruck</option>
+													<option value="flabbergasted">flabbergasted</option>
+													<option value="flummoxed">flummoxed</option>
+													<option value="perplexed">perplexed</option>
+													<option value="puzzled">puzzled</option>
+													<option value="shocked">shocked</option>
+													<option value="staggered">staggered</option>
+													<option value="stunned">stunned</option>
+													<option value="stupefied">stupefied</option>
+													<option value="surprised">surprised</option>
+													<option value="thunderstruck">thunderstruck</option>
+												</select>
+											</div>
+										</div>
+										
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="sad_and_despondent">😢 Sad and Despondent:</label>
+												<select name="sad_and_despondent" class="selectpicker" multiple id="id_sad_and_despondent" data-live-search="true"> 
+													<option value="blue">blue</option>
+													<option value="crestfallen">crestfallen</option>
+													<option value="depressed">depressed</option>
+													<option value="desolate">desolate</option>
+													<option value="despairing">despairing</option>
+													<option value="dismal">dismal</option>
+													<option value="dispirited">dispirited</option>
+													<option value="downhearted">downhearted</option>
+													<option value="forlorn">forlorn</option>
+													<option value="gloomy">gloomy</option>
+													<option value="heartbroken">heartbroken</option>
+													<option value="lugubrious">lugubrious</option>
+													<option value="melancholic">melancholic</option>
+													<option value="miserable">miserable</option>
+													<option value="morose">morose</option>
+													<option value="plaintive">plaintive</option>
+													<option value="sad">sad</option>
+													<option value="somber">somber</option>
+													<option value="sorrowful">sorrowful</option>
+													<option value="woebegone">woebegone</option>
+													<option value="woeful">woeful</option>
+												</select>
+											</div>
+										</div>
+										
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="romantic_and_passionate">😍 Romantic and Passionate:</label>
+												<select name="romantic_and_passionate" class="selectpicker" multiple id="id_romantic_and_passionate" data-live-search="true"> 
+													<option value="amorous">amorous</option>
+													<option value="carnal">carnal</option>
+													<option value="desirous">desirous</option>
+													<option value="enflamed">enflamed</option>
+													<option value="erotic">erotic</option>
+													<option value="infatuated">infatuated</option>
+													<option value="lecherous">lecherous</option>
+													<option value="libidinous">libidinous</option>
+													<option value="lust-driven">lust-driven</option>
+													<option value="lustful">lustful</option>
+													<option value="passionate">passionate</option>
+													<option value="prurient">prurient</option>
+													<option value="romantic">romantic</option>
+													<option value="salacious">salacious</option>
+													<option value="sensual">sensual</option>
+													<option value="sensuous">sensuous</option>
+													<option value="sizzling">sizzling</option>
+													<option value="steaminess">steaminess</option>
+													<option value="sultry">sultry</option>
+													<option value="torrid">torrid</option>
+													<option value="voluptuous">voluptuous</option>
+												</select>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="seductive_and_enticing">😘 Seductive and Enticing:</label>
+												<select name="seductive_and_enticing" class="selectpicker" multiple id="id_seductive_and_enticing" data-live-search="true"> 
+													<option value="aroused">aroused</option>
+													<option value="awakened">awakened</option>
+													<option value="bellicose">bellicose</option>
+													<option value="charming">charming</option>
+													<option value="compelling">compelling</option>
+													<option value="craving">craving</option>
+													<option value="enticing">enticing</option>
+													<option value="flirty">flirty</option>
+													<option value="irresistible">irresistible</option>
+													<option value="magnetic">magnetic</option>
+													<option value="provoked">provoked</option>
+													<option value="ravishing">ravishing</option>
+													<option value="seductive">seductive</option>
+													<option value="stimulated">stimulated</option>
+													<option value="titillating">titillating</option>
+												</select>
+											</div>
+										</div>										
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="angry_and_irritated">😠 Angry and Irritated:</label>
+												<select name="angry_and_irritated" class="selectpicker" multiple id="id_angry_and_irritated" data-live-search="true">
+													<option value="aggravated">aggravated</option>
+													<option value="angry">angry</option>
+													<option value="annoyed">annoyed</option>
+													<option value="bitter">bitter</option>
+													<option value="cross">cross</option>
+													<option value="enraged">enraged</option>
+													<option value="exasperated">exasperated</option>
+													<option value="furious">furious</option>
+													<option value="galled">galled</option>
+													<option value="huffy">huffy</option>
+													<option value="incensed">incensed</option>
+													<option value="indignant">indignant</option>
+													<option value="infuriated">infuriated</option>
+													<option value="irascible">irascible</option>
+													<option value="irate">irate</option>
+													<option value="irritable">irritable</option>
+													<option value="livid">livid</option>
+													<option value="maddened">maddened</option>
+													<option value="nerved">nerved</option>
+													<option value="nettled">nettled</option>
+													<option value="outraged">outraged</option>
+													<option value="perturbed">perturbed</option>
+													<option value="piqued">piqued</option>
+													<option value="prickly">prickly</option>
+													<option value="resentful">resentful</option>
+													<option value="snappish">snappish</option>
+													<option value="snarly">snarly</option>
+													<option value="spiky">spiky</option>
+													<option value="testy">testy</option>
+													<option value="truculent">truculent</option>
+													<option value="vexed">vexed</option>
+													<option value="wrathful">wrathful</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="persistent_and_determined">💪 Persistent and Determined:</label>
+												<select name="persistent_and_determined" class="selectpicker" multiple id="id_persistent_and_determined" data-live-search="true"> 
+													<option value="adamant">adamant</option>
+													<option value="determined">determined</option>
+													<option value="driven">driven</option>
+													<option value="enduring">enduring</option>
+													<option value="indefatigable">indefatigable</option>
+													<option value="motivated">motivated</option>
+													<option value="persistent">persistent</option>
+													<option value="resilient">resilient</option>
+													<option value="resolute">resolute</option>
+													<option value="steadfast">steadfast</option>
+													<option value="tenacious">tenacious</option>
+													<option value="undaunted">undaunted</option>
+													<option value="unfailing">unfailing</option>
+													<option value="unflinching">unflinching</option>
+													<option value="unrelenting">unrelenting</option>
+													<option value="unswerving">unswerving</option>
+													<option value="unwavering">unwavering</option>
+													<option value="unyielding">unyielding</option>
+												</select>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="discomposed_and_unsettled">😓 Discomposed and Unsettled:</label>
+												<select name="discomposed_and_unsettled" class="selectpicker" multiple id="id_discomposed_and_unsettled" data-live-search="true"> 
+													<option value="cowering">cowering</option>
+													<option value="cringing">cringing</option>
+													<option value="daunted">daunted</option>
+													<option value="discomposed">discomposed</option>
+													<option value="disconcerted">disconcerted</option>
+													<option value="disturbed">disturbed</option>
+													<option value="dread-filled">dread-filled</option>
+													<option value="flustered">flustered</option>
+													<option value="fractious">fractious</option>
+													<option value="fretful">fretful</option>
+													<option value="intimidated">intimidated</option>
+													<option value="nonplussed">nonplussed</option>
+													<option value="quailing">quailing</option>
+													<option value="ruffled">ruffled</option>
+													<option value="stressed">stressed</option>
+													<option value="ticked-off">ticked-off</option>
+													<option value="troubled">troubled</option>
+													<option value="unnerved">unnerved</option>
+													<option value="unsettled">unsettled</option>
+												</select>
+											</div>
+										</div>
+										
+									</div>
+									<div class="col">
+										<div class="container">
+											<div class="col">
+												<label for="grumpy_and_cranky">😡 Grumpy and Cranky:</label>
+												<select name="grumpy_and_cranky" class="selectpicker" multiple id="id_grumpy_and_cranky" data-live-search="true"> 
+													<option value="argumentative">argumentative</option>
+													<option value="belligerent">belligerent</option>
+													<option value="cantankerous">cantankerous</option>
+													<option value="combative">combative</option>
+													<option value="contentious">contentious</option>
+													<option value="crabby">crabby</option>
+													<option value="cranky">cranky</option>
+													<option value="curmudgeonly">curmudgeonly</option>
+													<option value="grouchy">grouchy</option>
+													<option value="grumpy">grumpy</option>
+													<option value="pugnacious">pugnacious</option>
+													<option value="quarrelsome">quarrelsome</option>
+													<option value="scrappy">scrappy</option>
+													<option value="sulky">sulky</option>
+													<option value="waspy">waspy</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="container">
+											<div class="col">
+												<label for="disgusted">🤢 Disgusted:</label>
+												<select name="disgusted" class="selectpicker" multiple id="id_disgusted" data-live-search="true"> 
+													<option value="disgusted">disgusted</option>
+													<option value="revolted">revolted</option>
+													<option value="repulsed">repulsed</option>
+													<option value="nauseated">nauseated</option>
+													<option value="sickened">sickened</option>
+													<option value="loathing">loathing</option>
+													<option value="distaste">distaste</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% elif request.user.profile.status == 'Actor' %}
 							<div class="container mb-5">
 								<div class="col">
 									<input name="m_slider" type="range" class="form-range" id="id_m_slider" min="0" max="10" value={{object.level}}>
@@ -104,21 +780,20 @@
 							</div>
 
 							<div class="control has-icons-left has-icons-right" style="margin-top: 1rem">
-								<audio id="audio_recorder" class="video-js vjs-default-skin"></audio>
+								<audio id="audio_recorder" class="video-js vjs-default-skin" loop></audio>
 							</div>
-							<button class="btn btn-primary" id="submit">Submit</button>
 
-						{% elif request.user.profile.status == 'NLD' %}
-							<div class="container">
-								<div class="col mt-2">
-									<textarea class="form-control" name="description_textarea" id="id_description_textarea" rows="4" 
-									placeholder="Please write a detailed description of what you hear in the recording, please include, the speakers emotions, background sounds and any other information to deem fit.">{% if object.description == None %}{{ sample_description }}{% else %}{{object.description}}{% endif %}</textarea>
-								</div>
-								<div class="mt-5">
-									<button class="btn btn-outline-info" id="submit">Submit</button>
-								</div>
-							</div>
 						{% endif %}
+						<div class="row mt-3">
+							<div class="col-4"></div>
+							<div class="col-2">
+								<button class="btn btn-secondary w-100 mt-2" id="submit">Submit</button>
+							</div>
+							<div class="col-2">
+								<a class="btn btn-primary w-100 mt-2" href="{% url 'random-sample' %}">Skip</a>
+							</div>
+							<div class="col-4"></div>
+						</div>
 					</Fieldset>
 				</div>
 			</form>
@@ -134,4 +809,108 @@
 	{% if request.user.profile.status == 'Actor' %}
 		<script src="{% static 'audio_recorder/js/real.recording.js' %}"></script>
 	{% endif %}
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js" integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<!-- persistant switch -->
+	<script>
+		$(document).ready(function() {
+			// Check if the loop property is stored in local storage
+			var isLoopEnabled = localStorage.getItem('loopEnabled') === 'true';
+		
+			// Set the initial state of the loop property
+			$("#audio_source").prop('loop', isLoopEnabled);
+		
+			// Update the button class based on the loop state
+			if (isLoopEnabled) {
+				$("#toggle_button").removeClass('btn-secondary').addClass('btn-primary');
+			} else {
+				$("#toggle_button").removeClass('btn-primary').addClass('btn-secondary');
+			}
+		
+			// Toggle the loop property and update button class on click
+			$("#toggle_button").click(function() {
+				var player = $("#audio_source");
+				var isLoopEnabled = player.prop('loop');
+		
+				if (!isLoopEnabled) {
+					player.prop('loop', true);
+					$(this).removeClass('btn-secondary').addClass('btn-primary');
+				} else {
+					player.prop('loop', false);
+					$(this).removeClass('btn-primary').addClass('btn-secondary');
+				}
+		
+				// Store the updated loop state in local storage
+				localStorage.setItem('loopEnabled', player.prop('loop'));
+			});
+		});
+	</script>
+
+	<!-- Displaye slider values -->
+	<script>
+		// Function to update the label text with the current slider value
+		function updateSliderValue(sliderId, labelId) {
+			var slider = document.getElementById(sliderId);
+			var label = document.getElementById(labelId);
+			label.textContent = slider.value;
+		}
+		
+		// Add event listeners to the sliders
+		document.getElementById("id_arousal_slider").addEventListener("input", function() {
+			updateSliderValue("id_arousal_slider", "arousalSliderVal");
+		});
+		
+		document.getElementById("id_valence_slider").addEventListener("input", function() {
+			updateSliderValue("id_valence_slider", "valenceSliderVal");
+		});
+	</script>
+
+	<!-- track user page time -->
+	<script>
+		$(document).ready(function(){
+			console.log("Document is ready");
+			$("#submit").click(function(event){
+				event.preventDefault();  // prevent the default form submission
+				var timeSpentOnPage = TimeMe.getTimeOnCurrentPageInSeconds();
+				var formData = $("#id_utterance_detail_form").serialize(); // get form data
+				console.log("Time spent on page: " + timeSpentOnPage);
+				$.ajax({
+					url: "{% url 'utterance-detail' pk=object.pk %}",
+					type: 'POST',
+					headers: { "X-CSRFToken": "{{ csrf_token }}" },
+					data: formData + "&time_spent=" + timeSpentOnPage,
+					success: function(data){
+						$("#id_utterance_detail_form").submit();
+						$.each(data.messages, function(i, message){
+							console.log(message);
+						});
+						window.location.href = data.redirect_url;
+					},
+					error: function(xhr, status, error) {
+						console.log("AJAX error: " + error);
+					}
+				});
+			});
+		});
+	</script>
+
+	<script>
+		const selectElements = document.querySelectorAll('.dynamic-select');
+		const inputFields = document.querySelectorAll('.otherInput');
+		
+		selectElements.forEach((select, index) => {
+			select.addEventListener('change', function () {
+				const selectedOptions = Array.from(select.selectedOptions).map(option => option.value);
+				if (selectedOptions.includes('other')) {
+					inputFields[index].style.display = 'block';
+				} else {
+					inputFields[index].style.display = 'none';
+				}
+			});
+		});
+	</script>
+	
+		
 {% endblock js %}

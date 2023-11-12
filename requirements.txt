@@ -2,8 +2,14 @@ django
 django-crispy-forms
 django-filter
 django-import-export
-crispy-bootstrap5
+django-embed-video
+crispy-bootstrap4
 pandas
 pathlib
 pillow
 uwsgi
+certbot
+django-auditlog
+datasets
+djangorestframework
+django_ratelimit

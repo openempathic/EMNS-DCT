@@ -7,7 +7,7 @@ class OrderFilter(django_filters.FilterSet):
     class Meta:
         model = Utterances
         fields = {  'utterance':['contains'], 
-                    'prosody':['contains'], 
+                    'emotion':['contains'], 
                     'status':['exact'],
                     }
 

@@ -5,7 +5,7 @@
 <nav id="sidebar-wrapper">
     <ul class="sidebar-nav">
         <li class="sidebar-brand">
-            <a class="js-scroll-trigger" href="#page-top">TTS Dataset Collection</a>
+            <a class="js-scroll-trigger" href="#page-top">Open Empathic DCT</a>
         </li>
         <li class="sidebar-nav-item">
             <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}">Home</a>
@@ -13,29 +13,41 @@
         <li class="sidebar-nav-item">
             <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}#about">About</a>
         </li>
-        <li class="sidebar-nav-item">
-            <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}#contribute">Contribute</a>
-        </li>
-        <li class="sidebar-nav-item">
-            <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}#contact-us">Contact Us</a>
-        </li>
 
         {% if user.is_authenticated %}
-
+            <hr class="custom-separator my-2">
             <li class="sidebar-nav-item">
-                <a class="js-scroll-trigger" href="{% url 'logout' %}">Logout</a>
+                <a class="js-scroll-trigger" href="{% url 'annotation-guide' %}">Annotation Guide</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'random-sample' %}">Annotate</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'utterance-create' %}">Submit URL</a>
             </li>
             <li class="sidebar-nav-item">
                 <a class="js-scroll-trigger" href="{% url 'audio-recorder-utterances' %}">Utterances</a>
             </li>
             <li class="sidebar-nav-item">
-                <a class="js-scroll-trigger" href="{% url 'utterance-create' %}">New Utterance</a>
-            </li>
-            <li class="sidebar-nav-item">
                 <a class="js-scroll-trigger" href="{% url 'profile' %}">Profile</a>
             </li>
-        {% else %}
-
+            <hr class="custom-separator my-2">
+        {% endif %}
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}#contact-us">Contact Us</a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'terms' %}">Terms & Conidtions</a>
+            </li>
+        {% if user.is_authenticated %}
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'logout' %}">Logout</a>
+            </li>
+        {% endif %}
+        {% if not user.is_authenticated %}
+            <li class="sidebar-nav-item">
+                <a class="js-scroll-trigger" href="{% url 'audio-recorder-home' %}#contribute">Contribute</a>
+            </li>
             <li class="sidebar-nav-item">
                 <a class="js-scroll-trigger" href="{% url 'login' %}">Login</a>
             </li>

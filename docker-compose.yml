@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  app:
+  app_debug:
     image: knoriy/dataset_collection_tool
     build:
       context: .
@@ -11,6 +11,7 @@ services:
     volumes:
       - ./django_dataset_collection_tool:/app
       - ./proxy:/proxy
+      - ~/EMNS-data/extracted/:/media
     command: sh -c "python3 manage.py runserver 0.0.0.0:8000"
     env_file:
       # - ./ENVIROMENT_VARIABLES

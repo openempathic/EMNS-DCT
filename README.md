@@ -34,7 +34,7 @@ Docker is used for deploying the tool. Once you have Docker and docker-compose i
 To make debugging and modifying the tool easier, we have created a separate compose file. You can access this mode by executing the following command:
 
 ```sh
-docker-compose -f docker-compose.yml up
+make run_debug
 ```
 
 This command will enable the debug mode and start the tool. With this mode, you can easily modify the tool's code and see the changes in real-time. It is important to note that this mode is intended for development purposes only and should not be used in a production environment.
@@ -97,7 +97,7 @@ def main(csv_dir, username, sep="\t", emotions=None, header=None):
    create_utterance(user, row[0], random.choice(emotions))
    print("Found nan: ", i)
 
-main("/app/src/data/sample.tsv", "knoriy")
+main("sample.tsv")
 ```
 
 ### Start container
@@ -131,7 +131,7 @@ docker exec -it emns-dct_proxy_1 sh
 ```
 
 ``` bash
-certbot --nginx --noninteractive --agree-tos -m name@email.com -d emns.com -d www.emns.com --redirect --test-cert
+certbot --nginx --noninteractive --agree-tos -m knoriy72@gmail.com -d dct.openempathic.ai -d www.dct.openempathic.ai --redirect --test-cert
 ```
 
 Remove `--test-cert` after confirming that everything loaded as expected.

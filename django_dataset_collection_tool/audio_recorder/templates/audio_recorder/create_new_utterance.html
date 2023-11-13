@@ -9,6 +9,9 @@
 <header class="masthead d-flex">
 
     <div class="container my-auto">
+        <div class="h-100 d-flex align-items-center justify-content-center" id="youtube_preview">
+            <iframe id="youtube_player" width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
 
         <!-- <div class="p-5 bg-secondary text-white"> -->
             <div class="content-section">
@@ -49,6 +52,71 @@
             </div>
         <!-- </div> -->
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let form = document.querySelector('form');
+            form.addEventListener('input', function() {
+                let youtubeUrl = document.getElementById("{{ form.audio_recording.auto_id }}").value;
+                let startTime = document.getElementById('start_time').value;
+                let endTime = document.getElementById('end_time').value; 
+
+                let embedUrl = createYoutubeEmbedUrl(youtubeUrl, startTime, endTime);
+                if (embedUrl) {
+                    // Display the embed URL or update an iframe, e.g.:
+                    document.getElementById('youtube_player').src = embedUrl;
+                }
+            });
+        });
+
+        function convertTimeToSeconds(timestr) {
+            if (!timestr) return 0; // If no time is provided, default to 0 seconds
+
+            try {
+                let timeComponents = timestr.split(':').map(Number);
+                let hours = 0, minutes = 0, seconds = 0;
+
+                if (timeComponents.length === 3) {
+                    [hours, minutes, seconds] = timeComponents;
+                } else if (timeComponents.length === 2) {
+                    [minutes, seconds] = timeComponents;
+                } else if (timeComponents.length === 1) {
+                    [seconds] = timeComponents;
+                } else {
+                    throw new Error("Please check the time format.");
+                }
+
+                return hours * 3600 + minutes * 60 + seconds;
+            } catch (error) {
+                alert(error.message);
+                return null;
+            }
+        }
+
+        function createYoutubeEmbedUrl(youtubeUrl, startTimeStr, endTimeStr) {
+            let start = convertTimeToSeconds(startTimeStr);
+            let end = convertTimeToSeconds(endTimeStr);
+
+            // Check for the presence of the end time. If not present, omit it from the URL
+            let endParameter = endTimeStr ? `&end=${end}` : '';
+
+            if (start === null || (end === null && endTimeStr)) {
+                return; // Error has already been alerted in convertTimeToSeconds
+            }
+            let videoIdPattern = /watch\?v=(.*?)(?:&|$)/;
+            let match = youtubeUrl.match(videoIdPattern);
+
+            if (!match) {
+                alert(`Invalid YouTube URL: ${youtubeUrl}`);
+                return;
+            }
+
+            let videoId = match[1];
+            let baseUrl = "https://www.youtube.com/embed/";
+
+            return `${baseUrl}${videoId}?modestbranding=1&loop=1&start=${start}${endParameter}`;
+        }
+    </script>
 </header>
+
 
 {% endblock content %}

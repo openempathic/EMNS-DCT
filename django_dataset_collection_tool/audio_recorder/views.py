@@ -207,6 +207,7 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 
 		if self.request.user.profile.status == 'NLD':
 			self.object.author = self.request.user
+			self.object.utterance = self.request.POST.get('utterance')
 			self.object.gender = self.request.POST.get('gender')
 			self.object.audio_quality = self.request.POST.get("audio_quality")
 			self.object.age =  self.request.POST.get("age")

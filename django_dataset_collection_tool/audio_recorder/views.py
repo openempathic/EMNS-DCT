@@ -442,83 +442,61 @@ class CanUsePaidParameter(permissions.BasePermission):
 ################## REST API VIEWS ##################
 from collections import defaultdict
 class GetStatsView(APIView):
-	authentication_classes = [TokenAuthGet]
-	permission_classes = [IsAuthenticated, CanUsePaidParameter]
-	throttle_classes = [StaffUserRateThrottle, AnonRateThrottle]
+    authentication_classes = [TokenAuthGet]
+    permission_classes = [IsAuthenticated, CanUsePaidParameter]
+    throttle_classes = [StaffUserRateThrottle, AnonRateThrottle]
 
-	def check_permissions(self, request):
-		"""
-		Override the default method to check for 'paid' parameter specifically.
-		"""
-		paid_param = request.GET.get('paid', None)
-		if paid_param and paid_param.lower() not in ['true', 'false']:
-			raise PermissionDenied(detail="Invalid 'paid' parameter value.")
-		return super().check_permissions(request)
-	
-	def get(self, request, *args, **kwargs):
-		# Extract the 'paid' parameter from the URL
-		paid_param = request.GET.get('paid', None)
-		
-		samples = Utterances.objects.filter(status='Awaiting Review')
+    def check_permissions(self, request):
+        """
+        Override the default method to check for 'paid' parameter specifically.
+        """
+        paid_param = request.GET.get('paid', None)
+        if paid_param and paid_param.lower() not in ['true', 'false']:
+            raise PermissionDenied(detail="Invalid 'paid' parameter value.")
+        return super().check_permissions(request)
+    
+    def get(self, request, *args, **kwargs):
+        # Extract the 'paid' parameter from the URL
+        paid_param = request.GET.get('paid', None)
 
-		# Use the paid parameter to conditionally filter the samples query
-		if paid_param and paid_param.lower() == 'true':
-			samples = (samples.filter(author__profile__paid=True)
-			.exclude(author__profile__paid=False)
-			.values('author__username')
-			.annotate(submission_count=Count('author'))
-			)
-			return RestResponse({'users': samples})
+        base_query = Utterances.objects.filter(status='Awaiting Review')
+        if paid_param:
+            is_paid = paid_param.lower() == 'true'
+            base_query = base_query.filter(author__profile__paid=is_paid)
 
-		total_samples = samples.count()
-		status_distribution = samples.values('status').annotate(count=Count('status'))
-		top_users_query = (samples.exclude(author__profile__paid=True)
-							.values('author__username')
-							.annotate(submission_count=Count('author'))
-							.order_by('-submission_count')[:10])
-		
-		avg_time_spent = samples.aggregate(average_time=Avg('time_spent'))['average_time']
-		gender_distribution = samples.values('gender').annotate(count=Count('gender'))
-		audio_quality_distribution = samples.values('audio_quality').annotate(count=Count('audio_quality'))
-		age_distribution = samples.values('age').annotate(count=Count('age'))
+        # Initial aggregations
+        total_samples = base_query.count()
+        status_distribution = base_query.values('status').annotate(count=Count('status'))
+        avg_time_spent = base_query.aggregate(average_time=Avg('time_spent'))['average_time']
+        gender_distribution = base_query.values('gender').annotate(count=Count('gender'))
+        audio_quality_distribution = base_query.values('audio_quality').annotate(count=Count('audio_quality'))
+        age_distribution = base_query.values('age').annotate(count=Count('age'))
 
-		top_users = [
-			{
-				'author__username': user['author__username'].split("@")[0] if "@" in user['author__username'] else user['author__username'],
-				'submission_count': user['submission_count']
-			} 
-			for user in top_users_query
-		]
+        # Top users
+        top_users_query = base_query.values('author__username').annotate(submission_count=Count('author')).order_by('-submission_count')[:10]
+        top_users = [{'author__username': user['author__username'], 'submission_count': user['submission_count']} for user in top_users_query]
 
-		emotion_keys = set()
-		sub_emotions_keys = set()
-		for utterance in samples:
-			emotion = eval(utterance.emotion)
-			emotion_keys.update(emotion.keys())
-			sub_emotions_keys.update(*emotion.values())
+        # Emotion and sub-emotion counting (assuming a JSON field or similar structure)
+        emotion_counts = defaultdict(int)
+        sub_emotion_counts = defaultdict(int)
 
-		emotion_conditions = [Q(emotion__contains=emotion_key) for emotion_key in emotion_keys]
-		emotion_counts = {
-			emotion_key: samples.filter(condition).count()
-			for emotion_key, condition in zip(emotion_keys, emotion_conditions)
-		}
+        for utterance in base_query.only('emotion'):
+            for emotion, sub_emotions in eval(utterance.emotion).items():
+                emotion_counts[emotion] += 1
+                for sub_emotion in sub_emotions:
+                    sub_emotion_counts[sub_emotion] += 1
 
-		sub_emotion_counts = defaultdict(int)
-		for sub_emotion in sub_emotions_keys:
-			count = samples.filter(emotion__contains=sub_emotion).count()
-			sub_emotion_counts[sub_emotion] += count
-		
-		return RestResponse({
-			'total_samples': total_samples,
-			'status_distribution': status_distribution,
-			'top_users': top_users,
-			'avg_time_spent': avg_time_spent,
-			'gender_distribution': gender_distribution,
-			'audio_quality_distribution': audio_quality_distribution,
-			'age_distribution': age_distribution,
-			'emotion_counts': emotion_counts,
-			'sub_emotion_counts': sub_emotion_counts,
-		})
+        return RestResponse({
+            'total_samples': total_samples,
+            'status_distribution': status_distribution,
+            'avg_time_spent': avg_time_spent,
+            'gender_distribution': gender_distribution,
+            'audio_quality_distribution': audio_quality_distribution,
+            'age_distribution': age_distribution,
+            'top_users': top_users,
+            'emotion_counts': dict(emotion_counts),
+            'sub_emotion_counts': dict(sub_emotion_counts),
+        })
 	
 class DownloadView(APIView):
 	authentication_classes = [TokenAuthGet]

@@ -146,3 +146,4 @@ update_google_domain_dns.sh
 backup.sh
 audio_recorder_utterances.csv
 DCT_diagram
+scripts/OE_backup.sqlite3

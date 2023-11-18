@@ -463,6 +463,8 @@ class GetStatsView(APIView):
         if paid_param:
             is_paid = paid_param.lower() == 'true'
             base_query = base_query.filter(author__profile__paid=is_paid)
+        else:
+            base_query.exclude(author__profile__paid=True)
 
         # Initial aggregations
         total_samples = base_query.count()

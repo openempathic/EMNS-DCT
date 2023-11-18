@@ -440,7 +440,7 @@ class CanUsePaidParameter(permissions.BasePermission):
 
 
 ################## REST API VIEWS ##################
-
+from collections import defaultdict
 class GetStatsView(APIView):
 	authentication_classes = [TokenAuthGet]
 	permission_classes = [IsAuthenticated, CanUsePaidParameter]
@@ -490,19 +490,24 @@ class GetStatsView(APIView):
 			for user in top_users_query
 		]
 
-		emotion_keys = [
-			'curious_and_fascinated', 'pensive_and_reflective', 'fearful_and_anxious', 
-			'happy_and_energetic', 'calm_and_composed', 'focused_and_attentive', 
-			'surprised_and_confused', 'sad_and_despondent', 'romantic_and_passionate',
-			'seductive_and_enticing', 'angry_and_irritated', 'persistent_and_determined',
-			'discomposed_and_unsettled', 'grumpy_and_cranky', 'disgusted'
-		]
+		emotion_keys = set()
+		sub_emotions_keys = set()
+		for utterance in samples:
+			emotion = eval(utterance.emotion)
+			emotion_keys.update(emotion.keys())
+			sub_emotions_keys.update(*emotion.values())
+
 		emotion_conditions = [Q(emotion__contains=emotion_key) for emotion_key in emotion_keys]
 		emotion_counts = {
 			emotion_key: samples.filter(condition).count()
 			for emotion_key, condition in zip(emotion_keys, emotion_conditions)
 		}
 
+		sub_emotion_counts = defaultdict(int)
+		for sub_emotion in sub_emotions_keys:
+			count = samples.filter(emotion__contains=sub_emotion).count()
+			sub_emotion_counts[sub_emotion] += count
+		
 		return RestResponse({
 			'total_samples': total_samples,
 			'status_distribution': status_distribution,
@@ -512,6 +517,7 @@ class GetStatsView(APIView):
 			'audio_quality_distribution': audio_quality_distribution,
 			'age_distribution': age_distribution,
 			'emotion_counts': emotion_counts,
+			'sub_emotion_counts': sub_emotion_counts,
 		})
 	
 class DownloadView(APIView):

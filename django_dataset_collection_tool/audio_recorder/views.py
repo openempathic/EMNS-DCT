@@ -77,21 +77,21 @@ def AnnotationGuideView(request, *args, **argv):
 	return render(request, 'audio_recorder/annotation_guide.html')
 
 class GetRandomSample(LoginRequiredMixin, DetailView):
-    model = Utterances  
-    form_class = RecordingUpdateForm
+	model = Utterances  
+	form_class = RecordingUpdateForm
 
-    def get(self, request, *args, **kwargs):
+	def get(self, request, *args, **kwargs):
 
-        # Get random utterance
-        count = self.get_queryset().count()
-        if count > 0:
-            random_index = random.randint(0, count-1)
-            random_object = self.get_queryset()[random_index]
-            return redirect(reverse('utterance-detail', kwargs={'pk': random_object.pk}))
-        
-        # If no utterances, redirect home
-        messages.warning(request, 'No utterances available')  
-        return redirect('audio-recorder-home')
+		# Get random utterance
+		count = self.get_queryset().count()
+		if count > 0:
+			random_index = random.randint(0, count-1)
+			random_object = self.get_queryset()[random_index]
+			return redirect(reverse('utterance-detail', kwargs={'pk': random_object.pk}))
+		
+		# If no utterances, redirect home
+		messages.warning(request, 'No utterances available')  
+		return redirect('audio-recorder-home')
 
 class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, DetailView):
 	model = Utterances
@@ -254,14 +254,14 @@ class UtteranceDetailView(LoginRequiredMixin, UserPassesTestMixin, FormMixin, De
 		return False
 	
 class ReleaseLockView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        utterance_id = request.POST.get('utterance_id')
-        utterance = get_object_or_404(Utterances, id=utterance_id)
-        if utterance.locked_by == request.user:
-            utterance.locked_by = None
-            utterance.save()
-            return JsonResponse({'success': True})
-        return JsonResponse({'success': False})
+	def post(self, request, *args, **kwargs):
+		utterance_id = request.POST.get('utterance_id')
+		utterance = get_object_or_404(Utterances, id=utterance_id)
+		if utterance.locked_by == request.user:
+			utterance.locked_by = None
+			utterance.save()
+			return JsonResponse({'success': True})
+		return JsonResponse({'success': False})
 
 class UtteranceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Utterances
@@ -442,63 +442,63 @@ class CanUsePaidParameter(permissions.BasePermission):
 ################## REST API VIEWS ##################
 from collections import defaultdict
 class GetStatsView(APIView):
-    authentication_classes = [TokenAuthGet]
-    permission_classes = [IsAuthenticated, CanUsePaidParameter]
-    throttle_classes = [StaffUserRateThrottle, AnonRateThrottle]
+	authentication_classes = [TokenAuthGet]
+	permission_classes = [IsAuthenticated, CanUsePaidParameter]
+	throttle_classes = [StaffUserRateThrottle, AnonRateThrottle]
 
-    def check_permissions(self, request):
-        """
-        Override the default method to check for 'paid' parameter specifically.
-        """
-        paid_param = request.GET.get('paid', None)
-        if paid_param and paid_param.lower() not in ['true', 'false']:
-            raise PermissionDenied(detail="Invalid 'paid' parameter value.")
-        return super().check_permissions(request)
-    
-    def get(self, request, *args, **kwargs):
-        # Extract the 'paid' parameter from the URL
-        paid_param = request.GET.get('paid', None)
+	def check_permissions(self, request):
+		"""
+		Override the default method to check for 'paid' parameter specifically.
+		"""
+		paid_param = request.GET.get('paid', None)
+		if paid_param and paid_param.lower() not in ['true', 'false']:
+			raise PermissionDenied(detail="Invalid 'paid' parameter value.")
+		return super().check_permissions(request)
+	
+	def get(self, request, *args, **kwargs):
+		# Extract the 'paid' parameter from the URL
+		paid_param = request.GET.get('paid', None)
 
-        base_query = Utterances.objects.filter(status='Awaiting Review')
-        if paid_param:
-            is_paid = paid_param.lower() == 'true'
-            base_query = base_query.filter(author__profile__paid=is_paid)
-        else:
-            base_query.exclude(author__profile__paid=True)
+		base_query = Utterances.objects.filter(status='Awaiting Review')
+		if paid_param:
+			is_paid = paid_param.lower() == 'true'
+			base_query = base_query.filter(author__profile__paid=is_paid)
 
-        # Initial aggregations
-        total_samples = base_query.count()
-        status_distribution = base_query.values('status').annotate(count=Count('status'))
-        avg_time_spent = base_query.aggregate(average_time=Avg('time_spent'))['average_time']
-        gender_distribution = base_query.values('gender').annotate(count=Count('gender'))
-        audio_quality_distribution = base_query.values('audio_quality').annotate(count=Count('audio_quality'))
-        age_distribution = base_query.values('age').annotate(count=Count('age'))
+		# return RestResponse({"paid": paid_param, "count": base_query.count()})
 
-        # Top users
-        top_users_query = base_query.values('author__username').annotate(submission_count=Count('author')).order_by('-submission_count')[:10]
-        top_users = [{'author__username': user['author__username'], 'submission_count': user['submission_count']} for user in top_users_query]
+		# Initial aggregations
+		total_samples = base_query.count()
+		status_distribution = base_query.values('status').annotate(count=Count('status'))
+		avg_time_spent = base_query.aggregate(average_time=Avg('time_spent'))['average_time']
+		gender_distribution = base_query.values('gender').annotate(count=Count('gender'))
+		audio_quality_distribution = base_query.values('audio_quality').annotate(count=Count('audio_quality'))
+		age_distribution = base_query.values('age').annotate(count=Count('age'))
 
-        # Emotion and sub-emotion counting (assuming a JSON field or similar structure)
-        emotion_counts = defaultdict(int)
-        sub_emotion_counts = defaultdict(lambda: defaultdict(int))
+		# Top users
+		top_users_query = base_query.values('author__username').annotate(submission_count=Count('author')).order_by('-submission_count')[:10]
+		top_users = [{'author__username': user['author__username'], 'submission_count': user['submission_count']} for user in top_users_query]
 
-        for utterance in base_query.only('emotion'):
-            for emotion, sub_emotions in eval(utterance.emotion).items():
-                emotion_counts[emotion] += 1
-                for sub_emotion in sub_emotions:
-                    sub_emotion_counts[emotion][sub_emotion] += 1
+		# Emotion and sub-emotion counting (assuming a JSON field or similar structure)
+		emotion_counts = defaultdict(int)
+		sub_emotion_counts = defaultdict(lambda: defaultdict(int))
 
-        return RestResponse({
-            'total_samples': total_samples,
-            'status_distribution': status_distribution,
-            'avg_time_spent': avg_time_spent,
-            'gender_distribution': gender_distribution,
-            'audio_quality_distribution': audio_quality_distribution,
-            'age_distribution': age_distribution,
-            'top_users': top_users,
-            'emotion_counts': dict(emotion_counts),
-            'sub_emotion_counts': dict(sub_emotion_counts),
-        })
+		for utterance in base_query.only('emotion'):
+			for emotion, sub_emotions in eval(utterance.emotion).items():
+				emotion_counts[emotion] += 1
+				for sub_emotion in sub_emotions:
+					sub_emotion_counts[emotion][sub_emotion] += 1
+
+		return RestResponse({
+			'total_samples': total_samples,
+			'status_distribution': status_distribution,
+			'avg_time_spent': avg_time_spent,
+			'gender_distribution': gender_distribution,
+			'audio_quality_distribution': audio_quality_distribution,
+			'age_distribution': age_distribution,
+			'top_users': top_users,
+			'emotion_counts': dict(emotion_counts),
+			'sub_emotion_counts': dict(sub_emotion_counts),
+		})
 	
 class DownloadView(APIView):
 	authentication_classes = [TokenAuthGet]
@@ -540,28 +540,28 @@ class DownloadView(APIView):
 		return response
 
 def report_utterance(request, utterance_id):
-    utterance = get_object_or_404(Utterances, pk=utterance_id)
+	utterance = get_object_or_404(Utterances, pk=utterance_id)
 
-    if request.method == 'POST':
-        reasons = request.POST.getlist('reason')
+	if request.method == 'POST':
+		reasons = request.POST.getlist('reason')
 
-        # If 'Other' is selected, append the custom reason
-        if 'Other' in reasons:
-            other_reason = request.POST.get('other_reason', '').strip()
-            if other_reason:
-                reasons.append(f"Other: {other_reason}")
+		# If 'Other' is selected, append the custom reason
+		if 'Other' in reasons:
+			other_reason = request.POST.get('other_reason', '').strip()
+			if other_reason:
+				reasons.append(f"Other: {other_reason}")
 
-        # Join the reasons into a single string or use a JSON structure
-        reasons_str = ', '.join(reasons)
+		# Join the reasons into a single string or use a JSON structure
+		reasons_str = ', '.join(reasons)
 
-        # Create and save the report instance
-        report = Report(utterance=utterance, reported_by=request.user, reason=reasons_str)
-        report.save()
+		# Create and save the report instance
+		report = Report(utterance=utterance, reported_by=request.user, reason=reasons_str)
+		report.save()
 
-        # Redirect to a success page or back to utterance detail with a success message
-        messages.success(request, 'Your report has been submitted successfully.')
-        return redirect('random-sample')
+		# Redirect to a success page or back to utterance detail with a success message
+		messages.success(request, 'Your report has been submitted successfully.')
+		return redirect('random-sample')
 
-    # If not a POST request, or if the object does not exist, redirect to a suitable page
-    messages.error(request, 'Invalid request or utterance not found.')
-    return redirect('home')  # Replace 'home' with your appropriate view name
+	# If not a POST request, or if the object does not exist, redirect to a suitable page
+	messages.error(request, 'Invalid request or utterance not found.')
+	return redirect('home')  # Replace 'home' with your appropriate view name

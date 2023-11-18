@@ -47,7 +47,8 @@ def format_emotions(myjson):
                 "Persistent And Determined":"💪",
                 "Discomposed And Unsettled":"😓",
                 "Grumpy And Cranky":"😡",
-                "Disgusted":"🤢"}
+                "Disgusted":"🤢",
+                "Sarcasm":"🙄"}
 
     sorted_emotions = sorted(myjson["emotion_counts"].items(), key=lambda x: x[1], reverse=True)
 

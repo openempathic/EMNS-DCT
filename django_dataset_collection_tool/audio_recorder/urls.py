@@ -12,12 +12,9 @@ urlpatterns = [
 
     path('random_sample/', views.GetRandomSample.as_view(), name='random-sample'),
 
-
-    
     path('utterances/<int:pk>/', views.UtteranceDetailView.as_view(), name="utterance-detail"),
-
     path('utterances/<int:pk>/update/', views.UtteranceUpdateView.as_view(), name="utterance-update"),
-
+    path('utterances/<int:utterance_id>/report/', views.report_utterance, name='report_utterance'),
     path('utterances/<int:pk>/delete/', views.UtteranceDeleteView.as_view(), name="utterance-delete"),
     path('utterances/new/', views.UtteranceCreateView.as_view(), name="utterance-create"),
     path('guide/', views.AnnotationGuideView, name="annotation-guide"),

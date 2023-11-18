@@ -1,13 +1,21 @@
 from django.contrib import admin
-from .models import Utterances
+from .models import Utterances, Report
 from import_export import resources
-
-
-admin.site.register(Utterances)
-
+from import_export.admin import ImportExportModelAdmin
 
 
 class UtterancesResource(resources.ModelResource):
     class Meta:
         model = Utterances
         fields = ['utterance', 'prosody', 'author_id', 'age', 'gender', 'date_created', 'status', 'audio_recording']
+
+@admin.register(Utterances)
+class UtterancesAdmin(ImportExportModelAdmin):
+    resource_class = UtterancesResource
+    list_display = ('id', 'author', 'date_created', 'status')
+    search_fields = ('utterance', 'author__username', 'author__email', 'author__first_name', 'author__last_name')
+
+@admin.register(Report)
+class ReportAdmin(admin.ModelAdmin):
+    list_display = ('utterance', 'reported_by', 'reason', 'date_reported')  # Customize as needed
+    search_fields = ('reason', 'utterance', 'reported_by')

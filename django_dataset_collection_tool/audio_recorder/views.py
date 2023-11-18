@@ -38,7 +38,7 @@ from django.db.models import Count, Avg, F, Q
 from urllib.parse import urlparse
 
 
-from .models import Utterances
+from .models import Utterances, Report
 from .forms import RecordingUpdateForm, ImportForm
 from .filters import OrderFilter
 from .admin import UtterancesResource
@@ -552,3 +552,30 @@ class DownloadView(APIView):
 			df.to_parquet(response, index=False)
 		
 		return response
+
+def report_utterance(request, utterance_id):
+    utterance = get_object_or_404(Utterances, pk=utterance_id)
+
+    if request.method == 'POST':
+        reasons = request.POST.getlist('reason')
+
+        # If 'Other' is selected, append the custom reason
+        if 'Other' in reasons:
+            other_reason = request.POST.get('other_reason', '').strip()
+            if other_reason:
+                reasons.append(f"Other: {other_reason}")
+
+        # Join the reasons into a single string or use a JSON structure
+        reasons_str = ', '.join(reasons)
+
+        # Create and save the report instance
+        report = Report(utterance=utterance, reported_by=request.user, reason=reasons_str)
+        report.save()
+
+        # Redirect to a success page or back to utterance detail with a success message
+        messages.success(request, 'Your report has been submitted successfully.')
+        return redirect('random-sample')
+
+    # If not a POST request, or if the object does not exist, redirect to a suitable page
+    messages.error(request, 'Invalid request or utterance not found.')
+    return redirect('home')  # Replace 'home' with your appropriate view name

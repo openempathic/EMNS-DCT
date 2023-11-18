@@ -60,4 +60,14 @@ class Utterances(models.Model):
             self.author = None
             self.save()
 
+class Report(models.Model):
+    utterance = models.ForeignKey(Utterances, on_delete=models.CASCADE)
+    reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    reason = models.TextField()
+    date_reported = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Report for utterance {self.utterance.pk} by {self.reported_by.username}"
+
+
 auditlog.register(Utterances, exclude_fields=['locked_by', 'is_locked'])

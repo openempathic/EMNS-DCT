@@ -15,35 +15,57 @@
 	<script src="{% static 'audio_recorder/js/timeme.min.js' %}"></script>
 	<script src="https://www.youtube.com/iframe_api"></script>
 	<script async src="https://www.youtube.com/iframe_api"></script>
-	<!-- Page Locking -->
-    <script>
-        function releaseLock() {
-            $.ajax({
-                url: "{% url 'release_lock' %}",
-                method: "POST",
-                data: {
-                    utterance_id: "{{ object.id }}",
-                    csrfmiddlewaretoken: "{{ csrf_token }}"
-                }
-            });
-        }
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 
-        $(window).on('beforeunload', function() {
-            releaseLock();
-        });
-    </script>
-	<!-- track user page time -->
-	<script>
-		TimeMe.initialize({
-			currentPageName: "{% url 'utterance-detail' pk=object.pk %}", // replace 'your_view_name' with your Django view name and 'object' with your context object
-			idleTimeoutInSeconds: 30 // time before user considered idle
-		});
-	</script>
+	<!-- Page Locking -->
+	<script src="{% static 'audio_recorder/js/locking_utterance.js' %}"></script>
 
 {% endblock scripts %}
 
 
 {% block content %}
+<!-- Report Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportModalLabel">Report Utterance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{% url 'report_utterance' object.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Reason for Reporting:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="reason" id="offensiveContent" value="Offensive Content">
+                            <label class="form-check-label" for="offensiveContent">Offensive Content</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="reason" id="explicit" value="Sexual or Explicit Content ">
+                            <label class="form-check-label" for="explicit">Sexual or Explicit Content</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="reason" id="hateSpeech" value="Hate Speech">
+                            <label class="form-check-label" for="hateSpeech">Hate Speech</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="reason" id="other" value="Other">
+                            <label class="form-check-label" for="other">Other</label>
+                        </div>
+                        <!-- Textarea for other reasons -->
+                        <textarea id="otherReason" name="other_reason" class="form-control mt-2" style="display:none;" placeholder="Please specify"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-warning" id="submitReport" disabled>Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <section class="content-section bg-primary">
 	<div class="container text-center text-primary">
@@ -52,24 +74,21 @@
 		</div>
 
 		<!-- <div class=" mb-5 bg-secondary"> -->
-			{% if object.author == user %}
-				<div class="container text-right my-auto">
-					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" href="{% url 'utterance-update' object.id %}">Update</a>
-							<a class="dropdown-item" href="{% url 'utterance-delete' object.id %}">Delete</a>
+			<div class="container text-right my-auto">
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+							{% if object.author == user %}
+								<a class="dropdown-item" href="{% url 'utterance-update' object.id %}">Update</a>
+								<a class="dropdown-item" href="{% url 'utterance-delete' object.id %}">Delete</a>
+							{% endif %}
+							<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#reportModal">Report</a>
 						</div>
 					</div>
 				</div>
-			{% endif %}
-			<!-- <div class="p-5 mb-3 mt-2 bg-light">
-				<h4 class="text-justify mb-5 mt-5"> {{ object.utterance }} </h4>
-			</div> -->
 
 			<div class="mb-2 mt-2">
 				{% if object.audio_recording %}
-					<!-- {% video object.audio_recording '560x315' %} -->
 					<div id="embeded_video"></div>
 					<script>
 						var player;
@@ -818,10 +837,13 @@
 
 		</div>
 	</div>	
+
 </section>
 {% endblock content %}
 
 {% block js %}
+	<script src="{% static 'audio_recorder/js/reportModal.js' %}"></script>
+
 	{% if request.user.profile.status == 'Actor' %}
 		<script src="{% static 'audio_recorder/js/real.recording.js' %}"></script>
 	{% endif %}

@@ -478,13 +478,13 @@ class GetStatsView(APIView):
 
         # Emotion and sub-emotion counting (assuming a JSON field or similar structure)
         emotion_counts = defaultdict(int)
-        sub_emotion_counts = defaultdict(int)
+        sub_emotion_counts = defaultdict(lambda: defaultdict(int))
 
         for utterance in base_query.only('emotion'):
             for emotion, sub_emotions in eval(utterance.emotion).items():
                 emotion_counts[emotion] += 1
                 for sub_emotion in sub_emotions:
-                    sub_emotion_counts[sub_emotion] += 1
+                    sub_emotion_counts[emotion][sub_emotion] += 1
 
         return RestResponse({
             'total_samples': total_samples,

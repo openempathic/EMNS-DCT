@@ -458,13 +458,11 @@ class GetStatsView(APIView):
 	def get(self, request, *args, **kwargs):
 		# Extract the 'paid' parameter from the URL
 		paid_param = request.GET.get('paid', None)
+		is_paid = False
 
 		base_query = Utterances.objects.filter(status='Awaiting Review')
 		if paid_param:
 			is_paid = paid_param.lower() == 'true'
-			base_query = base_query.filter(author__profile__paid=is_paid)
-
-		# return RestResponse({"paid": paid_param, "count": base_query.count()})
 
 		# Initial aggregations
 		total_samples = base_query.count()
@@ -475,7 +473,9 @@ class GetStatsView(APIView):
 		age_distribution = base_query.values('age').annotate(count=Count('age'))
 
 		# Top users
-		top_users_query = base_query.values('author__username').annotate(submission_count=Count('author')).order_by('-submission_count')[:10]
+		top_users_query = base_query.filter(author__profile__paid=is_paid).values('author__username').annotate(submission_count=Count('author')).order_by('-submission_count')
+		if not is_paid:
+			top_users_query = top_users_query[:10]
 		top_users = [{'author__username': user['author__username'], 'submission_count': user['submission_count']} for user in top_users_query]
 
 		# Emotion and sub-emotion counting (assuming a JSON field or similar structure)

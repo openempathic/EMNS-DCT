@@ -434,3 +434,13 @@ a:hover, a:focus, a:active {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+@keyframes growNumber {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+.growing-number {
+  display: inline-block;
+  animation: growNumber 1s ease-in-out;
+}

@@ -506,6 +506,44 @@ class GetStatsView(APIView):
 			'sub_emotion_counts': dict(sub_emotion_counts),
 		})
 	
+from django.db.models import Sum, Max, Min
+class UserStatsView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        user = request.user
+
+        # Aggregating various statistics
+        user_stats = Utterances.objects.filter(author=user).aggregate(
+            total_utterances=Count('id'),
+            average_arousal=Avg('arousal'),
+            average_valence=Avg('valence'),
+            total_time_spent=Sum('time_spent'),
+            max_time_spent=Max('time_spent'),
+            min_time_spent=Min('time_spent'),
+            utterances_by_language=Count('language', distinct=True),
+            utterances_by_accent=Count('accent', distinct=True),
+            utterances_by_audio_quality=Count('audio_quality', distinct=True),
+            utterances_by_gender=Count('gender', distinct=True),
+            average_time_spent=Avg('time_spent'),
+            latest_utterance_date=Max('date_created'),
+            earliest_utterance_date=Min('date_created')
+        )
+
+        # Counting utterances per status
+        status_distribution = Utterances.objects.filter(author=user).values('status').annotate(count=Count('status'))
+
+        # Counting utterances per language
+        language_distribution = Utterances.objects.filter(author=user).values('language').annotate(count=Count('language'))
+
+        # Combining various stats into context
+        context = {
+            'user_stats': user_stats,
+            'status_distribution': status_distribution,
+            'language_distribution': language_distribution
+        }
+
+        return render(request, 'audio_recorder/stats.html', context)
+
+
 class DownloadView(APIView):
 	authentication_classes = [TokenAuthGet]
 	permission_classes = [IsAuthenticated, CanUsePaidParameter]

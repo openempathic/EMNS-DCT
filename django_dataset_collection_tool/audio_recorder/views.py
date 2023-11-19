@@ -460,6 +460,11 @@ class GetStatsView(APIView):
 		paid_param = request.GET.get('paid', None)
 		is_paid = False
 
+		try:
+			limit_param = int(request.GET.get('limit', 10))
+		except ValueError:
+			raise PermissionDenied(detail="Invalid 'limit' parameter value.")
+
 		base_query = Utterances.objects.filter(status='Awaiting Review')
 		if paid_param:
 			is_paid = paid_param.lower() == 'true'
@@ -474,8 +479,8 @@ class GetStatsView(APIView):
 
 		# Top users
 		top_users_query = base_query.filter(author__profile__paid=is_paid).values('author__username').annotate(submission_count=Count('author')).order_by('-submission_count')
-		if not is_paid:
-			top_users_query = top_users_query[:10]
+		if limit_param > 0:
+			top_users_query = top_users_query[:limit_param]
 		top_users = [{'author__username': user['author__username'], 'submission_count': user['submission_count']} for user in top_users_query]
 
 		# Emotion and sub-emotion counting (assuming a JSON field or similar structure)
@@ -489,6 +494,7 @@ class GetStatsView(APIView):
 					sub_emotion_counts[emotion][sub_emotion] += 1
 
 		return RestResponse({
+			'limit': limit_param,
 			'total_samples': total_samples,
 			'status_distribution': status_distribution,
 			'avg_time_spent': avg_time_spent,

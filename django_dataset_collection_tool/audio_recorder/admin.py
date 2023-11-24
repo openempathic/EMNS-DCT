@@ -18,5 +18,9 @@ class UtterancesAdmin(ImportExportModelAdmin):
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('utterance', 'reported_by', 'reason', 'date_reported')
-    search_fields = ('reason', 'utterance', 'reported_by')
+    search_fields = ('reason', 'utterance__id', 'reported_by__username')
     list_filter = ('date_reported',)
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.select_related('utterance', 'reported_by')

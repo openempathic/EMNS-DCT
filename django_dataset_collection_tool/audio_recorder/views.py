@@ -16,7 +16,7 @@ from django.contrib.auth.models import User
 
 from rest_framework.views import APIView
 from rest_framework.response import Response as RestResponse
-from rest_framework import permissions
+from rest_framework import permissions, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from rest_framework.exceptions import PermissionDenied
@@ -42,6 +42,7 @@ from .models import Utterances, Report
 from .forms import RecordingUpdateForm, ImportForm
 from .filters import OrderFilter
 from .admin import UtterancesResource
+from .serializers import UtteranceSerializer
 
 import logging
 logger = logging.getLogger(__name__)
@@ -505,7 +506,42 @@ class GetStatsView(APIView):
 			'emotion_counts': dict(emotion_counts),
 			'sub_emotion_counts': dict(sub_emotion_counts),
 		})
-	
+
+class CreateUtteranceAPI(APIView):
+    """
+    API view to create a new utterance.
+
+	example json:
+	{
+    "language": "English",
+    "utterance": "This is an example utterance text.",
+    "audio_description": "Description of the audio context and background.",
+    "video_description": "Description of the video content if applicable.",
+    "bg_sounds": "Traffic",
+    "accent": "British",
+    "emotion": "Happy",
+    "status": "Awaiting Review",
+    "gender": "Female",
+    "audio_quality": "Good",
+    "age": "25",
+    "arousal": 5,
+    "valence": 7,
+    "time_spent": 3.5,
+    "audio_recording": "https://www.youtube.com/embed/utF9adp1mh8?modestbranding=1&loop=1&start=38&end=50"
+	}
+
+    """
+    authentication_classes = [TokenAuthGet]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = UtteranceSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(author=request.user)
+            return RestResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return RestResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 from django.db.models import Sum, Max, Min
 class UserStatsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):

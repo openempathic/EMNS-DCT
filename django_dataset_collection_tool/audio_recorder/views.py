@@ -634,7 +634,7 @@ class GetUtterancesURLsView(APIView, DownloadMixin):
         elif download_param == 'parquet':
             return self.create_parquet_response(utterances)
         else:
-            response_data = [{'id': utt['pk'], 'url': utt['audio_recording']} for utt in utterances]
+            response_data = [{'id': utt['pk'], 'url': utt['audio_recording'], 'transcription': utt['utterance']} for utt in utterances]
             return RestResponse(response_data)
 
     def get_parameters(self, request):
@@ -659,7 +659,7 @@ class GetUtterancesURLsView(APIView, DownloadMixin):
         return status_param, limit_param, download_param
 
     def query_utterances(self, status, limit):
-        query = Utterances.objects.filter(status=status).values('pk', 'audio_recording')
+        query = Utterances.objects.filter(status=status).values('pk', 'audio_recording', 'utterance')
         return query[:limit] if limit else query
 
 def report_utterance(request, utterance_id):

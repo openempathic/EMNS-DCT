@@ -4,6 +4,7 @@ import json
 import re
 import csv
 import pandas as pd
+from collections import defaultdict
 
 from django.http import HttpResponse, HttpResponseForbidden
 from django.http.response import JsonResponse
@@ -22,6 +23,9 @@ from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from rest_framework.exceptions import PermissionDenied
 from .auth import TokenAuthGet
 
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator
+
 from django.views import View
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 from django.views.generic.edit import FormMixin, FormView
@@ -33,7 +37,7 @@ from django.utils import timezone
 from django_filters.views import FilterView
 from django.core.mail import send_mail
 from django.conf import settings
-from django.db.models import Count, Avg, F, Q
+from django.db.models import Count, Avg, F, Q, Sum, Max, Min
 
 from urllib.parse import urlparse
 
@@ -441,7 +445,6 @@ class CanUsePaidParameter(permissions.BasePermission):
 
 
 ################## REST API VIEWS ##################
-from collections import defaultdict
 class GetStatsView(APIView):
 	authentication_classes = [TokenAuthGet]
 	permission_classes = [IsAuthenticated, CanUsePaidParameter]
@@ -541,8 +544,6 @@ class CreateUtteranceAPI(APIView):
             return RestResponse(serializer.data, status=status.HTTP_201_CREATED)
         return RestResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-from django.db.models import Sum, Max, Min
 class UserStatsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -618,6 +619,48 @@ class DownloadView(APIView):
 			df.to_parquet(response, index=False)
 		
 		return response
+
+class GetUtterancesURLsView(APIView):
+    authentication_classes = [TokenAuthGet]
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [StaffUserRateThrottle, AnonRateThrottle]
+
+    def get(self, request, *args, **kwargs):
+        # Retrieve the status parameter from the query string
+        status_param = request.GET.get('status', 'Awaiting Review')
+
+        # Validate the status parameter
+        valid_statuses = ['Pending', 'Awaiting Review', 'Complete', 'Needs Updating']
+        if status_param not in valid_statuses:
+            return RestResponse({'error': 'Invalid status parameter'}, status=400)
+
+        # Retrieve and validate the limit parameter
+        limit_param = request.GET.get('limit', None)
+        if limit_param:
+            try:
+                limit = int(limit_param)
+                MaxValueValidator(1000)(limit)  # Assuming a maximum limit of 1000
+            except (ValueError, ValidationError):
+                return RestResponse({'error': 'Invalid limit parameter'}, status=400)
+        else:
+            limit = None
+
+        # Query the database for utterances with the specified status
+        query = Utterances.objects.filter(status=status_param)
+        if limit:
+            query = query[:limit]
+        utterances = query.values('pk', 'audio_recording')
+
+        # Prepare the data for response
+        response_data = [
+            {
+                'id': utterance['pk'],
+                'url': utterance['audio_recording']
+            }
+            for utterance in utterances
+        ]
+
+        return RestResponse(response_data)
 
 def report_utterance(request, utterance_id):
 	utterance = get_object_or_404(Utterances, pk=utterance_id)

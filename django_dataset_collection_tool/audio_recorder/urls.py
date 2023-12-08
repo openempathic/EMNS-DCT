@@ -19,6 +19,7 @@ urlpatterns = [
     path('utterances/new/', views.UtteranceCreateView.as_view(), name="utterance-create"),
     path('guide/', views.AnnotationGuideView, name="annotation-guide"),
     path('api/stats/', views.GetStatsView.as_view(), name="get-stats"),
+    path('api/get_urls/', views.GetUtterancesURLsView.as_view(), name="get-urls"),
     path('api/add/', views.CreateUtteranceAPI.as_view(), name="add-utterance"),
     path('user-stats/', views.UserStatsView.as_view(), name='user_stats'),
     path('download/', views.DownloadView.as_view(), name="download"),
